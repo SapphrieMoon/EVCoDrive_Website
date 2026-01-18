@@ -1,7 +1,9 @@
-import { ComponentExample } from "@/components/component-example";
+import useRouteElements from "./useRouteElements";
 
-export function App() {
-return <ComponentExample />;
+function App() {
+    return (
+        useRouteElements()
+    )
 }
 
-export default App;
+export default App
