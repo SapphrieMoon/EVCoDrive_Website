@@ -1,25 +1,45 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AlertCircle } from "lucide-react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from 'react-hook-form';
+import { loginSchema, type LoginSchema } from "@/schema/auth.schema";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useLoginMutation } from "@/queries/auth.query";
+import type { AxiosError } from "axios";
+import { isAxiosUnprocessableEntityError } from "@/utils/axios/axiosError";
+import type { ErrorResponse } from "@/types/utils.type";
 
 export default function Login() {
     const navigate = useNavigate();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState('')
-    const [isLoading, setIsLoading] = useState(false);
+    
+    const {register, handleSubmit, setError, formState: {errors, isSubmitting}} = useForm<LoginSchema>({
+        resolver: zodResolver(loginSchema)
+    });
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsLoading(true);
-        // TODO: Xử lý đăng nhập
-        console.log("Đăng nhập với:", { email, password });
-        setTimeout(() => setIsLoading(false), 1000);
-        navigate('/');
-    };
+    const loginMutation = useLoginMutation(); 
+
+    const onSubmit = handleSubmit((data: LoginSchema) => {
+        loginMutation.mutate(data, {
+            onSuccess: () => {
+                navigate('/');
+            },
+            onError: (error) => {
+                if (isAxiosUnprocessableEntityError<ErrorResponse<LoginSchema>>(error)) {
+                  const formError = error.response?.data.data;
+              
+                  if (formError) {
+                    Object.keys(formError).forEach((key) => {
+                      setError(key as keyof LoginSchema, {
+                        message: formError[key as keyof LoginSchema],
+                        type: 'server'
+                      });
+                    });
+                  }
+                }
+              }
+        });
+        });
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-background px-4">
@@ -55,14 +75,9 @@ export default function Login() {
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    {error && (
-                        <div className="flex items-center gap-3 p-3 rounded-lg bg-destructive/10 border border-destructive/20">
-                            <AlertCircle className="w-4 h-4 text-destructive flex-shrink-0" />
-                            <p className="text-sm text-destructive">{error}</p>
-                        </div>
-                    )}
+                <form onSubmit={onSubmit} noValidate className="space-y-4">
 
+                    {/* Email */}
                     <div className="space-y-2">
                         <Label htmlFor="email" className="text-sm font-medium text-foreground">
                             Địa chỉ Email
@@ -72,13 +87,16 @@ export default function Login() {
                             id="email"
                             type="email"
                             placeholder="Nhập email của bạn"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            disabled={isLoading}
+                            {...register('email')}
+                            disabled={isSubmitting || loginMutation.isPending}
                             className="h-13 bg-background border border-border rounded-lg"
                         />
+                        {errors.email && (
+                            <p className="text-sm text-destructive">{errors.email.message}</p>
+                        )}
                     </div>
 
+                    {/* Password */}
                     <div className="space-y-2">
                         <Label htmlFor="password" className="text-sm font-medium text-foreground">
                             Mật khẩu
@@ -88,26 +106,21 @@ export default function Login() {
                             id="password"
                             type="password"
                             placeholder="Nhập mật khẩu của bạn"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            disabled={isLoading}
+                            {...register("password")}
+                            disabled={isSubmitting || loginMutation.isPending}
                             className="h-13 bg-background border border-border rounded-lg"
                         />
+                        {errors.password && (
+                            <p className="text-sm text-destructive">{errors.password.message}</p>
+                        )}
                     </div>
 
                     <Button
                         type="submit"
-                        disabled={isLoading}
+                        disabled={loginMutation.isPending}
                         className="w-full h-10 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg mt-6"
                     >
-                        {isLoading ? (
-                            <div className="flex items-center gap-2">
-                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                Đang xử lý...
-                            </div>
-                        ) : (
-                            'Đăng nhập'
-                        )}
+                        {isSubmitting || loginMutation.isPending ? "Đang xử lý..." : "Đăng nhập"}
                     </Button>
                 </form>
 
