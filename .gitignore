@@ -27,3 +27,6 @@ dist-ssr
 # Lockfiles (enforce pnpm)
 package-lock.json
 yarn.lock
+
+#Environment Variables
+.env

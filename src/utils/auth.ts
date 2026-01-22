@@ -1,7 +1,7 @@
 import type { User } from "@/types/user.type";
 
-const ACCESS_TOKEN_KEY = 'access_token';
-const REFRESH_TOKEN_KEY = 'refresh_token';
+const ACCESS_TOKEN_KEY = 'token';
+const REFRESH_TOKEN_KEY = 'refreshToken';
 const PROFILE_KEY = 'profile';
 
 export const LocalStorageEventTarget = new EventTarget()
@@ -14,7 +14,7 @@ export const setRefreshTokenToLocalStorage = (token: string) => {
     localStorage.setItem(REFRESH_TOKEN_KEY, token);
 };
 
-export const clearLS = () => {
+export const clearLocalStorage = () => {
     localStorage.removeItem(ACCESS_TOKEN_KEY)
     localStorage.removeItem(REFRESH_TOKEN_KEY)
     localStorage.removeItem(PROFILE_KEY)
