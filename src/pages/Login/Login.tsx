@@ -6,17 +6,17 @@ import { useForm } from 'react-hook-form';
 import { loginSchema, type LoginSchema } from "@/schema/auth.schema";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLoginMutation } from "@/queries/auth.query";
-import { isAxiosUnprocessableEntityError } from "@/utils/axios/axiosError";
+import { isAxiosError, isAxiosUnprocessableEntityError } from "@/utils/axios/axiosError";
 import type { ErrorResponse } from "@/types/utils.type";
 
 export default function Login() {
     const navigate = useNavigate();
-    
-    const {register, handleSubmit, setError, formState: {errors, isSubmitting}} = useForm<LoginSchema>({
+
+    const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm<LoginSchema>({
         resolver: zodResolver(loginSchema)
     });
 
-    const loginMutation = useLoginMutation(); 
+    const loginMutation = useLoginMutation();
 
     const onSubmit = handleSubmit((data: LoginSchema) => {
         loginMutation.mutate(data, {
@@ -25,20 +25,31 @@ export default function Login() {
             },
             onError: (error) => {
                 if (isAxiosUnprocessableEntityError<ErrorResponse<LoginSchema>>(error)) {
-                  const formError = error.response?.data.data;
-              
-                  if (formError) {
-                    Object.keys(formError).forEach((key) => {
-                      setError(key as keyof LoginSchema, {
-                        message: formError[key as keyof LoginSchema],
-                        type: 'server'
-                      });
-                    });
-                  }
+                    const formError = error.response?.data.data;
+
+                    if (formError) {
+                        Object.keys(formError).forEach((key) => {
+                            setError(key as keyof LoginSchema, {
+                                message: formError[key as keyof LoginSchema],
+                                type: 'server'
+                            });
+                        });
+                    }
                 }
-              }
+
+                if (isAxiosError<ErrorResponse<null>>(error)) {
+                    const message = error.response?.data.message;
+
+                    if (message) {
+                        setError('root', {
+                            type: 'server',
+                            message
+                        });
+                    }
+                }
+            }
         });
-        });
+    });
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-background px-4">
@@ -113,6 +124,14 @@ export default function Login() {
                             <p className="text-sm text-destructive">{errors.password.message}</p>
                         )}
                     </div>
+
+                    {errors.root && (
+                        <div className="flex items-center gap-3 p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+                            <p className="text-sm text-destructive">
+                                {errors.root.message}
+                            </p>
+                        </div>
+                    )}
 
                     <Button
                         type="submit"
