@@ -33,6 +33,12 @@ export const removeRefreshTokenFromLocalStorage = () => {
     localStorage.removeItem(REFRESH_TOKEN_KEY);
 };
 
+export const getProfileFromLocalStorage = () => {
+    const profile = localStorage.getItem(PROFILE_KEY);
+    return profile ? JSON.parse(profile) : null;
+};
+
 export const setProfileToLocalStorage = (profile: User) => {
     localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
 };
+

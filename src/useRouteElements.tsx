@@ -2,6 +2,7 @@ import { useRoutes } from "react-router-dom";
 import { Suspense } from "react";
 import Login from "@/pages/Login";
 import Home from "./pages/Home/Home";
+import { MainLayout } from "./layouts/MainLayout";
 
 
 export default function useRouteElements() {
@@ -12,7 +13,17 @@ export default function useRouteElements() {
         },
         {
             path: "/",
-            element: <Home />
+            element: <MainLayout />,
+            children: [
+                {
+                    index: true,
+                    element: (
+                        <Suspense>
+                          <Home />
+                        </Suspense>
+                      )
+                }
+            ]
         }
     ])
     return (

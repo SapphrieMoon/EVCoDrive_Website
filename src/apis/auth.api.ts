@@ -1,4 +1,4 @@
-import type { AuthResponse } from "@/types/auth.type";
+import type { AuthResponse, RefreshTokenResponse } from "@/types/auth.type";
 import http from "@/utils/http";
 
 export const URL_AUTH = {
@@ -8,7 +8,9 @@ export const URL_AUTH = {
 }
 
 const authApi = {
-    login: (body: { email: string; password: string }) => http.post<AuthResponse>(URL_AUTH.LOGIN, body)
+    login: (body: { email: string; password: string }) => http.post<AuthResponse>(URL_AUTH.LOGIN, body),
+    logout: () => http.post(URL_AUTH.LOGOUT),
+    refreshToken: () => http.post<RefreshTokenResponse>(URL_AUTH.REFRESH_TOKEN)
 };
 
 export default authApi;
