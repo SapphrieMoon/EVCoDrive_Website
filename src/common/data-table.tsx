@@ -53,7 +53,6 @@ export function VehicleBrandDataTable<TData, TValue>({
                 : updaterOrValue
             onSortingChange(newSorting)
         },
-        // FIX: Handle both function updater and direct value
         onPaginationChange: (updaterOrValue) => {
             const newPagination =
                 typeof updaterOrValue === "function"
@@ -74,7 +73,7 @@ export function VehicleBrandDataTable<TData, TValue>({
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id}>
+                                    <TableHead key={header.id} className="h-20">
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(
@@ -92,6 +91,7 @@ export function VehicleBrandDataTable<TData, TValue>({
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
+                                    className="h-16"
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
@@ -120,7 +120,7 @@ export function VehicleBrandDataTable<TData, TValue>({
             {/* Pagination Controls */}
             <div className="flex items-center justify-between py-4">
                 <div className="text-sm text-muted-foreground">
-                    Page {pagination.pageIndex + 1} of {pageCount}
+                    Trang {pagination.pageIndex + 1} / {pageCount}
                 </div>
                 <div className="flex gap-2">
                     <Button
@@ -129,7 +129,7 @@ export function VehicleBrandDataTable<TData, TValue>({
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
                     >
-                        Previous
+                        Trước
                     </Button>
                     <Button
                         variant="outline"
@@ -137,7 +137,7 @@ export function VehicleBrandDataTable<TData, TValue>({
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
                     >
-                        Next
+                        Sau
                     </Button>
                 </div>
             </div>

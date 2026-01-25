@@ -1,6 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import type { VehicleBrand } from "@/types/vehicle-brand.type"
 import { TableActionCell } from "@/common/table-action-cell"
+import { DeleteAction } from "@/common/table-delete-action"
+import vehicleBrandQueries from "@/queries/vehicle-brand.query"
 
 
 export const vehicleBrandColumns: ColumnDef<VehicleBrand>[] = [
@@ -21,7 +23,7 @@ export const vehicleBrandColumns: ColumnDef<VehicleBrand>[] = [
     // },
     {
         accessorKey: "name",
-        header: "Brand name"
+        header: "Tên hãng xe"
     },
     {
         accessorKey: "logoUrl",
@@ -40,19 +42,20 @@ export const vehicleBrandColumns: ColumnDef<VehicleBrand>[] = [
     },
     {
         accessorKey: "createdDate",
-        header: "Created Date"
+        header: "Ngày tạo"
     },
     {
         id: "actions",
-        header: "Actions",
+        header: "Thao tác",
         cell: ({ row }) => {
             const id = row.original.vehicleBrandId
+            const { mutate, isPending } = vehicleBrandQueries.useDelete()
             return (
                 <TableActionCell detailUrl={`/vehicle-brands/${id}`} editUrl={`/vehicle-brands/${id}/edit`}>
-                    {/* <DeleteAction
+                    <DeleteAction
                         onConfirm={() => mutate(id)}
                         isLoading={isPending}
-                    /> */}
+                    />
                 </TableActionCell>
             )
         }

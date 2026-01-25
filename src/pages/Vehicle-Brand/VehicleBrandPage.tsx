@@ -1,7 +1,11 @@
-import { useVehicleBrandPaginationQuery } from "@/queries/vehicle-brand.query";
+
 import { useState } from "react";
-import { VehicleBrandDataTable } from "./vehicle-brand.data-table";
+import { VehicleBrandDataTable } from "../../common/data-table";
 import { vehicleBrandColumns } from "./vehicle-brand.columns";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
+import vehicleBrandQueries from "@/queries/vehicle-brand.query";
 
 export default function VehicleBrandPage() {
     const [pagination, setPagination] = useState({
@@ -9,9 +13,12 @@ export default function VehicleBrandPage() {
         pageSize: 10
     })
 
-    const { data, isLoading } = useVehicleBrandPaginationQuery({
-        pageNumber: pagination.pageIndex + 1, // 👈 convert sang BE
-        pageSize: pagination.pageSize
+    const [search, setSearch] = useState("");
+
+    const { data, isLoading } = vehicleBrandQueries.usePagination({
+        pageNumber: pagination.pageIndex + 1,
+        pageSize: pagination.pageSize,
+        searchTermByName: search
     })
 
     console.log("asdads", data)
@@ -19,8 +26,27 @@ export default function VehicleBrandPage() {
     if (isLoading) return <div>Loading...</div>
 
     return (
-        <div className="space-y-4">
-            <h1 className="text-xl font-semibold">Vehicle Brands</h1>
+        <div className="space-y-2 m-4">
+
+            <h1 className="text-4xl font-bold">Quản lý các thương hiệu xe</h1>
+
+
+            <div className="flex items-center py-4 justify-between mt-6">
+                <Input
+                    placeholder="Tìm kiếm thương hiệu..."
+                    value={search}
+                    onChange={(e) => {
+                        setSearch(e.target.value);
+                        setPagination(prev => ({ ...prev, pageIndex: 0 })); // Quan trọng: Reset về trang 1 khi search
+                    }}
+                    className="max-w-sm"
+                />
+
+                <Button>
+                    <PlusIcon className="w-4 h-4" />
+                    Thêm thương hiệu
+                </Button>
+            </div>
 
             <VehicleBrandDataTable
                 columns={vehicleBrandColumns}

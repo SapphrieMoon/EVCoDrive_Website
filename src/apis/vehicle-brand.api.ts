@@ -2,12 +2,17 @@ import type { VehicleBrandPaginationParams, VehicleBrandPaginationResponse } fro
 import http from "@/utils/http"
 
 export const URL_VEHICLE_BRAND = {
+    GET_ALL: "/vehiclebrands",
     GET_ALL_PAGINATION: "/vehiclebrands/pagination"
 }
 
 const vehicleBrandApi = {
+    getAll: async () =>
+        await http.get<VehicleBrandPaginationResponse>(URL_VEHICLE_BRAND.GET_ALL),
     getAllPagination: async (params: VehicleBrandPaginationParams) =>
-        await http.get<VehicleBrandPaginationResponse>(URL_VEHICLE_BRAND.GET_ALL_PAGINATION, { params })
+        await http.get<VehicleBrandPaginationResponse>(URL_VEHICLE_BRAND.GET_ALL_PAGINATION, { params }),
+    delete: async (id: string) =>
+        await http.delete<VehicleBrandPaginationResponse>(`/vehiclebrands/${id}`)
 }
 
 export default vehicleBrandApi;
