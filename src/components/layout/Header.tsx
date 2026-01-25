@@ -48,7 +48,7 @@ export const Header = () => {
           <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
         </Button>
-        s
+
         {/* Avatar*/}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -61,8 +61,10 @@ export const Header = () => {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel className="font-medium">{user?.fullName}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem onClick={handleLogout} className="text-destructive hover:text-foreground hover:bg-destructive/50">Logout</DropdownMenuItem>
+            <DropdownMenuItem>Hồ sơ</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout} className="text-destructive hover:text-foreground hover:bg-destructive/50">
+              Đăng xuất
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 

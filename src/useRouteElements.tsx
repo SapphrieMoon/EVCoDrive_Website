@@ -3,25 +3,34 @@ import { Suspense } from "react";
 import Login from "@/pages/Login";
 import Home from "./pages/Home/Home";
 import { MainLayout } from "./layouts/MainLayout";
-
+import path from "./constants/path";
+import VehicleBrandPage from "./pages/Vehicle-Brand";
 
 export default function useRouteElements() {
     const routeElements = useRoutes([
         {
-            path: "/login",
+            path: path.login,
             element: <Login />
         },
         {
-            path: "/",
+            path: path.home,
             element: <MainLayout />,
             children: [
                 {
                     index: true,
                     element: (
                         <Suspense>
-                          <Home />
+                            <Home />
                         </Suspense>
-                      )
+                    )
+                },
+                {
+                    path: path.vehicleBrand,
+                    element: (
+                        <Suspense>
+                            <VehicleBrandPage />
+                        </Suspense>
+                    )
                 }
             ]
         }
