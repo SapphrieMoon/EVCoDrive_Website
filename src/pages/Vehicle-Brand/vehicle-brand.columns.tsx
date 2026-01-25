@@ -1,35 +1,29 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import type { VehicleBrand } from "@/types/vehicle-brand.type"
+import { TableActionCell } from "@/common/table-action-cell"
 import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom"
+import { ArrowUpDown } from "lucide-react"
 
-const BrandActionCell = ({ brand }: { brand: VehicleBrand }) => {
-    const navigate = useNavigate()
-
-    return (
-        <div className="flex gap-2">
-            <Button
-                size="sm"
-                onClick={() => navigate(`/vehicle-brands/${brand.vehicleBrandId}`)}
-            >
-                Detail
-            </Button>
-
-            <Button
-                size="sm"
-                variant="outline"
-                onClick={() => navigate(`/vehicle-brands/${brand.vehicleBrandId}/edit`)}
-            >
-                Edit
-            </Button>
-        </div>
-    )
-}
 
 export const vehicleBrandColumns: ColumnDef<VehicleBrand>[] = [
+    //------------------ Sorting----------------
+    // {
+    //     accessorKey: "name",
+    //     header: ({ column }) => {
+    //         return (
+    //             <Button
+    //                 variant="ghost"
+    //                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //             >
+    //                 Brand Name
+    //                 <ArrowUpDown className="ml-2 h-4 w-4" />
+    //             </Button>
+    //         )
+    //     }
+    // },
     {
         accessorKey: "name",
-        header: "Brand Name"
+        header: "Brand name"
     },
     {
         accessorKey: "logoUrl",
@@ -41,7 +35,7 @@ export const vehicleBrandColumns: ColumnDef<VehicleBrand>[] = [
                 <img
                     src={brand.logoUrl}
                     alt={brand.name}
-                    className="h-8 object-contain"
+                    className="h-8 object-contain flex items-center"
                 />
             )
         }
@@ -53,6 +47,16 @@ export const vehicleBrandColumns: ColumnDef<VehicleBrand>[] = [
     {
         id: "actions",
         header: "Actions",
-        cell: ({ row }) => <BrandActionCell brand={row.original} />
+        cell: ({ row }) => {
+            const id = row.original.vehicleBrandId
+            return (
+                <TableActionCell detailUrl={`/vehicle-brands/${id}`} editUrl={`/vehicle-brands/${id}/edit`}>
+                    {/* <DeleteAction
+                        onConfirm={() => mutate(id)}
+                        isLoading={isPending}
+                    /> */}
+                </TableActionCell>
+            )
+        }
     }
 ]

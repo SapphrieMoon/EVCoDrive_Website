@@ -14,7 +14,7 @@ export default function VehicleBrandPage() {
         pageSize: pagination.pageSize
     })
 
-    console.log("asdads", data?.data.items)
+    console.log("asdads", data)
 
     if (isLoading) return <div>Loading...</div>
 
@@ -24,8 +24,8 @@ export default function VehicleBrandPage() {
 
             <VehicleBrandDataTable
                 columns={vehicleBrandColumns}
-                data={data?.data.items ?? []}
-                pageCount={data?.data.totalPages ?? 0}
+                data={data?.data.data.items ?? []}
+                pageCount={data?.data.data.totalPages ?? 0}
                 pagination={pagination}
                 onPaginationChange={setPagination}
             />

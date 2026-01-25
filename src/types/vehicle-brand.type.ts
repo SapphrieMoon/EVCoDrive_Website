@@ -1,4 +1,5 @@
 import type { PaginationParams, PaginationResponse } from "./pagination.type"
+import type { SuccessResponse } from "./utils.type"
 
 export interface VehicleBrand {
     vehicleBrandId: string
@@ -13,4 +14,4 @@ export interface VehicleBrandPaginationParams extends PaginationParams {
 }
 
 export type VehicleBrandPaginationResponse =
-    PaginationResponse<VehicleBrand>
+    SuccessResponse<PaginationResponse<VehicleBrand>>

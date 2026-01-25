@@ -1,8 +1,10 @@
 import {
     type ColumnDef,
     type PaginationState,
+    type SortingState,
     flexRender,
     getCoreRowModel,
+    getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
 
@@ -21,6 +23,8 @@ interface DataTableProps<TData, TValue> {
     data: TData[]
     pagination: PaginationState
     onPaginationChange: (pagination: PaginationState) => void
+    sorting?: SortingState
+    onSortingChange?: (sorting: SortingState) => void
     pageCount: number
 }
 
@@ -29,14 +33,25 @@ export function VehicleBrandDataTable<TData, TValue>({
     data,
     pagination,
     onPaginationChange,
+    sorting = [],
+    onSortingChange = () => { },
     pageCount,
 }: DataTableProps<TData, TValue>) {
+
     const table = useReactTable({
         data,
         columns,
         pageCount,
+        getSortedRowModel: getSortedRowModel(),
         state: {
+            sorting,
             pagination,
+        },
+        onSortingChange: (updaterOrValue) => {
+            const newSorting = typeof updaterOrValue === "function"
+                ? updaterOrValue(sorting)
+                : updaterOrValue
+            onSortingChange(newSorting)
         },
         // FIX: Handle both function updater and direct value
         onPaginationChange: (updaterOrValue) => {
@@ -48,6 +63,7 @@ export function VehicleBrandDataTable<TData, TValue>({
         },
         getCoreRowModel: getCoreRowModel(),
         manualPagination: true,
+        manualSorting: true,
     })
 
     return (
