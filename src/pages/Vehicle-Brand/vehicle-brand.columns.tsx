@@ -1,8 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import type { VehicleBrand } from "@/types/vehicle-brand.type"
 import { TableActionCell } from "@/common/table-action-cell"
-import { Button } from "@/components/ui/button"
-import { ArrowUpDown } from "lucide-react"
 
 
 export const vehicleBrandColumns: ColumnDef<VehicleBrand>[] = [

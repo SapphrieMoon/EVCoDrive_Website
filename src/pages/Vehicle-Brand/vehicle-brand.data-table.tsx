@@ -4,7 +4,7 @@ import {
     type SortingState,
     flexRender,
     getCoreRowModel,
-    getSortedRowModel,
+    // getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
 
@@ -42,7 +42,7 @@ export function VehicleBrandDataTable<TData, TValue>({
         data,
         columns,
         pageCount,
-        getSortedRowModel: getSortedRowModel(),
+        // getSortedRowModel: getSortedRowModel(),
         state: {
             sorting,
             pagination,
