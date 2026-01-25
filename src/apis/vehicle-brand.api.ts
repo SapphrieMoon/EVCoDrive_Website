@@ -6,8 +6,11 @@ export const URL_VEHICLE_BRAND = {
 }
 
 const vehicleBrandApi = {
-    getAllPagination: (params: VehicleBrandPaginationParams) =>
-        http.get<VehicleBrandPaginationResponse>(URL_VEHICLE_BRAND.GET_ALL_PAGINATION, { params }),
+    getAllPagination: async (params: VehicleBrandPaginationParams) => {
+        const response = await http.get<VehicleBrandPaginationResponse>(URL_VEHICLE_BRAND.GET_ALL_PAGINATION, { params })
+
+        return response.data
+    }
 }
 
 export default vehicleBrandApi;
