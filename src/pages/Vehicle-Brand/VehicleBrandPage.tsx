@@ -37,7 +37,7 @@ export default function VehicleBrandPage() {
                     value={search}
                     onChange={(e) => {
                         setSearch(e.target.value);
-                        setPagination(prev => ({ ...prev, pageIndex: 0 })); // Quan trọng: Reset về trang 1 khi search
+                        setPagination(prev => ({ ...prev, pageIndex: 0 }));
                     }}
                     className="max-w-sm"
                 />
