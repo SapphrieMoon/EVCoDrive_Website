@@ -6,10 +6,11 @@ import { Link } from "react-router-dom"
 interface TableActionCellProps {
     editUrl?: string
     detailUrl?: string
+    onDetailClick?: () => void
     children?: ReactNode
 }
 
-export const TableActionCell = ({ editUrl, detailUrl, children }: TableActionCellProps) => {
+export const TableActionCell = ({ editUrl, detailUrl, onDetailClick, children }: TableActionCellProps) => {
     return (
         <div>
             {editUrl && (
@@ -20,13 +21,17 @@ export const TableActionCell = ({ editUrl, detailUrl, children }: TableActionCel
                 </Button>
             )}
 
-            {detailUrl && (
+            {detailUrl ? (
                 <Button variant="ghost" size="icon" asChild title="Chi tiết">
                     <Link to={detailUrl}>
                         <Eye className="h-4 w-4" />
                     </Link>
                 </Button>
-            )}
+            ) : onDetailClick ? (
+                <Button variant="ghost" size="icon" onClick={onDetailClick} title="Xem nhanh">
+                    <Eye className="h-4 w-4" />
+                </Button>
+            ) : null}
 
             {children}
         </div>
