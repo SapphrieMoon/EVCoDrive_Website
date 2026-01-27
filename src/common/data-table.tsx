@@ -2,6 +2,7 @@ import {
     type ColumnDef,
     type PaginationState,
     type SortingState,
+    type TableMeta,
     flexRender,
     getCoreRowModel,
     // getSortedRowModel,
@@ -18,6 +19,7 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { TableSkeleton } from "./skeletons/table-skeleton"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -27,6 +29,8 @@ interface DataTableProps<TData, TValue> {
     sorting?: SortingState
     onSortingChange?: (sorting: SortingState) => void
     pageCount: number
+    meta?: TableMeta<TData>
+    isLoading?: boolean
 }
 
 export function VehicleBrandDataTable<TData, TValue>({
@@ -37,6 +41,8 @@ export function VehicleBrandDataTable<TData, TValue>({
     sorting = [],
     onSortingChange = () => { },
     pageCount,
+    meta,
+    isLoading,
 }: DataTableProps<TData, TValue>) {
 
     const table = useReactTable({
@@ -48,6 +54,7 @@ export function VehicleBrandDataTable<TData, TValue>({
             sorting,
             pagination,
         },
+        meta,
         onSortingChange: (updaterOrValue) => {
             const newSorting = typeof updaterOrValue === "function"
                 ? updaterOrValue(sorting)
@@ -86,35 +93,43 @@ export function VehicleBrandDataTable<TData, TValue>({
                             </TableRow>
                         ))}
                     </TableHeader>
-                    <TableBody>
-                        {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                    className="h-16"
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
-                                    ))}
+
+                    {isLoading ? (
+                        <TableSkeleton
+                            columnCount={columns.length}
+                            rowCount={pagination.pageSize}
+                        />
+                    ) : (
+                        <TableBody>
+                            {table.getRowModel().rows?.length ? (
+                                table.getRowModel().rows.map((row) => (
+                                    <TableRow
+                                        key={row.id}
+                                        data-state={row.getIsSelected() && "selected"}
+                                        className="h-16"
+                                    >
+                                        {row.getVisibleCells().map((cell) => (
+                                            <TableCell key={cell.id}>
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={columns.length}
+                                        className="h-24 text-center"
+                                    >
+                                        Không có dữ liệu.
+                                    </TableCell>
                                 </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="h-24 text-center"
-                                >
-                                    No results.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
+                            )}
+                        </TableBody>
+                    )}
                 </Table>
             </div>
 

@@ -22,17 +22,25 @@ const vehicleBrandQueries = {
     },
 
     useDelete: () => {
-        const queryClient = useQueryClient() // Thêm cái này để invalidate sau khi xóa
+        const queryClient = useQueryClient()
 
         return useMutation({
             mutationFn: (id: string) => vehicleBrandApi.delete(id),
             onSuccess: () => {
-                // Tự động làm mới danh sách sau khi xóa thành công
                 queryClient.invalidateQueries({
-                    queryKey: vehicleBrandKey.getAll() // Xóa sạch cache liên quan đến brand
+                    queryKey: vehicleBrandKey.getAll()
                 })
                 toast.success("Xóa thành công")
             }
+        })
+    },
+
+    useGetDetail: (id: string) => {
+        return useQuery({
+            queryKey: vehicleBrandKey.getDetail(id),
+            queryFn: () => vehicleBrandApi.detail(id),
+            placeholderData: (previousData) => previousData,
+            enabled: !!id
         })
     }
 }

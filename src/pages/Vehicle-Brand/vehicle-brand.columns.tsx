@@ -47,11 +47,13 @@ export const vehicleBrandColumns: ColumnDef<VehicleBrand>[] = [
     {
         id: "actions",
         header: "Thao tác",
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
             const id = row.original.vehicleBrandId
             const { mutate, isPending } = vehicleBrandQueries.useDelete()
             return (
-                <TableActionCell detailUrl={`/vehicle-brands/${id}`} editUrl={`/vehicle-brands/${id}/edit`}>
+                <TableActionCell onDetailClick={() => table.options.meta?.onViewDetail?.(id)}
+                    editUrl={`/vehicle-brands/${id}/edit`}
+                >
                     <DeleteAction
                         onConfirm={() => mutate(id)}
                         isLoading={isPending}

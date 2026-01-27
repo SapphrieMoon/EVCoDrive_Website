@@ -6,8 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import vehicleBrandQueries from "@/queries/vehicle-brand.query";
+import { VehicleBrandDetail } from "./vehicle-brand-detail";
 
 export default function VehicleBrandPage() {
+    const [selectedId, setSelectedId] = useState<string | null>(null)
+    const [isDetailOpen, setIsDetailOpen] = useState(false)
+
+    const handleViewDetail = (id: string) => {
+        setSelectedId(id)
+        setIsDetailOpen(true)
+    }
+
     const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 10
@@ -54,6 +63,16 @@ export default function VehicleBrandPage() {
                 pageCount={data?.data.data.totalPages ?? 0}
                 pagination={pagination}
                 onPaginationChange={setPagination}
+                meta={{
+                    onViewDetail: handleViewDetail
+                }}
+                isLoading={isLoading}
+            />
+
+            <VehicleBrandDetail
+                id={selectedId}
+                open={isDetailOpen}
+                onOpenChange={setIsDetailOpen}
             />
         </div>
     )
