@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { CONTRACT_STATUSES, CONTRACT_TYPES, type Contract } from "@/types/contract.type";
 import { formatDate } from "@/utils/date";
 import type { ColumnDef } from "@tanstack/react-table";
-import { CheckCircle2, CircleDashed, XCircle } from "lucide-react";
+import { CheckCircle2, XCircle } from "lucide-react";
 
 export const contractColumns: ColumnDef<Contract>[] = [
     {
@@ -21,7 +21,7 @@ export const contractColumns: ColumnDef<Contract>[] = [
         cell: ({ row }) => {
             const type = row.original.contractType as keyof typeof CONTRACT_TYPES;
             const config = CONTRACT_TYPES[type] || { label: "N/A", variant: "outline" };
-            return <Badge variant={config.variant as any}>{config.label}</Badge>;
+            return <Badge variant={config.variant}>{config.label}</Badge>;
         }
     },
     {
