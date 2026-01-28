@@ -6,12 +6,23 @@ import { MainLayout } from "./layouts/MainLayout";
 import path from "./constants/path";
 import VehicleBrandPage from "./pages/Vehicle-Brand";
 import ContractPage from "./pages/Contract";
+import { PublicLayout } from "./layouts/PublicLayout";
 
 export default function useRouteElements() {
     const routeElements = useRoutes([
         {
             path: path.login,
             element: <Login />
+        },
+        {
+            path: path.home,
+            element: <PublicLayout />,
+            children: [
+                {
+                    index: true,
+                    element: <Home />
+                }
+            ]
         },
         {
             path: path.home,

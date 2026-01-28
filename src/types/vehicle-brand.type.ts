@@ -9,6 +9,10 @@ export interface VehicleBrand {
     updatedDate: string
 }
 
+export interface VehicleBrandRequest {
+    name: string
+    logoUrl: string
+}
 export interface VehicleBrandPaginationParams extends PaginationParams {
     searchTermByName?: string
 }
