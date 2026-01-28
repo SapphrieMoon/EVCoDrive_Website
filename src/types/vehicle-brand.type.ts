@@ -15,3 +15,6 @@ export interface VehicleBrandPaginationParams extends PaginationParams {
 
 export type VehicleBrandPaginationResponse =
     SuccessResponse<PaginationResponse<VehicleBrand>>
+
+export type VehicleBrandDetailResponse =
+    SuccessResponse<VehicleBrand>

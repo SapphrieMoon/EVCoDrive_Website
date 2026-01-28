@@ -6,8 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import vehicleBrandQueries from "@/queries/vehicle-brand.query";
+import { VehicleBrandDetail } from "./vehicle-brand-detail";
 
 export default function VehicleBrandPage() {
+    const [selectedId, setSelectedId] = useState<string | null>(null)
+    const [isDetailOpen, setIsDetailOpen] = useState(false)
+
+    const handleViewDetail = (id: string) => {
+        setSelectedId(id)
+        setIsDetailOpen(true)
+    }
+
     const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 10
@@ -21,9 +30,6 @@ export default function VehicleBrandPage() {
         searchTermByName: search
     })
 
-    console.log("asdads", data)
-
-    if (isLoading) return <div>Loading...</div>
 
     return (
         <div className="space-y-2 m-4">
@@ -37,7 +43,7 @@ export default function VehicleBrandPage() {
                     value={search}
                     onChange={(e) => {
                         setSearch(e.target.value);
-                        setPagination(prev => ({ ...prev, pageIndex: 0 })); // Quan trọng: Reset về trang 1 khi search
+                        setPagination(prev => ({ ...prev, pageIndex: 0 }));
                     }}
                     className="max-w-sm"
                 />
@@ -54,7 +60,19 @@ export default function VehicleBrandPage() {
                 pageCount={data?.data.data.totalPages ?? 0}
                 pagination={pagination}
                 onPaginationChange={setPagination}
+                meta={{
+                    onViewDetail: handleViewDetail
+                }}
+                isLoading={isLoading}
             />
+
+            {selectedId && (
+                <VehicleBrandDetail
+                    id={selectedId}
+                    open={isDetailOpen}
+                    onOpenChange={setIsDetailOpen}
+                />
+            )}
         </div>
     )
 }

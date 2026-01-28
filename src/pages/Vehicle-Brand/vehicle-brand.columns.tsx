@@ -3,6 +3,7 @@ import type { VehicleBrand } from "@/types/vehicle-brand.type"
 import { TableActionCell } from "@/common/table-action-cell"
 import { DeleteAction } from "@/common/table-delete-action"
 import vehicleBrandQueries from "@/queries/vehicle-brand.query"
+import { formatDate } from "@/utils/date"
 
 
 export const vehicleBrandColumns: ColumnDef<VehicleBrand>[] = [
@@ -42,16 +43,24 @@ export const vehicleBrandColumns: ColumnDef<VehicleBrand>[] = [
     },
     {
         accessorKey: "createdDate",
-        header: "Ngày tạo"
+        header: "Ngày tạo",
+        cell: ({ row }) => formatDate(row.original.createdDate, false)
+    },
+    {
+        accessorKey: "updatedDate",
+        header: "Ngày cập nhật",
+        cell: ({ row }) => formatDate(row.original.updatedDate, false)
     },
     {
         id: "actions",
         header: "Thao tác",
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
             const id = row.original.vehicleBrandId
             const { mutate, isPending } = vehicleBrandQueries.useDelete()
             return (
-                <TableActionCell detailUrl={`/vehicle-brands/${id}`} editUrl={`/vehicle-brands/${id}/edit`}>
+                <TableActionCell onDetailClick={() => table.options.meta?.onViewDetail?.(id)}
+                    editUrl={`/vehicle-brands/${id}/edit`}
+                >
                     <DeleteAction
                         onConfirm={() => mutate(id)}
                         isLoading={isPending}
