@@ -5,6 +5,7 @@ import Home from "./pages/Home/Home";
 import { MainLayout } from "./layouts/MainLayout";
 import path from "./constants/path";
 import VehicleBrandPage from "./pages/Vehicle-Brand";
+import ContractPage from "./pages/Contract";
 
 export default function useRouteElements() {
     const routeElements = useRoutes([
@@ -29,6 +30,14 @@ export default function useRouteElements() {
                     element: (
                         <Suspense>
                             <VehicleBrandPage />
+                        </Suspense>
+                    )
+                },
+                {
+                    path: path.contract,
+                    element: (
+                        <Suspense>
+                            <ContractPage />
                         </Suspense>
                     )
                 }

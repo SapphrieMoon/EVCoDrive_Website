@@ -33,7 +33,7 @@ interface DataTableProps<TData, TValue> {
     isLoading?: boolean
 }
 
-export function VehicleBrandDataTable<TData, TValue>({
+export function DataTable<TData, TValue>({
     columns,
     data,
     pagination,
