@@ -7,27 +7,14 @@ import { PlusIcon } from "lucide-react";
 import vehicleBrandQueries from "@/queries/vehicle-brand.query";
 import { VehicleBrandDetail } from "./vehicle-brand-detail";
 import { DataTable } from "@/common/data-table";
-import type { VehicleBrandRequest } from "@/types/vehicle-brand.type";
 
 export default function VehicleBrandPage() {
     const [selectedId, setSelectedId] = useState<string | null>(null)
     const [isDetailOpen, setIsDetailOpen] = useState(false)
-    const [isFormOpen, setIsFormOpen] = useState(false)
-    const [editData, setEditData] = useState<VehicleBrandRequest | null>(null)
 
     const handleViewDetail = (id: string) => {
         setSelectedId(id)
         setIsDetailOpen(true)
-    }
-
-    const handleCreate = () => {
-        setEditData(null) // Xóa data cũ nếu có
-        setIsFormOpen(true)
-    }
-
-    const handleEdit = (data: { id: string; name: string; logoUrl: string }) => {
-        setEditData(data)
-        setIsFormOpen(true)
     }
 
     const [pagination, setPagination] = useState({
@@ -61,7 +48,7 @@ export default function VehicleBrandPage() {
                     className="max-w-sm"
                 />
 
-                <Button onClick={handleCreate}>
+                <Button>
                     <PlusIcon className="w-4 h-4" />
                     Thêm thương hiệu
                 </Button>
