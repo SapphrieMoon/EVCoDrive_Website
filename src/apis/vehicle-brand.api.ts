@@ -1,3 +1,4 @@
+import type { VehicleBrandFormValues } from "@/schema/vehicle-brand.schema";
 import type { VehicleBrandDetailResponse, VehicleBrandPaginationParams, VehicleBrandPaginationResponse } from "@/types/vehicle-brand.type";
 import http from "@/utils/http"
 
@@ -14,7 +15,11 @@ const vehicleBrandApi = {
     delete: async (id: string) =>
         await http.delete<VehicleBrandPaginationResponse>(`/vehiclebrands/${id}`),
     detail: async (id: string) =>
-        await http.get<VehicleBrandDetailResponse>(`/vehiclebrands/${id}`)
+        await http.get<VehicleBrandDetailResponse>(`/vehiclebrands/${id}`),
+    create: async (data: VehicleBrandFormValues) =>
+        await http.post<VehicleBrandDetailResponse>(URL_VEHICLE_BRAND.GET_ALL, data),
+    update: async (id: string, data: VehicleBrandFormValues) =>
+        await http.put<VehicleBrandDetailResponse>(`/vehiclebrands/${id}`, data),
 }
 
 export default vehicleBrandApi;

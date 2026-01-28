@@ -21,32 +21,32 @@ export default function Login() {
     const onSubmit = handleSubmit((data: LoginSchema) => {
         loginMutation.mutate(data, {
             onSuccess: () => {
-                navigate('/');
+                navigate('/vehicle-brands');
             },
             onError: (error) => {
                 // 422 → lỗi field
                 if (isAxiosUnprocessableEntityError<ErrorResponse<LoginSchema>>(error)) {
-                  const formError = error.response?.data.data;
-                  if (formError) {
-                    Object.keys(formError).forEach((key) => {
-                      setError(key as keyof LoginSchema, {
-                        type: 'server',
-                        message: formError[key as keyof LoginSchema]
-                      });
-                    });
-                  }
-                  return;
+                    const formError = error.response?.data.data;
+                    if (formError) {
+                        Object.keys(formError).forEach((key) => {
+                            setError(key as keyof LoginSchema, {
+                                type: 'server',
+                                message: formError[key as keyof LoginSchema]
+                            });
+                        });
+                    }
+                    return;
                 }
-              
+
                 // 401 → lỗi chung
                 if (isAxiosError<ErrorResponse<null>>(error)) {
-                  const message = error.response?.data.message;
-                  if (message) {
-                    setError('root', {
-                      type: 'server',
-                      message
-                    });
-                  }
+                    const message = error.response?.data.message;
+                    if (message) {
+                        setError('root', {
+                            type: 'server',
+                            message
+                        });
+                    }
                 }
             }
         });

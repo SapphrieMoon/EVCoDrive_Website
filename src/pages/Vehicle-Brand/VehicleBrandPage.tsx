@@ -1,12 +1,12 @@
 
 import { useState } from "react";
-import { VehicleBrandDataTable } from "../../common/data-table";
 import { vehicleBrandColumns } from "./vehicle-brand.columns";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import vehicleBrandQueries from "@/queries/vehicle-brand.query";
 import { VehicleBrandDetail } from "./vehicle-brand-detail";
+import { DataTable } from "@/common/data-table";
 
 export default function VehicleBrandPage() {
     const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -54,7 +54,7 @@ export default function VehicleBrandPage() {
                 </Button>
             </div>
 
-            <VehicleBrandDataTable
+            <DataTable
                 columns={vehicleBrandColumns}
                 data={data?.data.data.items ?? []}
                 pageCount={data?.data.data.totalPages ?? 0}
