@@ -3,6 +3,7 @@ import type { VehicleBrand } from "@/types/vehicle-brand.type"
 import { TableActionCell } from "@/common/table-action-cell"
 import { DeleteAction } from "@/common/table-delete-action"
 import vehicleBrandQueries from "@/queries/vehicle-brand.query"
+import { formatDate } from "@/utils/date"
 
 
 export const vehicleBrandColumns: ColumnDef<VehicleBrand>[] = [
@@ -42,7 +43,13 @@ export const vehicleBrandColumns: ColumnDef<VehicleBrand>[] = [
     },
     {
         accessorKey: "createdDate",
-        header: "Ngày tạo"
+        header: "Ngày tạo",
+        cell: ({ row }) => formatDate(row.original.createdDate, false)
+    },
+    {
+        accessorKey: "updatedDate",
+        header: "Ngày cập nhật",
+        cell: ({ row }) => formatDate(row.original.updatedDate, false)
     },
     {
         id: "actions",

@@ -30,9 +30,6 @@ export default function VehicleBrandPage() {
         searchTermByName: search
     })
 
-    console.log("asdads", data)
-
-    if (isLoading) return <div>Loading...</div>
 
     return (
         <div className="space-y-2 m-4">
@@ -69,11 +66,13 @@ export default function VehicleBrandPage() {
                 isLoading={isLoading}
             />
 
-            <VehicleBrandDetail
-                id={selectedId}
-                open={isDetailOpen}
-                onOpenChange={setIsDetailOpen}
-            />
+            {selectedId && (
+                <VehicleBrandDetail
+                    id={selectedId}
+                    open={isDetailOpen}
+                    onOpenChange={setIsDetailOpen}
+                />
+            )}
         </div>
     )
 }
