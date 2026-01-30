@@ -37,9 +37,11 @@ const vehicleBrandQueries = {
     },
 
     useGetDetail: (id: string) => {
+        const safeId = id ?? ""
+
         return useQuery({
-            queryKey: vehicleBrandKey.detail(id),
-            queryFn: () => vehicleBrandApi.detail(id),
+            queryKey: vehicleBrandKey.detail(safeId),
+            queryFn: () => vehicleBrandApi.detail(safeId),
             placeholderData: (previousData) => previousData,
             enabled: !!id
         })

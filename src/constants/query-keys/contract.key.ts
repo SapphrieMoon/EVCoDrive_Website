@@ -1,7 +1,14 @@
 import type { ContractPaginationParams } from "@/types/contract.type";
 
 export const contractKey = {
-    getAll: () => ["contract"],
-    getAllPagination: (params: ContractPaginationParams) => ["contract", params],
-    getDetail: (id: string) => ["contract", id]
+    all: () => ["contract"],
+    lists: () => ["contract", "list"],
+    listPagination: (params: ContractPaginationParams) => [
+        "contract",
+        "list",
+        "pagination",
+        params,
+    ],
+    details: () => ["contract", "detail"],
+    detail: (id: string) => ["contract", "detail", id],
 }

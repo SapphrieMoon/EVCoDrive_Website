@@ -1,3 +1,4 @@
+import type { BaseCrudFormProps } from "./crud-form.type"
 import type { PaginationParams, PaginationResponse } from "./pagination.type"
 import type { SuccessResponse } from "./utils.type"
 
@@ -22,3 +23,5 @@ export type VehicleBrandPaginationResponse =
 
 export type VehicleBrandDetailResponse =
     SuccessResponse<VehicleBrand>
+
+export interface VehicleBrandFormProps extends BaseCrudFormProps { }

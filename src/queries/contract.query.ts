@@ -7,7 +7,7 @@ import { toast } from "sonner"
 const contractQueries = {
     useGetAll: () => {
         return useQuery({
-            queryKey: contractKey.getAll(),
+            queryKey: contractKey.all(),
             queryFn: () => contractApi.getAll(),
             placeholderData: (previousData) => previousData,
         })
@@ -15,7 +15,7 @@ const contractQueries = {
 
     usePagination: (params: ContractPaginationParams) => {
         return useQuery({
-            queryKey: contractKey.getAllPagination(params),
+            queryKey: contractKey.listPagination(params),
             queryFn: () => contractApi.getAllPagination(params),
             placeholderData: (previousData) => previousData,
         })
@@ -28,7 +28,7 @@ const contractQueries = {
             mutationFn: (id: string) => contractApi.delete(id),
             onSuccess: () => {
                 queryClient.invalidateQueries({
-                    queryKey: contractKey.getAll()
+                    queryKey: contractKey.lists()
                 })
                 toast.success("Xóa thành công")
             }
@@ -37,7 +37,7 @@ const contractQueries = {
 
     useGetDetail: (id: string) => {
         return useQuery({
-            queryKey: contractKey.getDetail(id),
+            queryKey: contractKey.detail(id),
             queryFn: () => contractApi.getDetail(id),
             placeholderData: (previousData) => previousData,
             enabled: !!id
