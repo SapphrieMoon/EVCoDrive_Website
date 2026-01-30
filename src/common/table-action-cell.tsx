@@ -7,17 +7,27 @@ interface TableActionCellProps {
     editUrl?: string
     detailUrl?: string
     onDetailClick?: () => void
+    onEditClick?: () => void
     children?: ReactNode
 }
 
-export const TableActionCell = ({ editUrl, detailUrl, onDetailClick, children }: TableActionCellProps) => {
+export const TableActionCell = ({ editUrl, detailUrl, onDetailClick, onEditClick, children }: TableActionCellProps) => {
     return (
         <div>
-            {editUrl && (
+            {editUrl ? (
                 <Button>
                     <Link to={editUrl}>
                         <Pencil className="h-4 w-4" />
                     </Link>
+                </Button>
+            ) : onEditClick && (
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={onEditClick}
+                    title="Chỉnh sửa"
+                >
+                    <Pencil className="h-4 w-4" />
                 </Button>
             )}
 

@@ -8,7 +8,7 @@ import { toast } from "sonner";
 const vehicleBrandQueries = {
     useGetAll: () => {
         return useQuery({
-            queryKey: vehicleBrandKey.getAll(),
+            queryKey: vehicleBrandKey.all(),
             queryFn: () => vehicleBrandApi.getAll(),
             placeholderData: (previousData) => previousData,
         })
@@ -16,7 +16,7 @@ const vehicleBrandQueries = {
 
     usePagination: (params: VehicleBrandPaginationParams) => {
         return useQuery({
-            queryKey: vehicleBrandKey.getAllPagination(params),
+            queryKey: vehicleBrandKey.listPagination(params),
             queryFn: () => vehicleBrandApi.getAllPagination(params),
             placeholderData: (previousData) => previousData,
         })
@@ -29,7 +29,7 @@ const vehicleBrandQueries = {
             mutationFn: (id: string) => vehicleBrandApi.delete(id),
             onSuccess: () => {
                 queryClient.invalidateQueries({
-                    queryKey: vehicleBrandKey.getAll()
+                    queryKey: vehicleBrandKey.lists(), exact: false
                 })
                 toast.success("Xóa thành công")
             }
@@ -37,9 +37,11 @@ const vehicleBrandQueries = {
     },
 
     useGetDetail: (id: string) => {
+        const safeId = id ?? ""
+
         return useQuery({
-            queryKey: vehicleBrandKey.getDetail(id),
-            queryFn: () => vehicleBrandApi.detail(id),
+            queryKey: vehicleBrandKey.detail(safeId),
+            queryFn: () => vehicleBrandApi.detail(safeId),
             placeholderData: (previousData) => previousData,
             enabled: !!id
         })
@@ -52,7 +54,7 @@ const vehicleBrandQueries = {
             mutationFn: (data: VehicleBrandFormValues) => vehicleBrandApi.create(data),
             onSuccess: () => {
                 queryClient.invalidateQueries({
-                    queryKey: vehicleBrandKey.getAll()
+                    queryKey: vehicleBrandKey.lists()
                 })
                 toast.success("Thêm thành công")
             }
@@ -66,9 +68,9 @@ const vehicleBrandQueries = {
             mutationFn: ({ id, data }: { id: string, data: VehicleBrandFormValues }) => vehicleBrandApi.update(id, data),
             onSuccess: (_, variables) => {
                 queryClient.invalidateQueries({
-                    queryKey: vehicleBrandKey.getAll()
+                    queryKey: vehicleBrandKey.lists()
                 })
-                queryClient.invalidateQueries({ queryKey: vehicleBrandKey.getDetail(variables.id) })
+                queryClient.invalidateQueries({ queryKey: vehicleBrandKey.detail(variables.id) })
                 toast.success("Cập nhật thành công")
             }
         })

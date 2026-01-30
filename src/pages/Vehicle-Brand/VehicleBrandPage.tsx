@@ -7,6 +7,8 @@ import { PlusIcon } from "lucide-react";
 import vehicleBrandQueries from "@/queries/vehicle-brand.query";
 import { VehicleBrandDetail } from "./vehicle-brand-detail";
 import { DataTable } from "@/common/data-table";
+import { VehicleBrandForm } from "./vehicle-brand-form";
+import type { CrudFormMode } from "@/types/crud-form.type";
 
 export default function VehicleBrandPage() {
     const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -30,6 +32,22 @@ export default function VehicleBrandPage() {
         searchTermByName: search
     })
 
+    const [dialogOpen, setDialogOpen] = useState(false)
+    const [dialogMode, setDialogMode] = useState<CrudFormMode>("create")
+    const [editingId, setEditingId] = useState<string | null>(null)
+
+    const handleCreate = () => {
+        setDialogMode("create")
+        setEditingId(null)
+        setDialogOpen(true)
+    }
+
+    const handleEdit = (id: string) => {
+        setDialogMode("update")
+        setEditingId(id)
+        setDialogOpen(true)
+    }
+
 
     return (
         <div className="space-y-2 m-4">
@@ -48,7 +66,7 @@ export default function VehicleBrandPage() {
                     className="max-w-sm"
                 />
 
-                <Button>
+                <Button onClick={handleCreate}>
                     <PlusIcon className="w-4 h-4" />
                     Thêm thương hiệu
                 </Button>
@@ -61,7 +79,8 @@ export default function VehicleBrandPage() {
                 pagination={pagination}
                 onPaginationChange={setPagination}
                 meta={{
-                    onViewDetail: handleViewDetail
+                    onViewDetail: handleViewDetail,
+                    onEdit: handleEdit
                 }}
                 isLoading={isLoading}
             />
@@ -73,6 +92,14 @@ export default function VehicleBrandPage() {
                     onOpenChange={setIsDetailOpen}
                 />
             )}
+
+            {/* Create / Update dialog */}
+            <VehicleBrandForm
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
+                mode={dialogMode}
+                id={editingId}
+            />
         </div>
     )
 }
