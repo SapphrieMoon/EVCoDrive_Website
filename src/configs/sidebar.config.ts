@@ -1,3 +1,4 @@
+import path from "@/constants/path";
 import type { SidebarItem } from "@/types/sidebar.type";
 
 export const adminSidebar: SidebarItem[] = [
@@ -6,13 +7,14 @@ export const adminSidebar: SidebarItem[] = [
         children: [
             { label: "Tài khoản", path: "/accounts" },
             { label: "Nhóm", path: "/groups" },
-            { label: "Hợp đồng", path: "/contracts" },
+            { label: "Hợp đồng", path: path.contract },
         ],
     },
     {
         label: "Quản lý xe",
         children: [
-            { label: "Hãng xe", path: "/vehicle-brands" },   // VehicleBrand
+            { label: "Xe đăng ký", path: path.vehicle },    // Vehicle
+            { label: "Hãng xe", path: path.vehicleBrand },   // VehicleBrand
             { label: "Dòng xe", path: "/vehicle-models" },   // VehicleModel
         ],
     },
