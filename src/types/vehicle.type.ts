@@ -2,8 +2,10 @@ import type { PaginationParams, PaginationResponse } from "./pagination.type";
 import type { SuccessResponse } from "./utils.type";
 
 export enum VehicleStatus {
+    Pending = "Pending",
     ReadyForInspection = "ReadyForInspection",
-    Signing = "Approved",
+    Inspecting = "Inspecting",
+    SigningContract = "SigningContract",
     SaleEligible = "SaleEligible",
     Active = "Active",
     Maintenance = "Maintenance",
@@ -40,3 +42,23 @@ export type VehiclePaginationResponse = SuccessResponse<PaginationResponse<Vehic
 
 export type VehicleDetailResponse = SuccessResponse<Vehicle>
 
+
+//============================== Vehicle Status Action=======================
+export enum VehicleAction {
+    APPROVE = "APPROVE",               // Duyệt
+    REJECT = "REJECT",                 // Từ chối
+
+    MARK_INSPECTING = "MARK_INSPECTING", // Chuyển sang đang kiểm tra
+    COMPLETE_INSPECTION = "COMPLETE_INSPECTION", // Hoàn tất kiểm tra
+
+    ACTIVATE = "ACTIVATE",             // Kích hoạt xe
+    MOVE_TO_MAINTENANCE = "MOVE_TO_MAINTENANCE", // Chuyển bảo trì
+    DECOMMISSION = "DECOMMISSION",     // Ngưng sử dụng
+}
+
+export interface VehicleStatusAction {
+    type: VehicleAction
+    label: string
+    nextStatus: VehicleStatus
+    variant?: "default" | "destructive"
+}

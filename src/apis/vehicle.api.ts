@@ -1,4 +1,4 @@
-import type { VehicleDetailResponse, VehiclePaginationParams, VehiclePaginationResponse } from "@/types/vehicle.type"
+import type { VehicleDetailResponse, VehiclePaginationParams, VehiclePaginationResponse, VehicleStatus } from "@/types/vehicle.type"
 import http from "@/utils/http"
 
 export const URL_VEHICLE = {
@@ -19,4 +19,6 @@ export const vehicleApi = {
     //     await http.put<VehicleDetailResponse>(URL_VEHICLE.UPDATE, { params: { id }, data }),
     delete: async (id: string) =>
         await http.delete<VehicleDetailResponse>(URL_VEHICLE.GET_ALL, { params: { id } }),
+    updateStatus: (id: string, status: VehicleStatus) =>
+        http.patch(`/vehicles/${id}/status`, null, { params: { status } }),
 }
