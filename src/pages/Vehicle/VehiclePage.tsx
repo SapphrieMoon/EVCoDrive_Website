@@ -5,8 +5,10 @@ import { useState } from "react";
 import { vehicleColumns } from "./vehicle-columns";
 import type { VehicleAction, VehicleStatus } from "@/types/vehicle.type";
 import { VEHICLE_STATUS_ACTIONS } from "@/constants/status/vehicle/vehicle-status-action";
+import { VehicleDetail } from "./vehicle-detail";
 
 export default function VehiclePage() {
+    //========================== Pagination ==========================
     const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 10
@@ -14,12 +16,14 @@ export default function VehiclePage() {
 
     const [search, setSearch] = useState("");
 
-    const { data, isLoading } = vehicleQueries.usePagination({
+    const { data, isFetching } = vehicleQueries.usePagination({
         pageNumber: pagination.pageIndex + 1,
         pageSize: pagination.pageSize,
         searchTerm: search
     })
+    //========================== End Pagination ==========================
 
+    //========================== Update Status ==========================
     const updateStatusMutation = vehicleQueries.useUpdateStatus()
 
     const handleAction = (
@@ -41,6 +45,17 @@ export default function VehiclePage() {
             status: actionConfig.nextStatus, // 👈 CHỈ CÁI NÀY GỬI BE
         })
     }
+    //========================== End Update Status ==========================
+
+    //========================== View Detail ==========================
+    const [selectedId, setSelectedId] = useState<string | null>(null)
+    const [isDetailOpen, setIsDetailOpen] = useState(false)
+
+    const handleViewDetail = (id: string) => {
+        setSelectedId(id)
+        setIsDetailOpen(true)
+    }
+
 
     return (
         <div className="space-y-2 m-4">
@@ -73,10 +88,19 @@ export default function VehiclePage() {
                 onPaginationChange={setPagination}
                 meta={{
                     onAction: handleAction,
+                    onViewDetail: handleViewDetail
                 }}
 
-                isLoading={isLoading}
+                isLoading={isFetching}
             />
+
+            {selectedId && (
+                <VehicleDetail
+                    id={selectedId}
+                    open={isDetailOpen}
+                    onOpenChange={setIsDetailOpen}
+                />
+            )}
         </div>
     )
 }

@@ -8,6 +8,7 @@ import VehicleBrandPage from "./pages/Vehicle-Brand";
 import ContractPage from "./pages/Contract";
 import { PublicLayout } from "./layouts/PublicLayout";
 import VehiclePage from "./pages/Vehicle";
+import VehicleModelPage from "./pages/Vehicle-Model";
 
 export default function useRouteElements() {
     const routeElements = useRoutes([
@@ -42,6 +43,14 @@ export default function useRouteElements() {
                     element: (
                         <Suspense>
                             <VehicleBrandPage />
+                        </Suspense>
+                    )
+                },
+                {
+                    path: path.vehicleModel,
+                    element: (
+                        <Suspense>
+                            <VehicleModelPage />
                         </Suspense>
                     )
                 },
