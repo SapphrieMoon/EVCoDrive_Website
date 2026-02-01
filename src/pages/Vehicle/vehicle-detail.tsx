@@ -95,7 +95,7 @@ export function VehicleDetail({ id, open, onOpenChange }: VehicleDetailProps) {
 
                                     <div className="grid grid-cols-2 gap-4">
                                         <InfoItem icon={Palette} label="Màu sắc" value={vehicleData?.color} />
-                                        {/* <InfoItem icon={Calendar} label="Năm sản xuất" value={vehicleData?.year.toString()} /> */}
+                                        <InfoItem icon={Calendar} label="Năm sản xuất" value={vehicleData?.year.toString()} />
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4">
@@ -105,7 +105,7 @@ export function VehicleDetail({ id, open, onOpenChange }: VehicleDetailProps) {
                                             value={`${vehicleData?.batteryHealth}%`}
                                             valueClassName={vehicleData?.batteryHealth && vehicleData.batteryHealth < 70 ? "text-destructive" : "text-chart-2"}
                                         />
-                                        {/* <InfoItem icon={Milestone} label="Odometer" value={`${vehicleData?.odometer.toLocaleString()} km`} /> */}
+                                        <InfoItem icon={Milestone} label="Odometer" value={`${vehicleData?.odometer.toLocaleString()} km`} />
                                     </div>
 
                                     <Separator className="my-2" />
