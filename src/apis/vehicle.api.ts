@@ -12,7 +12,7 @@ export const vehicleApi = {
     getAllPagination: async (params: VehiclePaginationParams) =>
         await http.get<VehiclePaginationResponse>(URL_VEHICLE.GET_ALL_PAGINATION, { params }),
     getDetail: async (id: string) =>
-        await http.get<VehicleDetailResponse>(URL_VEHICLE.GET_ALL, { params: { id } }),
+        await http.get<VehicleDetailResponse>(`/vehicles/${id}`),
     // create: async (data: VehicleFormValues) =>
     //     await http.post<VehicleDetailResponse>(URL_VEHICLE.CREATE, data),
     // update: async (id: string, data: VehicleFormValues) =>

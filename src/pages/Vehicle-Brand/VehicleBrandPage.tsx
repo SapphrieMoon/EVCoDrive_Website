@@ -11,14 +11,7 @@ import { VehicleBrandForm } from "./vehicle-brand-form";
 import type { CrudFormMode } from "@/types/crud-form.type";
 
 export default function VehicleBrandPage() {
-    const [selectedId, setSelectedId] = useState<string | null>(null)
-    const [isDetailOpen, setIsDetailOpen] = useState(false)
-
-    const handleViewDetail = (id: string) => {
-        setSelectedId(id)
-        setIsDetailOpen(true)
-    }
-
+    //======================== Pagination ==========================
     const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 10
@@ -26,12 +19,24 @@ export default function VehicleBrandPage() {
 
     const [search, setSearch] = useState("");
 
-    const { data, isLoading } = vehicleBrandQueries.usePagination({
+    const { data, isRefetching } = vehicleBrandQueries.usePagination({
         pageNumber: pagination.pageIndex + 1,
         pageSize: pagination.pageSize,
         searchTermByName: search
     })
+    //======================== End Pagination ==========================
 
+    //======================== View Detail ==========================
+    const [selectedId, setSelectedId] = useState<string | null>(null)
+    const [isDetailOpen, setIsDetailOpen] = useState(false)
+
+    const handleViewDetail = (id: string) => {
+        setSelectedId(id)
+        setIsDetailOpen(true)
+    }
+    //======================== End View Detail ==========================
+
+    //======================== Create / Update ==========================
     const [dialogOpen, setDialogOpen] = useState(false)
     const [dialogMode, setDialogMode] = useState<CrudFormMode>("create")
     const [editingId, setEditingId] = useState<string | null>(null)
@@ -47,6 +52,7 @@ export default function VehicleBrandPage() {
         setEditingId(id)
         setDialogOpen(true)
     }
+    //======================== End Create / Update ==========================
 
 
     return (
@@ -82,7 +88,7 @@ export default function VehicleBrandPage() {
                     onViewDetail: handleViewDetail,
                     onEdit: handleEdit
                 }}
-                isLoading={isLoading}
+                isLoading={isRefetching}
             />
 
             {selectedId && (

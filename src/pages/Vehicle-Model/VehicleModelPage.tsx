@@ -1,13 +1,13 @@
 import { DataTable } from "@/common/data-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import contractQueries from "@/queries/contract.query";
+import vehicleModelQueries from "@/queries/vehicle-model.type";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
-import { contractColumns } from "./contract.columns";
+import { vehicleModelColumns } from "./vehicle-model-columns";
 
-export default function ContractPage() {
-    //========================== Pagination ==========================
+export default function VehicleModelPage() {
+    //======================== Pagination ==========================
     const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 10
@@ -15,20 +15,20 @@ export default function ContractPage() {
 
     const [search, setSearch] = useState("");
 
-    const { data, isFetching } = contractQueries.usePagination({
+    const { data, isRefetching } = vehicleModelQueries.useGetPagination({
         pageNumber: pagination.pageIndex + 1,
         pageSize: pagination.pageSize,
-        searchTerm: search
+        searchTermByName: search
     })
     return (
         <div className="space-y-2 m-4">
 
-            <h1 className="text-4xl font-bold">Quản lý các hợp đồng</h1>
+            <h1 className="text-4xl font-bold">Quản lý các dòng xe</h1>
 
 
             <div className="flex items-center py-4 justify-between mt-6">
                 <Input
-                    placeholder="Tìm kiếm hợp đồng..."
+                    placeholder="Tìm kiếm dòng xe..."
                     value={search}
                     onChange={(e) => {
                         setSearch(e.target.value);
@@ -39,19 +39,21 @@ export default function ContractPage() {
 
                 <Button>
                     <PlusIcon className="w-4 h-4" />
-                    Thêm hợp đồng
+                    Thêm thương hiệu
                 </Button>
             </div>
 
             <DataTable
-                columns={contractColumns}
+                columns={vehicleModelColumns}
                 data={data?.data.data.items ?? []}
                 pageCount={data?.data.data.totalPages ?? 0}
                 pagination={pagination}
                 onPaginationChange={setPagination}
-
-                isLoading={isFetching}
+                meta={{
+                }}
+                isLoading={isRefetching}
             />
+
         </div>
     )
 }

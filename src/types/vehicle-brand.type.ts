@@ -14,7 +14,14 @@ export interface VehicleBrandRequest {
     name: string
     logoUrl: string
 }
-export interface VehicleBrandPaginationParams extends PaginationParams {
+
+export interface VehicleBrandSummary {
+    vehicleBrandId: string
+    name: string
+    logoUrl: string
+}
+
+export type VehicleBrandPaginationParams = PaginationParams & {
     searchTermByName?: string
 }
 
@@ -24,4 +31,4 @@ export type VehicleBrandPaginationResponse =
 export type VehicleBrandDetailResponse =
     SuccessResponse<VehicleBrand>
 
-export interface VehicleBrandFormProps extends BaseCrudFormProps { }
+export type VehicleBrandFormProps = BaseCrudFormProps & {}
