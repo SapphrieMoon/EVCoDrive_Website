@@ -3,6 +3,8 @@ import { Input } from "@/components/ui/input";
 import vehicleQueries from "@/queries/vehicle.query";
 import { useState } from "react";
 import { vehicleColumns } from "./vehicle-columns";
+import type { VehicleAction, VehicleStatus } from "@/types/vehicle.type";
+import { VEHICLE_STATUS_ACTIONS } from "@/constants/status/vehicle/vehicle-status-action";
 
 export default function VehiclePage() {
     const [pagination, setPagination] = useState({
@@ -17,6 +19,29 @@ export default function VehiclePage() {
         pageSize: pagination.pageSize,
         searchTerm: search
     })
+
+    const updateStatusMutation = vehicleQueries.useUpdateStatus()
+
+    const handleAction = (
+        id: string,
+        currentStatus: VehicleStatus,
+        action: VehicleAction
+    ) => {
+        const actionConfig =
+            VEHICLE_STATUS_ACTIONS[currentStatus]?.find(
+                a => a.type === action
+            )
+
+        console.log("trest: ", actionConfig, currentStatus, action)
+
+        if (!actionConfig) return
+
+        updateStatusMutation.mutate({
+            id,
+            status: actionConfig.nextStatus, // 👈 CHỈ CÁI NÀY GỬI BE
+        })
+    }
+
     return (
         <div className="space-y-2 m-4">
 
@@ -46,6 +71,9 @@ export default function VehiclePage() {
                 pageCount={data?.data.data.totalPages ?? 0}
                 pagination={pagination}
                 onPaginationChange={setPagination}
+                meta={{
+                    onAction: handleAction,
+                }}
 
                 isLoading={isLoading}
             />
