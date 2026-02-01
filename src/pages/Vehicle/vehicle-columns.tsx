@@ -2,8 +2,9 @@ import { TableActionCell } from "@/common/table-action-cell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { VEHICLE_STATUS_MAPPING } from "@/constants/status/vehicle/vehicle-status";
+import { VEHICLE_STATUS_ACTIONS } from "@/constants/status/vehicle/vehicle-status-action";
 import { cn } from "@/lib/utils";
-import { VehicleAction, VehicleStatus, type Vehicle } from "@/types/vehicle.type";
+import { VehicleStatus, type Vehicle } from "@/types/vehicle.type";
 import { formatDate } from "@/utils/date";
 import type { ColumnDef } from "@tanstack/react-table";
 
@@ -90,39 +91,27 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
         cell: ({ row, table }) => {
             const id = row.original.vehicleId
             const status = row.original.vehicleStatus
+            const actions = VEHICLE_STATUS_ACTIONS[status] ?? []
 
-            const canApproveReject =
-                status === VehicleStatus.Pending || status === VehicleStatus.Inspecting
-            // const { mutate, isPending } = vehicleQueries.useDelete()
             return (
                 <div className="flex items-center gap-2">
-                    {canApproveReject && (
-                        <>
-                            {/* APPROVE */}
-                            <Button
-                                size="icon"
-                                variant="outline"
-                                className="text-green-600 hover:bg-green-500/10"
-                                onClick={() =>
-                                    table.options.meta?.onAction?.(id, status, VehicleAction.APPROVE)
-                                }
-                            >
-                                ✓
-                            </Button>
-
-                            {/* REJECT */}
-                            <Button
-                                size="icon"
-                                variant="outline"
-                                className="text-red-600 hover:bg-red-500/10"
-                                onClick={() =>
-                                    table.options.meta?.onAction?.(id, status, VehicleAction.REJECT)
-                                }
-                            >
-                                ✕
-                            </Button>
-                        </>
-                    )}
+                    {actions.map(action => (
+                        <Button
+                            key={action.type}
+                            size="icon"
+                            variant={action.variant ?? "outline"}
+                            title={action.label}
+                            onClick={() =>
+                                table.options.meta?.onAction?.(
+                                    id,
+                                    status,
+                                    action.type
+                                )
+                            }
+                        >
+                            <action.icon className="h-4 w-4" />
+                        </Button>
+                    ))}
 
                     <TableActionCell onDetailClick={() => table.options.meta?.onViewDetail?.(id)}
                         onEditClick={() => table.options.meta?.onEdit?.(id)}

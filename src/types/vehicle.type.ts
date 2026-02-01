@@ -1,3 +1,4 @@
+import type { LucideIcon } from "lucide-react";
 import type { PaginationParams, PaginationResponse } from "./pagination.type";
 import type { SuccessResponse } from "./utils.type";
 
@@ -61,4 +62,5 @@ export interface VehicleStatusAction {
     label: string
     nextStatus: VehicleStatus
     variant?: "default" | "destructive"
+    icon: LucideIcon
 }

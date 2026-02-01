@@ -32,6 +32,8 @@ export default function VehiclePage() {
                 a => a.type === action
             )
 
+        console.log("trest: ", actionConfig, currentStatus, action)
+
         if (!actionConfig) return
 
         updateStatusMutation.mutate({
