@@ -6,7 +6,6 @@ declare module "@tanstack/react-table" {
     interface TableMeta<TData extends RowData> {
         onViewDetail?: (id: string) => void
         onEdit?: (id: string) => void
-        onApprove?: (id: string, status: VehicleAction) => void
-        onReject?: (id: string, status: VehicleAction) => void
+        onAction?: (id: string, currentStatus: VehicleStatus, action: VehicleAction) => void
     }
 }

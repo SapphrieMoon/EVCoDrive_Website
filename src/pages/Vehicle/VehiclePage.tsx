@@ -3,7 +3,8 @@ import { Input } from "@/components/ui/input";
 import vehicleQueries from "@/queries/vehicle.query";
 import { useState } from "react";
 import { vehicleColumns } from "./vehicle-columns";
-import type { VehicleStatus } from "@/types/vehicle.type";
+import type { VehicleAction, VehicleStatus } from "@/types/vehicle.type";
+import { VEHICLE_STATUS_ACTIONS } from "@/constants/status/vehicle/vehicle-status-action";
 
 export default function VehiclePage() {
     const [pagination, setPagination] = useState({
@@ -21,13 +22,24 @@ export default function VehiclePage() {
 
     const updateStatusMutation = vehicleQueries.useUpdateStatus()
 
-    const handleApprove = (id: string, status: VehicleStatus) => {
-        updateStatusMutation.mutate({ id, status })
+    const handleAction = (
+        id: string,
+        currentStatus: VehicleStatus,
+        action: VehicleAction
+    ) => {
+        const actionConfig =
+            VEHICLE_STATUS_ACTIONS[currentStatus]?.find(
+                a => a.type === action
+            )
+
+        if (!actionConfig) return
+
+        updateStatusMutation.mutate({
+            id,
+            status: actionConfig.nextStatus, // 👈 CHỈ CÁI NÀY GỬI BE
+        })
     }
 
-    const handleReject = (id: string, status: VehicleStatus) => {
-        updateStatusMutation.mutate({ id, status })
-    }
     return (
         <div className="space-y-2 m-4">
 
@@ -58,8 +70,7 @@ export default function VehiclePage() {
                 pagination={pagination}
                 onPaginationChange={setPagination}
                 meta={{
-                    onApprove: handleApprove,
-                    onReject: handleReject,
+                    onAction: handleAction,
                 }}
 
                 isLoading={isLoading}

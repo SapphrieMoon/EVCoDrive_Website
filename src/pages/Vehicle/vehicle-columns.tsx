@@ -104,7 +104,7 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
                                 variant="outline"
                                 className="text-green-600 hover:bg-green-500/10"
                                 onClick={() =>
-                                    table.options.meta?.onApprove?.(id, VehicleAction.APPROVE)
+                                    table.options.meta?.onAction?.(id, status, VehicleAction.APPROVE)
                                 }
                             >
                                 ✓
@@ -116,7 +116,7 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
                                 variant="outline"
                                 className="text-red-600 hover:bg-red-500/10"
                                 onClick={() =>
-                                    table.options.meta?.onReject?.(id, VehicleAction.REJECT)
+                                    table.options.meta?.onAction?.(id, status, VehicleAction.REJECT)
                                 }
                             >
                                 ✕
