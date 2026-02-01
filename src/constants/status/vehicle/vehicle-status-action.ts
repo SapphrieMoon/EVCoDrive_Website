@@ -54,21 +54,21 @@ export const VEHICLE_STATUS_ACTIONS: Record<
         },
     ],
 
-    [VehicleStatus.SaleEligible]: [
-        {
-            type: VehicleAction.ACTIVATE,
-            label: "Kích hoạt",
-            nextStatus: VehicleStatus.Active,
-            icon: Check,
-        },
-        {
-            type: VehicleAction.REJECT,
-            label: "Từ chối",
-            nextStatus: VehicleStatus.Rejected,
-            variant: "destructive",
-            icon: X,
-        },
-    ],
+    // [VehicleStatus.SaleEligible]: [
+    //     {
+    //         type: VehicleAction.ACTIVATE,
+    //         label: "Kích hoạt",
+    //         nextStatus: VehicleStatus.Active,
+    //         icon: Check,
+    //     },
+    //     {
+    //         type: VehicleAction.REJECT,
+    //         label: "Từ chối",
+    //         nextStatus: VehicleStatus.Rejected,
+    //         variant: "destructive",
+    //         icon: X,
+    //     },
+    // ],
 
     [VehicleStatus.Active]: [
         {
@@ -102,6 +102,7 @@ export const VEHICLE_STATUS_ACTIONS: Record<
         },
     ],
 
+    [VehicleStatus.SaleEligible]: [],
     [VehicleStatus.SigningContract]: [],
     [VehicleStatus.Rejected]: [],
     [VehicleStatus.Decommissioned]: [],
