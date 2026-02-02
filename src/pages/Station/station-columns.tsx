@@ -1,4 +1,6 @@
 import { TableActionCell } from "@/common/table-action-cell";
+import { DeleteAction } from "@/common/table-delete-action";
+import stationQueries from "@/queries/station.query";
 import type { Station } from "@/types/station.type";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Clock, ExternalLink, MapPin } from "lucide-react";
@@ -80,17 +82,17 @@ export const stationColumns: ColumnDef<Station>[] = [
         header: "Thao tác",
         cell: ({ row, table }) => {
             const id = row.original.stationId
-            // const { mutate, isPending } = stationQueries.useDelete()
+            const { mutate, isPending } = stationQueries.useDelete()
 
             return (
                 <TableActionCell
                     onDetailClick={() => table.options.meta?.onViewDetail?.(id)}
                     onEditClick={() => table.options.meta?.onEdit?.(id)}
                 >
-                    {/* <DeleteAction
-              onConfirm={() => mutate(id)}
-              isLoading={isPending}
-            /> */}
+                    <DeleteAction
+                        onConfirm={() => mutate(id)}
+                        isLoading={isPending}
+                    />
                 </TableActionCell>
             )
         }

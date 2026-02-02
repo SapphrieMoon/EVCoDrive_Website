@@ -1,7 +1,7 @@
 import { stationApi } from "@/apis/station.api"
 import { stationKey } from "@/constants/query-keys/station.key"
 import type { StationPaginationParams } from "@/types/station.type"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 const stationQueries = {
     useAll: () => {
@@ -24,6 +24,19 @@ const stationQueries = {
             queryKey: stationKey.detail(id),
             queryFn: () => stationApi.getDetail(id),
             enabled: !!id
+        })
+    },
+
+    useDelete: () => {
+        const queryClient = useQueryClient()
+
+        return useMutation({
+            mutationFn: (id: string) => stationApi.delete(id),
+            onSuccess: () => {
+                queryClient.invalidateQueries({
+                    queryKey: stationKey.lists()
+                })
+            }
         })
     }
 
