@@ -6,11 +6,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const vehicleBrandQueries = {
-    useGetAll: () => {
+    useAll: () => {
         return useQuery({
             queryKey: vehicleBrandKey.all(),
-            queryFn: () => vehicleBrandApi.getAll(),
-            placeholderData: (previousData) => previousData,
+            queryFn: vehicleBrandApi.getAll,
         })
     },
 
@@ -22,27 +21,12 @@ const vehicleBrandQueries = {
         })
     },
 
-    useDelete: () => {
-        const queryClient = useQueryClient()
-
-        return useMutation({
-            mutationFn: (id: string) => vehicleBrandApi.delete(id),
-            onSuccess: () => {
-                queryClient.invalidateQueries({
-                    queryKey: vehicleBrandKey.lists(), exact: false
-                })
-                toast.success("Xóa thành công")
-            }
-        })
-    },
-
-    useGetDetail: (id: string) => {
+    useDetail: (id: string) => {
         const safeId = id ?? ""
 
         return useQuery({
             queryKey: vehicleBrandKey.detail(safeId),
             queryFn: () => vehicleBrandApi.detail(safeId),
-            placeholderData: (previousData) => previousData,
             enabled: !!id
         })
     },
@@ -74,7 +58,21 @@ const vehicleBrandQueries = {
                 toast.success("Cập nhật thành công")
             }
         })
-    }
+    },
+
+    useDelete: () => {
+        const queryClient = useQueryClient()
+
+        return useMutation({
+            mutationFn: (id: string) => vehicleBrandApi.delete(id),
+            onSuccess: () => {
+                queryClient.invalidateQueries({
+                    queryKey: vehicleBrandKey.lists(), exact: false
+                })
+                toast.success("Xóa thành công")
+            }
+        })
+    },
 }
 
 export default vehicleBrandQueries

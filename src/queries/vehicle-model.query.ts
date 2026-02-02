@@ -4,14 +4,14 @@ import type { VehicleModelPaginationParams } from "@/types/vehicle-model.type"
 import { useQuery } from "@tanstack/react-query"
 
 const vehicleModelQueries = {
-    useGetAll: () => {
+    useAll: () => {
         return useQuery({
             queryKey: vehicleModelKey.all(),
-            queryFn: () => vehicleModelApi.getAll()
+            queryFn: vehicleModelApi.getAll,
         })
     },
 
-    useGetPagination: (params: VehicleModelPaginationParams) => {
+    usePagination: (params: VehicleModelPaginationParams) => {
         return useQuery({
             queryKey: vehicleModelKey.listPagination(params),
             queryFn: () => vehicleModelApi.getPagination(params),
@@ -19,11 +19,10 @@ const vehicleModelQueries = {
         })
     },
 
-    useGetDetail: (id: string) => {
+    useDetail: (id: string) => {
         return useQuery({
             queryKey: vehicleModelKey.detail(id),
             queryFn: () => vehicleModelApi.getDetail(id),
-            placeholderData: (previousData) => previousData,
             enabled: !!id
         })
     }

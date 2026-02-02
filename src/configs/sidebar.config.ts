@@ -8,6 +8,8 @@ export const adminSidebar: SidebarItem[] = [
             { label: "Tài khoản", path: "/accounts" },
             { label: "Nhóm", path: "/groups" },
             { label: "Hợp đồng", path: path.contract },
+            { label: "Trạm kiểm tra", path: path.station },
+            { label: "Nhân viên", path: path.staff },
         ],
     },
     {

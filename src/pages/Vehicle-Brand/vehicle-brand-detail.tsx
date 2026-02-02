@@ -18,7 +18,7 @@ interface VehicleBrandDetailProps {
 }
 
 export function VehicleBrandDetail({ id, open, onOpenChange }: VehicleBrandDetailProps) {
-    const { data, isLoading } = vehicleBrandQueries.useGetDetail(id as string)
+    const { data, isLoading } = vehicleBrandQueries.useDetail(id as string)
 
     console.log("data", data?.data)
 

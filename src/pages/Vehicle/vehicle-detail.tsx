@@ -36,7 +36,7 @@ interface VehicleDetailProps {
 
 export function VehicleDetail({ id, open, onOpenChange }: VehicleDetailProps) {
     // Giả sử dùng query lấy dữ liệu xe
-    const { data, isLoading } = vehicleQueries.useGetDetail(id as string)
+    const { data, isLoading } = vehicleQueries.useDetail(id as string)
     const vehicleData = data?.data.data;
     console.log("dwqeqwe: ", vehicleData);
 

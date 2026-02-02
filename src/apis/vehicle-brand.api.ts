@@ -2,24 +2,24 @@ import type { VehicleBrandFormValues } from "@/schema/vehicle-brand.schema";
 import type { VehicleBrandDetailResponse, VehicleBrandPaginationParams, VehicleBrandPaginationResponse } from "@/types/vehicle-brand.type";
 import http from "@/utils/http"
 
-export const URL_VEHICLE_BRAND = {
-    GET_ALL: "/vehiclebrands",
-    GET_ALL_PAGINATION: "/vehiclebrands/pagination"
+export const VEHICLE_BRAND_URL = {
+    BASE: "/vehiclebrands",
+    PAGINATION: "/vehiclebrands/pagination"
 }
 
 const vehicleBrandApi = {
     getAll: async () =>
-        await http.get<VehicleBrandPaginationResponse>(URL_VEHICLE_BRAND.GET_ALL),
+        await http.get<VehicleBrandPaginationResponse>(VEHICLE_BRAND_URL.BASE),
     getAllPagination: async (params: VehicleBrandPaginationParams) =>
-        await http.get<VehicleBrandPaginationResponse>(URL_VEHICLE_BRAND.GET_ALL_PAGINATION, { params }),
-    delete: async (id: string) =>
-        await http.delete<VehicleBrandPaginationResponse>(`/vehiclebrands/${id}`),
+        await http.get<VehicleBrandPaginationResponse>(VEHICLE_BRAND_URL.PAGINATION, { params }),
     detail: async (id: string) =>
-        await http.get<VehicleBrandDetailResponse>(`/vehiclebrands/${id}`),
+        await http.get<VehicleBrandDetailResponse>(`${VEHICLE_BRAND_URL.BASE}/${id}`),
     create: async (data: VehicleBrandFormValues) =>
-        await http.post<VehicleBrandDetailResponse>(URL_VEHICLE_BRAND.GET_ALL, data),
+        await http.post<VehicleBrandDetailResponse>(VEHICLE_BRAND_URL.BASE, data),
     update: async (id: string, data: VehicleBrandFormValues) =>
-        await http.put<VehicleBrandDetailResponse>(`/vehiclebrands/${id}`, data),
+        await http.put<VehicleBrandDetailResponse>(`${VEHICLE_BRAND_URL.BASE}/${id}`, data),
+    delete: async (id: string) =>
+        await http.delete<VehicleBrandPaginationResponse>(`${VEHICLE_BRAND_URL.BASE}/${id}`),
 }
 
 export default vehicleBrandApi;
