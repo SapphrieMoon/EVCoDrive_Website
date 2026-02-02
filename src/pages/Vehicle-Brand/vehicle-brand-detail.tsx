@@ -8,16 +8,12 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { CalendarDays, Hash, Info } from "lucide-react"
 import vehicleBrandQueries from "@/queries/vehicle-brand.query"
-import { Skeleton } from "@/components/ui/skeleton"
 import { formatDate } from "@/utils/date"
+import type { BaseDetailProps } from "@/types/commons/dialog.type"
+import { DetailSkeleton } from "@/common/skeletons/detail-skeleton"
 
-interface VehicleBrandDetailProps {
-    id: string | null
-    open: boolean
-    onOpenChange: (open: boolean) => void
-}
 
-export function VehicleBrandDetail({ id, open, onOpenChange }: VehicleBrandDetailProps) {
+export function VehicleBrandDetail({ id, open, onOpenChange }: BaseDetailProps) {
     const { data, isLoading } = vehicleBrandQueries.useDetail(id as string)
 
     console.log("data", data?.data)
@@ -34,35 +30,24 @@ export function VehicleBrandDetail({ id, open, onOpenChange }: VehicleBrandDetai
                         Thông tin đầy đủ của hãng xe trong hệ thống
                     </SheetDescription>
                 </SheetHeader>
-
-                <div className="space-y-8 py-6">
-                    {/* Logo Section */}
-                    <div className="flex flex-col items-center justify-center space-y-4">
-                        <div className="relative flex h-32 w-32 items-center justify-center rounded-xl border bg-card p-4 shadow-sm">
-                            <img
-                                src={data?.data.data.logoUrl}
-                                alt={data?.data.data.name}
-                                className="h-full w-full object-contain"
-                            />
-                        </div>
-                        <Badge variant="secondary" className="text-base px-4">{data?.data.data.name}</Badge>
-                    </div>
-
-                    {/* Info Section */}
-                    {isLoading ? (
-                        // 👈 SKELETON KHI ĐANG LOAD
-                        <div className="space-y-8 py-6">
-                            <div className="flex flex-col items-center justify-center space-y-4">
-                                <Skeleton className="h-32 w-32 rounded-xl" />
-                                <Skeleton className="h-6 w-24" />
+                {/* Info Section */}
+                {isLoading ? (
+                    <DetailSkeleton />
+                ) : (
+                    <div className="space-y-8 py-6">
+                        {/* Logo Section */}
+                        <div className="flex flex-col items-center justify-center space-y-4">
+                            <div className="relative flex h-32 w-32 items-center justify-center rounded-xl border bg-card p-4 shadow-sm">
+                                <img
+                                    src={data?.data.data.logoUrl}
+                                    alt={data?.data.data.name}
+                                    className="h-full w-full object-contain"
+                                />
                             </div>
-                            <div className="space-y-4">
-                                {[1, 2, 3].map((i) => (
-                                    <Skeleton key={i} className="h-16 w-full rounded-lg" />
-                                ))}
-                            </div>
+                            <Badge variant="secondary" className="text-base px-4">{data?.data.data.name}</Badge>
                         </div>
-                    ) : (
+
+
                         <div className="space-y-4 ml-4">
                             <div className="flex items-start gap-3 rounded-lg border p-3">
                                 <Hash className="mt-0.5 h-4 w-4 text-muted-foreground" />
@@ -88,8 +73,9 @@ export function VehicleBrandDetail({ id, open, onOpenChange }: VehicleBrandDetai
                                 </div>
                             </div>
                         </div>
-                    )}
-                </div>
+
+                    </div>
+                )}
             </SheetContent>
         </Sheet>
     )

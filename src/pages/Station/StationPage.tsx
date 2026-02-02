@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import stationQueries from "@/queries/station.query";
 import { useState } from "react";
 import { stationColumns } from "./station-columns";
+import { StationDetail } from "./station-detail";
 
 export default function StationPage() {
     //========================== Pagination ==========================
@@ -18,6 +19,15 @@ export default function StationPage() {
         pageSize: pagination.pageSize,
         searchTerm: search
     })
+
+    //========================== Detail ==========================
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
+    const [selectedId, setSelectedId] = useState<string | null>(null);
+
+    const handleViewDetail = (id: string) => {
+        setSelectedId(id);
+        setIsDetailOpen(true);
+    }
 
     return (
         <div className="space-y-2 m-4">
@@ -49,18 +59,19 @@ export default function StationPage() {
                 pagination={pagination}
                 onPaginationChange={setPagination}
                 meta={{
+                    onViewDetail: handleViewDetail
                 }}
 
                 isLoading={isFetching}
             />
 
-            {/* {selectedId && (
-                    <VehicleDetail
-                        id={selectedId}
-                        open={isDetailOpen}
-                        onOpenChange={setIsDetailOpen}
-                    />
-                )} */}
+            {selectedId && (
+                <StationDetail
+                    id={selectedId}
+                    open={isDetailOpen}
+                    onOpenChange={setIsDetailOpen}
+                />
+            )}
         </div>
     )
 }

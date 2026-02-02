@@ -1,5 +1,5 @@
 import path from "@/constants/path";
-import type { SidebarItem } from "@/types/sidebar.type";
+import type { SidebarItem } from "@/types/commons/sidebar.type";
 
 export const adminSidebar: SidebarItem[] = [
     {

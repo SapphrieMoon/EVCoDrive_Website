@@ -7,7 +7,7 @@ import { loginSchema, type LoginSchema } from "@/schema/auth.schema";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLoginMutation } from "@/queries/auth.query";
 import { isAxiosError, isAxiosUnprocessableEntityError } from "@/utils/axios/axiosError";
-import type { ErrorResponse } from "@/types/utils.type";
+import type { ErrorResponse } from "@/types/commons/utils.type";
 
 export default function Login() {
     const navigate = useNavigate();

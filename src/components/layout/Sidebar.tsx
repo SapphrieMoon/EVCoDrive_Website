@@ -1,4 +1,4 @@
-import type { SidebarItem } from "@/types/sidebar.type";
+import type { SidebarItem } from "@/types/commons/sidebar.type";
 import { NavLink } from "react-router-dom";
 
 export const Sidebar = ({ items }: { items: SidebarItem[] }) => {
