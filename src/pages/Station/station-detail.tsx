@@ -1,10 +1,8 @@
 import { DetailSkeleton } from "@/common/skeletons/detail-skeleton"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { cn } from "@/lib/utils"
 import stationQueries from "@/queries/station.query"
 import type { BaseDetailProps } from "@/types/commons/dialog.type"
-import { formatDate } from "@/utils/date"
-import { Activity, CalendarDays, Clock, ExternalLink, Hash, MapPin, Navigation } from "lucide-react"
+import { Clock, ExternalLink, MapPin, Navigation } from "lucide-react"
 
 export function StationDetail({ id, open, onOpenChange }: BaseDetailProps) {
     const { data, isLoading } = stationQueries.useDetail(id as string)
