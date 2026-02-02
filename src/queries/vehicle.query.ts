@@ -5,10 +5,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
 const vehicleQueries = {
-    useGetAll: () => {
+    useAll: () => {
         return useQuery({
             queryKey: vehicleKey.all(),
-            queryFn: () => vehicleApi.getAll(),
+            queryFn: vehicleApi.getAll,
             placeholderData: (previousData) => previousData,
         })
     },
@@ -21,7 +21,7 @@ const vehicleQueries = {
         })
     },
 
-    useGetDetail: (id: string) => {
+    useDetail: (id: string) => {
         const safeId = id ?? ""
 
         return useQuery({

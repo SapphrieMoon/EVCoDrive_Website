@@ -4,7 +4,10 @@ const path = {
     vehicleBrand: '/vehicle-brands',
     vehicleModel: '/vehicle-models',
     contract: '/contracts',
-    vehicle: "/vehicles"
+    vehicle: "/vehicles",
+    station: "/stations",
+    staff: "/staffs",
+
 } as const
 
 export default path

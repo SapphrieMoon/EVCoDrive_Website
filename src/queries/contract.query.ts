@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
 const contractQueries = {
-    useGetAll: () => {
+    useAll: () => {
         return useQuery({
             queryKey: contractKey.all(),
             queryFn: () => contractApi.getAll(),
@@ -18,6 +18,14 @@ const contractQueries = {
             queryKey: contractKey.listPagination(params),
             queryFn: () => contractApi.getAllPagination(params),
             placeholderData: (previousData) => previousData,
+        })
+    },
+
+    useDetail: (id: string) => {
+        return useQuery({
+            queryKey: contractKey.detail(id),
+            queryFn: () => contractApi.getDetail(id),
+            enabled: !!id
         })
     },
 
@@ -35,14 +43,6 @@ const contractQueries = {
         })
     },
 
-    useGetDetail: (id: string) => {
-        return useQuery({
-            queryKey: contractKey.detail(id),
-            queryFn: () => contractApi.getDetail(id),
-            placeholderData: (previousData) => previousData,
-            enabled: !!id
-        })
-    }
 }
 
 export default contractQueries

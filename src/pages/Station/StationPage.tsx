@@ -1,13 +1,11 @@
 import { DataTable } from "@/common/data-table";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import vehicleModelQueries from "@/queries/vehicle-model.query";
-import { PlusIcon } from "lucide-react";
+import stationQueries from "@/queries/station.query";
 import { useState } from "react";
-import { vehicleModelColumns } from "./vehicle-model-columns";
+import { stationColumns } from "./station-columns";
 
-export default function VehicleModelPage() {
-    //======================== Pagination ==========================
+export default function StationPage() {
+    //========================== Pagination ==========================
     const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 10
@@ -15,20 +13,21 @@ export default function VehicleModelPage() {
 
     const [search, setSearch] = useState("");
 
-    const { data, isRefetching } = vehicleModelQueries.usePagination({
+    const { data, isFetching } = stationQueries.usePagination({
         pageNumber: pagination.pageIndex + 1,
         pageSize: pagination.pageSize,
-        searchTermByName: search
+        searchTerm: search
     })
+
     return (
         <div className="space-y-2 m-4">
 
-            <h1 className="text-4xl font-bold">Quản lý các dòng xe</h1>
+            <h1 className="text-4xl font-bold">Quản lý danh sách trạm kiểm tra</h1>
 
 
             <div className="flex items-center py-4 justify-between mt-6">
                 <Input
-                    placeholder="Tìm kiếm dòng xe..."
+                    placeholder="Tìm kiếm trạm..."
                     value={search}
                     onChange={(e) => {
                         setSearch(e.target.value);
@@ -37,23 +36,31 @@ export default function VehicleModelPage() {
                     className="max-w-sm"
                 />
 
-                <Button>
+                {/* <Button>
                     <PlusIcon className="w-4 h-4" />
-                    Thêm thương hiệu
-                </Button>
+                    Thêm hợp đồng
+                </Button> */}
             </div>
 
             <DataTable
-                columns={vehicleModelColumns}
+                columns={stationColumns}
                 data={data?.data.data.items ?? []}
                 pageCount={data?.data.data.totalPages ?? 0}
                 pagination={pagination}
                 onPaginationChange={setPagination}
                 meta={{
                 }}
-                isLoading={isRefetching}
+
+                isLoading={isFetching}
             />
 
+            {/* {selectedId && (
+                    <VehicleDetail
+                        id={selectedId}
+                        open={isDetailOpen}
+                        onOpenChange={setIsDetailOpen}
+                    />
+                )} */}
         </div>
     )
 }
