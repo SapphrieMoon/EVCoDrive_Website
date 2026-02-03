@@ -7,7 +7,7 @@ import type { AuthResponse, RefreshTokenResponse } from "@/types/auth.type";
 import { HttpStatusCode } from "@/constants/httpStatusCode.enum";
 import { toast } from "sonner";
 import { isAxiosExpiredTokenError, isAxiosUnauthorizedError } from "./axios/axiosError";
-import type { ErrorResponse } from "@/types/utils.type";
+import type { ErrorResponse } from "@/types/commons/utils.type";
 
 class Http {
     instance: AxiosInstance

@@ -1,10 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton"
 import { TableBody, TableCell, TableRow } from "@/components/ui/table"
-
-interface TableSkeletonProps {
-    columnCount: number // Số cột của bảng
-    rowCount?: number    // Số dòng muốn hiển thị (mặc định 5-10)
-}
+import type { TableSkeletonProps } from "@/types/commons/skeleton.type"
 
 export function TableSkeleton({ columnCount, rowCount = 10 }: TableSkeletonProps) {
     return (

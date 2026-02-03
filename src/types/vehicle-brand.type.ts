@@ -1,6 +1,6 @@
-import type { BaseCrudFormProps } from "./crud-form.type"
-import type { PaginationParams, PaginationResponse } from "./pagination.type"
-import type { SuccessResponse } from "./utils.type"
+import type { BaseCrudFormProps } from "./commons/crud-form.type"
+import type { PaginationParams, PaginationResponse } from "./commons/pagination.type"
+import type { SuccessResponse } from "./commons/utils.type"
 
 export interface VehicleBrand {
     vehicleBrandId: string

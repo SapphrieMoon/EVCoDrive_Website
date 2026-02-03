@@ -1,7 +1,11 @@
 import { TableActionCell } from "@/common/table-action-cell";
 import { DeleteAction } from "@/common/table-delete-action";
+import { Badge } from "@/components/ui/badge";
+import { STATION_ISOPEN_STATUS, STATION_STATUS_MAPPING } from "@/constants/status/station/station-status";
+import { cn } from "@/lib/utils";
 import stationQueries from "@/queries/station.query";
 import type { Station } from "@/types/station.type";
+import { formatTime } from "@/utils/date";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Clock, ExternalLink, MapPin } from "lucide-react";
 
@@ -30,9 +34,6 @@ export const stationColumns: ColumnDef<Station>[] = [
         header: "Giờ hoạt động",
         cell: ({ row }) => {
             const { openTime, closeTime } = row.original
-            // Format chỉ lấy HH:mm
-            const formatTime = (isoString: string) =>
-                new Date(isoString).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit", hour12: false });
 
             return (
                 <div className="flex items-center gap-2">
@@ -63,20 +64,33 @@ export const stationColumns: ColumnDef<Station>[] = [
             )
         }
     },
-    // {
-    //   accessorKey: "status",
-    //   header: "Trạng thái",
-    //   cell: ({ row }) => {
-    //     const status = row.original.status
-    //     const config = STATION_STATUS_MAPPING[status]
+    {
+        accessorKey: "isOpen",
+        header: "Đóng/Mở cửa",
+        cell: ({ row }) => {
+            const isOpen = row.original.isOpen
+            const config = STATION_ISOPEN_STATUS[isOpen]
+            return (
+                <Badge variant="outline" className={cn("font-medium", config?.color)}>
+                    {config?.label}
+                </Badge>
+            )
+        }
+    },
+    {
+        accessorKey: "status",
+        header: "Trạng thái",
+        cell: ({ row }) => {
+            const status = row.original.status
+            const config = STATION_STATUS_MAPPING[status]
 
-    //     return (
-    //       <Badge variant="outline" className={cn("font-medium", config?.className)}>
-    //         {config?.label || status}
-    //       </Badge>
-    //     )
-    //   }
-    // },
+            return (
+                <Badge variant="outline" className={cn("font-medium", config?.color)}>
+                    {config?.label || status}
+                </Badge>
+            )
+        }
+    },
     {
         id: "actions",
         header: "Thao tác",

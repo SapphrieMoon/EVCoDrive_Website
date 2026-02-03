@@ -8,7 +8,7 @@ import vehicleBrandQueries from "@/queries/vehicle-brand.query";
 import { VehicleBrandDetail } from "./vehicle-brand-detail";
 import { DataTable } from "@/common/data-table";
 import { VehicleBrandForm } from "./vehicle-brand-form";
-import type { CrudFormMode } from "@/types/crud-form.type";
+import type { CrudFormMode } from "@/types/commons/crud-form.type";
 
 export default function VehicleBrandPage() {
     //======================== Pagination ==========================

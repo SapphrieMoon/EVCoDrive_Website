@@ -1,5 +1,5 @@
 import type { User } from "./user.type";
-import type { SuccessResponse } from "./utils.type";
+import type { SuccessResponse } from "./commons/utils.type";
 
 export type AuthResponse = SuccessResponse<{
     token: string;

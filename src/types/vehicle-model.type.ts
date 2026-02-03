@@ -1,5 +1,5 @@
-import type { PaginationParams, PaginationResponse } from "./pagination.type"
-import type { SuccessResponse } from "./utils.type"
+import type { PaginationParams, PaginationResponse } from "./commons/pagination.type"
+import type { SuccessResponse } from "./commons/utils.type"
 import type { VehicleBrandSummary } from "./vehicle-brand.type"
 
 export interface VehicleModel {

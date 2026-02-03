@@ -1,6 +1,6 @@
 
 import { HttpStatusCode } from "@/constants/httpStatusCode.enum";
-import type { ErrorResponse } from "@/types/utils.type";
+import type { ErrorResponse } from "@/types/commons/utils.type";
 import axios, { AxiosError } from "axios";
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {

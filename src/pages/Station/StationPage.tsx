@@ -3,6 +3,11 @@ import { Input } from "@/components/ui/input";
 import stationQueries from "@/queries/station.query";
 import { useState } from "react";
 import { stationColumns } from "./station-columns";
+import { StationDetail } from "./station-detail";
+import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
+import type { CrudFormMode } from "@/types/commons/crud-form.type";
+import { StationForm } from "./station-form";
 
 export default function StationPage() {
     //========================== Pagination ==========================
@@ -18,6 +23,32 @@ export default function StationPage() {
         pageSize: pagination.pageSize,
         searchTerm: search
     })
+
+    //========================== Detail ==========================
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
+    const [selectedId, setSelectedId] = useState<string | null>(null);
+
+    const handleViewDetail = (id: string) => {
+        setSelectedId(id);
+        setIsDetailOpen(true);
+    }
+
+    //======================== Create / Update ==========================
+    const [dialogOpen, setDialogOpen] = useState(false)
+    const [dialogMode, setDialogMode] = useState<CrudFormMode>("create")
+    const [editingId, setEditingId] = useState<string | null>(null)
+
+    const handleCreate = () => {
+        setDialogMode("create")
+        setEditingId(null)
+        setDialogOpen(true)
+    }
+
+    const handleEdit = (id: string) => {
+        setDialogMode("update")
+        setEditingId(id)
+        setDialogOpen(true)
+    }
 
     return (
         <div className="space-y-2 m-4">
@@ -36,10 +67,10 @@ export default function StationPage() {
                     className="max-w-sm"
                 />
 
-                {/* <Button>
+                <Button onClick={handleCreate}>
                     <PlusIcon className="w-4 h-4" />
-                    Thêm hợp đồng
-                </Button> */}
+                    Thêm trạm
+                </Button>
             </div>
 
             <DataTable
@@ -49,18 +80,27 @@ export default function StationPage() {
                 pagination={pagination}
                 onPaginationChange={setPagination}
                 meta={{
+                    onViewDetail: handleViewDetail,
+                    onEdit: handleEdit
                 }}
 
                 isLoading={isFetching}
             />
 
-            {/* {selectedId && (
-                    <VehicleDetail
-                        id={selectedId}
-                        open={isDetailOpen}
-                        onOpenChange={setIsDetailOpen}
-                    />
-                )} */}
+            {selectedId && (
+                <StationDetail
+                    id={selectedId}
+                    open={isDetailOpen}
+                    onOpenChange={setIsDetailOpen}
+                />
+            )}
+
+            <StationForm
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
+                mode={dialogMode}
+                id={editingId}
+            />
         </div>
     )
 }

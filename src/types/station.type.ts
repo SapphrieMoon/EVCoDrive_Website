@@ -1,11 +1,15 @@
-import type { PaginationParams, PaginationResponse } from "./pagination.type"
-import type { SuccessResponse } from "./utils.type"
+import type { BaseCrudFormProps } from "./commons/crud-form.type"
+import type { PaginationParams, PaginationResponse } from "./commons/pagination.type"
+import type { SuccessResponse } from "./commons/utils.type"
 
 export enum StationStatus {
     Active = "Active",
     Inactive = "Inactive",
-    Maintenance = "Maintenance",
-    Closed = "Closed"
+}
+
+export enum OpenStatus {
+    Open = "open",
+    Closed = "closed",
 }
 
 export interface Station {
@@ -16,6 +20,7 @@ export interface Station {
     closeTime: string   // ISO string
     latitude: number
     longitude: number
+    isOpen: OpenStatus
     status: StationStatus
     createdDate: string
     updatedDate: string
@@ -29,3 +34,5 @@ export type StationPaginationParams = PaginationParams & {
 export type StationPaginationResponse = SuccessResponse<PaginationResponse<Station>>
 
 export type StationDetailResponse = SuccessResponse<Station>
+
+export type StationFormProps = BaseCrudFormProps & {}
