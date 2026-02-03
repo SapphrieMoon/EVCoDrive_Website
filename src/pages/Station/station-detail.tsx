@@ -1,5 +1,8 @@
 import { DetailSkeleton } from "@/common/skeletons/detail-skeleton"
+import { Badge } from "@/components/ui/badge"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { STATION_ISOPEN_STATUS, STATION_STATUS_MAPPING } from "@/constants/status/station/station-status"
+import { cn } from "@/lib/utils"
 import stationQueries from "@/queries/station.query"
 import type { BaseDetailProps } from "@/types/commons/dialog.type"
 import { Clock, ExternalLink, MapPin, Navigation } from "lucide-react"
@@ -24,7 +27,7 @@ export function StationDetail({ id, open, onOpenChange }: BaseDetailProps) {
                 {isLoading ? (
                     <DetailSkeleton />
                 ) : (
-                    <div className="space-y-6 py-6">
+                    <div className="space-y-6 py-6 ml-4">
                         {/* Status & Name Header */}
                         <div className="flex flex-col items-center justify-center space-y-3 bg-muted/30 py-6 rounded-xl border border-dashed">
                             <div className="p-3 bg-background rounded-full shadow-sm">
@@ -34,11 +37,21 @@ export function StationDetail({ id, open, onOpenChange }: BaseDetailProps) {
                                 <h3 className="font-bold text-lg leading-tight">{station?.name}</h3>
                                 <p className="text-sm text-muted-foreground px-4">{station?.address}</p>
                             </div>
-                            {/* {station && (
-                                <Badge className={cn("mt-2", STATION_STATUS_MAPPING[station.status].className)}>
-                                    {STATION_STATUS_MAPPING[station.status].label}
-                                </Badge>
-                            )} */}
+                            <div className="flex gap-2 justify-center">
+                                {station && (
+                                    <>
+                                        <Badge variant="secondary" className={cn("rounded-full font-medium", STATION_STATUS_MAPPING[station.status].color)}>
+                                            {STATION_STATUS_MAPPING[station.status].label}
+                                        </Badge>
+                                        <Badge variant="secondary" className={cn("rounded-full font-medium", STATION_ISOPEN_STATUS[station.isOpen].color)}>
+                                            <div className={cn("mr-1.5 h-1.5 w-1.5 rounded-full animate-pulse",
+                                                station.isOpen === "open" ? "bg-emerald-500" : "bg-red-500"
+                                            )} />
+                                            {STATION_ISOPEN_STATUS[station.isOpen].label}
+                                        </Badge>
+                                    </>
+                                )}
+                            </div>
                         </div>
 
                         {/* Operational Info */}
@@ -50,13 +63,13 @@ export function StationDetail({ id, open, onOpenChange }: BaseDetailProps) {
                                 <div className="flex justify-between items-center text-sm">
                                     <span className="text-muted-foreground">Giờ mở cửa</span>
                                     <span className="font-mono font-bold text-primary italic">
-                                        {station && new Date(station.openTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        {station && station.openTime}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center text-sm">
                                     <span className="text-muted-foreground">Giờ đóng cửa</span>
                                     <span className="font-mono font-bold text-destructive italic">
-                                        {station && new Date(station.closeTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        {station && station.closeTime}
                                     </span>
                                 </div>
                             </div>
