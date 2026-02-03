@@ -16,7 +16,7 @@ export const VehicleBrandForm = ({ open, onOpenChange, mode, id }: VehicleBrandF
         resolver: zodResolver(vehicleBrandSchema)
     })
 
-    const { data } = vehicleBrandQueries.useDetail(id ?? "")
+    const { data } = vehicleBrandQueries.useDetail(id as string)
 
     useEffect(() => {
         if (isUpdate && data) {
