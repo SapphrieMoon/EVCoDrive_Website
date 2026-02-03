@@ -1,3 +1,4 @@
+import { StationStatus } from "@/types/station.type";
 import z from "zod";
 
 export const stationSchema = z.object({
@@ -11,14 +12,13 @@ export const stationSchema = z.object({
         .min(1, "Vui lòng chọn giờ mở cửa"),
     closeTime: z.string()
         .min(1, "Vui lòng chọn giờ đóng cửa"),
+    status: z.nativeEnum(StationStatus).optional().default(StationStatus.Active),
 })
     .refine((data) => {
-        const open = new Date(data.openTime).getTime();
-        const close = new Date(data.closeTime).getTime();
-        return open < close;
+        return data.openTime < data.closeTime;
     }, {
         message: "Giờ đóng cửa phải sau giờ mở cửa",
         path: ["closeTime"],
     });
 
-export type StationFormValues = z.infer<typeof stationSchema>;
+export type StationFormValues = z.input<typeof stationSchema>;

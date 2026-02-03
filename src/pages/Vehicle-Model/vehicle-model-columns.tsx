@@ -30,7 +30,7 @@ export const vehicleModelColumns: ColumnDef<VehicleModel>[] = [
     },
     {
         accessorKey: "range",
-        header: "Quãng đường",
+        header: "Km/lần sạc",
         cell: ({ row }) => (
             <div className="flex items-center gap-2">
                 <Milestone className="h-3 w-3 text-muted-foreground" />
