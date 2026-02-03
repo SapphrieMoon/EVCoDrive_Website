@@ -13,7 +13,7 @@ import { Controller, useForm } from "react-hook-form"
 export const StationForm = ({ open, onOpenChange, mode, id }: StationFormProps) => {
     const isUpdate = mode === "update"
 
-    const { register, handleSubmit, reset, control, formState: { isSubmitting } } = useForm<StationFormValues>({
+    const { register, handleSubmit, reset, control } = useForm<StationFormValues>({
         resolver: zodResolver(stationSchema),
         defaultValues: {
             status: StationStatus.Active
