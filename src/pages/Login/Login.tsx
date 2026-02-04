@@ -1,16 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useNavigate } from "react-router-dom";
 import { useForm } from 'react-hook-form';
 import { loginSchema, type LoginSchema } from "@/schema/auth.schema";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLoginMutation } from "@/queries/auth.query";
 import { isAxiosError, isAxiosUnprocessableEntityError } from "@/utils/axios/axiosError";
 import type { ErrorResponse } from "@/types/commons/utils.type";
-
+import { toast } from "sonner";
 export default function Login() {
-    const navigate = useNavigate();
 
     const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm<LoginSchema>({
         resolver: zodResolver(loginSchema)
@@ -21,7 +19,7 @@ export default function Login() {
     const onSubmit = handleSubmit((data: LoginSchema) => {
         loginMutation.mutate(data, {
             onSuccess: () => {
-                navigate('/vehicle-brands');
+                toast.success("Đăng nhập thành công")
             },
             onError: (error) => {
                 // 422 → lỗi field
