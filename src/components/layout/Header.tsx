@@ -6,17 +6,13 @@ import { getProfileFromLocalStorage } from "@/utils/auth";
 import type { User } from "@/types/user.type";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { useLogoutMutation } from "@/queries/auth.query";
-import { useNavigate } from "react-router-dom";
-
 export const Header = () => {
   const { theme, setTheme } = useTheme();
   const user: User | null = getProfileFromLocalStorage();
   const logoutMutation = useLogoutMutation();
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     logoutMutation.mutate();
-    navigate('/login');
   }
 
   return (

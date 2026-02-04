@@ -11,15 +11,9 @@ import type { ErrorResponse } from "@/types/commons/utils.type";
 
 class Http {
     instance: AxiosInstance
-
-    private accessToken: string
-    private refreshToken: string
     private refreshTokenRequest: Promise<string> | null = null
 
     constructor() {
-        this.accessToken = getAccessTokenFromLocalStorage() || '';
-        this.refreshToken = getRefreshTokenFromLocalStorage() || '';
-
         this.instance = axios.create({
             baseURL: config.baseUrl,
             timeout: 10000,
@@ -36,8 +30,9 @@ class Http {
     private setupRequestInterceptor() {
         this.instance.interceptors.request.use(
             (config) => {
-                if (this.accessToken) {
-                    config.headers.Authorization = this.accessToken
+                const accessToken = getAccessTokenFromLocalStorage()
+                if (accessToken) {
+                    config.headers.Authorization = accessToken
                 }
                 return config
             },
@@ -54,17 +49,16 @@ class Http {
                 //Login -> lưu Token + Profile (nếu có Register thì thêm URL_AUTH.REGISTER)
                 if (url === URL_AUTH.LOGIN) {
                     const data = response.data as AuthResponse
-                    this.accessToken = data.data.token
-                    this.refreshToken = data.data.refreshToken
+                    const accessToken = data.data.token
+                    const refreshToken = data.data.refreshToken
 
-                    setAccessTokenToLocalStorage(this.accessToken)
-                    setRefreshTokenToLocalStorage(this.refreshToken)
+                    setAccessTokenToLocalStorage(accessToken)
+                    setRefreshTokenToLocalStorage(refreshToken)
                     setProfileToLocalStorage(data.data.user)
                 }
 
                 //Logout
                 if (url === URL_AUTH.LOGOUT) {
-                    this.accessToken = '';
                     clearLocalStorage();
                 }
 
@@ -116,8 +110,6 @@ class Http {
 
             // Các case 401 khác → logout
             clearLocalStorage();
-            this.accessToken = ''
-            this.refreshToken = ''
             toast.error(error.response?.data.message || "Unauthorized")
         }
 
@@ -128,18 +120,15 @@ class Http {
     private async handleRefreshToken() {
         return this.instance
             .post<RefreshTokenResponse>(URL_AUTH.REFRESH_TOKEN, {
-                refresh_token: this.refreshToken
+                refresh_token: getRefreshTokenFromLocalStorage()
             })
             .then((res) => {
                 const { access_token } = res.data.data
-                this.accessToken = access_token
-                setAccessTokenToLocalStorage(this.accessToken);
+                setAccessTokenToLocalStorage(access_token);
                 return access_token
             })
             .catch((error) => {
                 clearLocalStorage();
-                this.accessToken = ''
-                this.refreshToken = ''
                 throw error
             })
     }
