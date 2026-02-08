@@ -13,6 +13,8 @@ export const vehicleModelApi = {
         await http.get<VehicleModelPaginationResponse>(VEHICLE_MODEL_URL.PAGINATION, { params }),
     getDetail: async (id: string) =>
         await http.get<VehicleModelDetailResponse>(`${VEHICLE_MODEL_URL.BASE}/${id}`),
+    delete: async (id: string) =>
+        await http.delete(`${VEHICLE_MODEL_URL.BASE}/${id}`),
 }
 
 export default vehicleModelApi;
