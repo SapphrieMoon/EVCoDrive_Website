@@ -13,6 +13,7 @@ const VehicleModelPage = lazy(() => import("@/pages/Vehicle-Model"));
 const ContractPage = lazy(() => import("@/pages/Contract"));
 const VehiclePage = lazy(() => import("@/pages/Vehicle"));
 const StationPage = lazy(() => import("@/pages/Station"));
+const StaffPage = lazy(() => import("@/pages/Staff"));
 // const MainLayout = lazy(() => import("@/layouts/MainLayout"));
 // const PublicLayout = lazy(() => import("@/layouts/PublicLayout"));
 // const NotFound = lazy(() => import("@/pages/NotFound"));
@@ -57,6 +58,7 @@ export default function useRouteElements() {
                         { path: path.station, element: <StationPage /> },
                         { path: path.vehicleBrand, element: <VehicleBrandPage /> },
                         { path: path.vehicleModel, element: <VehicleModelPage /> },
+                        { path: path.staff, element: <StaffPage /> },
                     ]
                 }
             ]
