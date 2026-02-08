@@ -58,7 +58,7 @@ export default function StaffPage() {
 
             <div className="flex items-center py-4 justify-between mt-6">
                 <Input
-                    placeholder="Tìm kiếm trạm..."
+                    placeholder="Tìm kiếm nhân viên bằng tên hoặc email..."
                     value={search}
                     onChange={(e) => {
                         setSearch(e.target.value);
