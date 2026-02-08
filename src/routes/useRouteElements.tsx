@@ -4,6 +4,7 @@ import { MainLayout } from "../layouts/MainLayout";
 import path from "../constants/path";
 import { PublicLayout } from "../layouts/PublicLayout";
 import { ProtectedRoute, RejectedRoute } from "./guards";
+import CubeLoader from "@/components/cube-loader/RouteLoader";
 
 
 const Login = lazy(() => import("@/pages/Login"));
@@ -65,7 +66,7 @@ export default function useRouteElements() {
         },
     ])
     return (
-        <Suspense fallback={<div className="h-screen w-full flex items-center justify-center">Loading...</div>}>
+        <Suspense fallback={<div className="h-screen w-full flex items-center justify-center"><CubeLoader /></div>}>
             {routeElements}
         </Suspense>
     )
