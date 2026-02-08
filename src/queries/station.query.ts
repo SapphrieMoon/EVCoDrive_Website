@@ -50,8 +50,8 @@ const stationQueries = {
                 queryClient.invalidateQueries({
                     queryKey: stationKey.lists()
                 })
+
                 queryClient.invalidateQueries({ queryKey: stationKey.detail(variables.id) })
-                toast.success("Cập nhật thành công")
             }
         })
     },

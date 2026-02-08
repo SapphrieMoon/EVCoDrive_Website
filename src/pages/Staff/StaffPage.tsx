@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { StaffDetail } from "./staff-detail";
+import type { CrudFormMode } from "@/types/commons/crud-form.type";
+import { StaffForm } from "./staff-form";
 
 export default function StaffPage() {
     //========================== Pagination ==========================
@@ -31,6 +33,23 @@ export default function StaffPage() {
         setIsDetailOpen(true);
     }
 
+    //======================== Create / Update ==========================
+    const [dialogOpen, setDialogOpen] = useState(false)
+    const [dialogMode, setDialogMode] = useState<CrudFormMode>("create")
+    const [editingId, setEditingId] = useState<string | null>(null)
+
+    const handleCreate = () => {
+        setDialogMode("create")
+        setEditingId(null)
+        setDialogOpen(true)
+    }
+
+    const handleEdit = (id: string) => {
+        setDialogMode("update")
+        setEditingId(id)
+        setDialogOpen(true)
+    }
+
     return (
         <div className="space-y-2 m-4">
 
@@ -48,7 +67,7 @@ export default function StaffPage() {
                     className="max-w-sm"
                 />
 
-                <Button >
+                <Button onClick={handleCreate}>
                     <PlusIcon className="w-4 h-4" />
                     Thêm nhân viên mới
                 </Button>
@@ -62,6 +81,7 @@ export default function StaffPage() {
                 onPaginationChange={setPagination}
                 meta={{
                     onViewDetail: handleViewDetail,
+                    onEdit: handleEdit,
                 }}
 
                 isLoading={isFetching}
@@ -75,12 +95,12 @@ export default function StaffPage() {
                 />
             )}
 
-            {/* <StationForm
+            <StaffForm
                 open={dialogOpen}
                 onOpenChange={setDialogOpen}
                 mode={dialogMode}
                 id={editingId}
-            /> */}
+            />
         </div>
     )
 }
