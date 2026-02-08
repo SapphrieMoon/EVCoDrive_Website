@@ -1,5 +1,0 @@
-export const VEHICLE_STATUS_MAPPING: Record<VehicleStatus, { label: string; color: string }> = {
-    [VehicleStatus.Pending]: {
-        label: "Chờ xác nhận",
-        color: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"
-    },
