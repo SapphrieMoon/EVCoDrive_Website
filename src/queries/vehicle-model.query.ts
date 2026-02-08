@@ -1,7 +1,7 @@
 import { vehicleModelApi } from "@/apis/vehicle-model.api"
 import { vehicleModelKey } from "@/constants/query-keys/vehicle-model.key"
 import type { VehicleModelPaginationParams } from "@/types/vehicle-model.type"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 const vehicleModelQueries = {
     useAll: () => {
@@ -24,6 +24,19 @@ const vehicleModelQueries = {
             queryKey: vehicleModelKey.detail(id),
             queryFn: () => vehicleModelApi.getDetail(id),
             enabled: !!id
+        })
+    },
+
+    useDelete: () => {
+        const queryClient = useQueryClient()
+
+        return useMutation({
+            mutationFn: (id: string) => vehicleModelApi.delete(id),
+            onSuccess: () => {
+                queryClient.invalidateQueries({
+                    queryKey: vehicleModelKey.lists()
+                })
+            }
         })
     }
 }

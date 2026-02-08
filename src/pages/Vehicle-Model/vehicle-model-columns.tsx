@@ -1,5 +1,7 @@
 import { TableActionCell } from "@/common/table-action-cell"
+import { DeleteAction } from "@/common/table-delete-action"
 import { Badge } from "@/components/ui/badge"
+import vehicleModelQueries from "@/queries/vehicle-model.query"
 import type { VehicleModel } from "@/types/vehicle-model.type"
 import { formatDate } from "@/utils/date"
 import type { ColumnDef } from "@tanstack/react-table"
@@ -67,17 +69,17 @@ export const vehicleModelColumns: ColumnDef<VehicleModel>[] = [
         header: "Thao tác",
         cell: ({ row, table }) => {
             const id = row.original.vehicleModelId
-            // const { mutate, isPending } = vehicleModelQueries.useDelete()
+            const { mutate, isPending } = vehicleModelQueries.useDelete()
 
             return (
                 <TableActionCell
                     onDetailClick={() => table.options.meta?.onViewDetail?.(id)}
                     onEditClick={() => table.options.meta?.onEdit?.(id)}
                 >
-                    {/* <DeleteAction
-              onConfirm={() => mutate(id)}
-              isLoading={isPending}
-            /> */}
+                    <DeleteAction
+                        onConfirm={() => mutate(id)}
+                        isLoading={isPending}
+                    />
                 </TableActionCell>
             )
         }

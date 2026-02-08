@@ -5,6 +5,7 @@ import vehicleModelQueries from "@/queries/vehicle-model.query";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { vehicleModelColumns } from "./vehicle-model-columns";
+import { VehicleModelDetail } from "./vehicle-model-detail";
 
 export default function VehicleModelPage() {
     //======================== Pagination ==========================
@@ -20,6 +21,16 @@ export default function VehicleModelPage() {
         pageSize: pagination.pageSize,
         searchTermByName: search
     })
+
+    //======================== View Detail ==========================
+    const [selectedId, setSelectedId] = useState<string | null>(null)
+    const [isDetailOpen, setIsDetailOpen] = useState(false)
+
+    const handleViewDetail = (id: string) => {
+        setSelectedId(id)
+        setIsDetailOpen(true)
+    }
+
     return (
         <div className="space-y-2 m-4">
 
@@ -50,9 +61,18 @@ export default function VehicleModelPage() {
                 pagination={pagination}
                 onPaginationChange={setPagination}
                 meta={{
+                    onViewDetail: handleViewDetail,
                 }}
                 isLoading={isRefetching}
             />
+
+            {selectedId && (
+                <VehicleModelDetail
+                    id={selectedId}
+                    open={isDetailOpen}
+                    onOpenChange={setIsDetailOpen}
+                />
+            )}
 
         </div>
     )
