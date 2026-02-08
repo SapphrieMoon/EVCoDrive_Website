@@ -3,7 +3,6 @@ import { stationKey } from "@/constants/query-keys/station.key"
 import type { StationFormValues } from "@/schema/station.schema"
 import type { StationPaginationParams } from "@/types/station.type"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { toast } from "sonner"
 
 const stationQueries = {
     useAll: () => {
@@ -50,8 +49,8 @@ const stationQueries = {
                 queryClient.invalidateQueries({
                     queryKey: stationKey.lists()
                 })
+
                 queryClient.invalidateQueries({ queryKey: stationKey.detail(variables.id) })
-                toast.success("Cập nhật thành công")
             }
         })
     },

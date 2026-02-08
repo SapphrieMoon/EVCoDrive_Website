@@ -35,4 +35,6 @@ export type StationPaginationResponse = SuccessResponse<PaginationResponse<Stati
 
 export type StationDetailResponse = SuccessResponse<Station>
 
+export type StationListResponse = SuccessResponse<Station[]>
+
 export type StationFormProps = BaseCrudFormProps & {}

@@ -1,5 +1,5 @@
 import type { StationFormValues } from "@/schema/station.schema"
-import type { StationDetailResponse, StationPaginationParams, StationPaginationResponse } from "@/types/station.type"
+import type { StationDetailResponse, StationListResponse, StationPaginationParams, StationPaginationResponse } from "@/types/station.type"
 import http from "@/utils/http"
 
 export const STATION_URL = {
@@ -9,7 +9,7 @@ export const STATION_URL = {
 
 export const stationApi = {
     getAll: async () =>
-        await http.get<StationDetailResponse>(STATION_URL.BASE),
+        await http.get<StationListResponse>(STATION_URL.BASE),
     getAllPagination: async (params: StationPaginationParams) =>
         await http.get<StationPaginationResponse>(STATION_URL.PAGINATION, { params }),
     getDetail: async (id: string) =>
