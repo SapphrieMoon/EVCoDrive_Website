@@ -61,7 +61,7 @@ const staffQueries = {
         const queryClient = useQueryClient()
 
         return useMutation({
-            mutationFn: (id: string) => staffApi.detele(id),
+            mutationFn: (id: string) => staffApi.delete(id),
             onSuccess: () => {
                 queryClient.invalidateQueries({
                     queryKey: staffKey.lists()

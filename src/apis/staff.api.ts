@@ -18,6 +18,6 @@ export const staffApi = {
         await http.post<StaffDetailResponse>(STAFF_URL.BASE, data),
     update: async (id: string, data: StaffFormValues) =>
         await http.put<StaffDetailResponse>(`${STAFF_URL.BASE}/${id}`, data),
-    detele: async (id: string) =>
+    delete: async (id: string) =>
         await http.delete<StaffPaginationResponse>(`${STAFF_URL.BASE}/${id}`),
 }

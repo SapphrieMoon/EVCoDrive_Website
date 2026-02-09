@@ -6,6 +6,8 @@ import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { vehicleModelColumns } from "./vehicle-model-columns";
 import { VehicleModelDetail } from "./vehicle-model-detail";
+import type { CrudFormMode } from "@/types/commons/crud-form.type";
+import { VehicleModelForm } from "./vehicle-model-form";
 
 export default function VehicleModelPage() {
     //======================== Pagination ==========================
@@ -31,6 +33,23 @@ export default function VehicleModelPage() {
         setIsDetailOpen(true)
     }
 
+    //======================== Create / Update ==========================
+    const [dialogOpen, setDialogOpen] = useState(false)
+    const [dialogMode, setDialogMode] = useState<CrudFormMode>("create")
+    const [editingId, setEditingId] = useState<string | null>(null)
+
+    const handleCreate = () => {
+        setDialogMode("create")
+        setEditingId(null)
+        setDialogOpen(true)
+    }
+
+    const handleEdit = (id: string) => {
+        setDialogMode("update")
+        setEditingId(id)
+        setDialogOpen(true)
+    }
+
     return (
         <div className="space-y-2 m-4">
 
@@ -48,9 +67,9 @@ export default function VehicleModelPage() {
                     className="max-w-sm"
                 />
 
-                <Button>
+                <Button onClick={handleCreate}>
                     <PlusIcon className="w-4 h-4" />
-                    Thêm thương hiệu
+                    Thêm dòng xe
                 </Button>
             </div>
 
@@ -62,6 +81,7 @@ export default function VehicleModelPage() {
                 onPaginationChange={setPagination}
                 meta={{
                     onViewDetail: handleViewDetail,
+                    onEdit: handleEdit,
                 }}
                 isLoading={isRefetching}
             />
@@ -73,6 +93,13 @@ export default function VehicleModelPage() {
                     onOpenChange={setIsDetailOpen}
                 />
             )}
+
+            <VehicleModelForm
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
+                mode={dialogMode}
+                id={editingId}
+            />
 
         </div>
     )
