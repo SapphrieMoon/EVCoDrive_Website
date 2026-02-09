@@ -77,7 +77,6 @@ export default function CoOwnerGroupPage() {
                 pagination={pagination}
                 onPaginationChange={setPagination}
                 meta={{
-                    onViewDetail: handleViewDetail,
                 }}
 
                 isLoading={isFetching}

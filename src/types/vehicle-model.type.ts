@@ -13,7 +13,7 @@ export interface VehicleModel {
     vehicleModelId: string
     name: string
     vehicleBrand: VehicleBrandSummary
-    gearShiftType: string
+    gearShiftType: GearShiftType
     range: number
     batteryCapacity: number
     seatingCapacity: number
