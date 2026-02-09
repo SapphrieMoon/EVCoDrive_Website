@@ -19,4 +19,4 @@ export const vehicleModelSchema = z.object({
 
 })
 
-export type VehicleModelFormValues = z.infer<typeof vehicleModelSchema>
+export type VehicleModelFormValues = z.input<typeof vehicleModelSchema>

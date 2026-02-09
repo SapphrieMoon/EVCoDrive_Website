@@ -22,13 +22,13 @@ export default function CoOwnerGroupPage() {
     })
 
     //========================== Detail ==========================
-    const [isDetailOpen, setIsDetailOpen] = useState(false);
-    const [selectedId, setSelectedId] = useState<string | null>(null);
+    // const [isDetailOpen, setIsDetailOpen] = useState(false);
+    // const [selectedId, setSelectedId] = useState<string | null>(null);
 
-    const handleViewDetail = (id: string) => {
-        setSelectedId(id);
-        setIsDetailOpen(true);
-    }
+    // const handleViewDetail = (id: string) => {
+    //     setSelectedId(id);
+    //     setIsDetailOpen(true);
+    // }
 
     //======================== Create / Update ==========================
     // const [dialogOpen, setDialogOpen] = useState(false)
