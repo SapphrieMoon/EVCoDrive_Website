@@ -8,6 +8,7 @@ import type { VehicleBrandFormProps } from "@/types/vehicle-brand.type"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 export const VehicleBrandForm = ({ open, onOpenChange, mode, id }: VehicleBrandFormProps) => {
     const isUpdate = mode === "update"
@@ -38,13 +39,21 @@ export const VehicleBrandForm = ({ open, onOpenChange, mode, id }: VehicleBrandF
         if (isUpdate && id) {
             updateMutation.mutate({ id: id!, data }, {
                 onSuccess: () => {
-                    onOpenChange(false)
+                    onOpenChange(false);
+                    toast.success("Cập nhật thành công");
                 },
+                onError: () => {
+                    toast.error("Cập nhật thất bại, vui lòng thử lại sau!")
+                }
             })
         } else {
             createMutation.mutate(data, {
                 onSuccess: () => {
-                    onOpenChange(false)
+                    onOpenChange(false);
+                    toast.success("Thêm thương hiệu mới thành công");
+                },
+                onError: () => {
+                    toast.error("    thương hiệu mới thất bại, vui lòng thử lại sau!");
                 },
             })
         }

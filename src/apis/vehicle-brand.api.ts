@@ -1,5 +1,5 @@
 import type { VehicleBrandFormValues } from "@/schema/vehicle-brand.schema";
-import type { VehicleBrandDetailResponse, VehicleBrandPaginationParams, VehicleBrandPaginationResponse } from "@/types/vehicle-brand.type";
+import type { VehicleBrandDetailResponse, VehicleBrandListResponse, VehicleBrandPaginationParams, VehicleBrandPaginationResponse } from "@/types/vehicle-brand.type";
 import http from "@/utils/http"
 
 export const VEHICLE_BRAND_URL = {
@@ -9,7 +9,7 @@ export const VEHICLE_BRAND_URL = {
 
 const vehicleBrandApi = {
     getAll: async () =>
-        await http.get<VehicleBrandPaginationResponse>(VEHICLE_BRAND_URL.BASE),
+        await http.get<VehicleBrandListResponse>(VEHICLE_BRAND_URL.BASE),
     getAllPagination: async (params: VehicleBrandPaginationParams) =>
         await http.get<VehicleBrandPaginationResponse>(VEHICLE_BRAND_URL.PAGINATION, { params }),
     detail: async (id: string) =>

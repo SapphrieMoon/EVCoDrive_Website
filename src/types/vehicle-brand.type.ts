@@ -32,3 +32,5 @@ export type VehicleBrandDetailResponse =
     SuccessResponse<VehicleBrand>
 
 export type VehicleBrandFormProps = BaseCrudFormProps & {}
+
+export type VehicleBrandListResponse = SuccessResponse<VehicleBrand[]>

@@ -72,14 +72,14 @@ export const coOwnerGroupColumns: ColumnDef<CoOwnerGroup>[] = [
     },
     {
         id: "actions",
-        header: "Thao tác",
+        header: "",
         cell: ({ row, table }) => {
             const id = row.original.coOwnerGroupId;
             const { mutate, isPending } = coOwnerGroupQueries.useDelete();
             return (
                 <TableActionCell
                     onDetailClick={() => table.options.meta?.onViewDetail?.(id)}
-                // Bạn có thể thêm onEditClick hoặc các action khác vào đây
+                    onEditClick={() => table.options.meta?.onEdit?.(id)}
                 >
                     <DeleteAction
                         onConfirm={() => mutate(id)}
