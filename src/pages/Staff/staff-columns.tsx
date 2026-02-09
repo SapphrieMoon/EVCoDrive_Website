@@ -31,7 +31,7 @@ export const staffColumns: ColumnDef<Staff>[] = [
         cell: ({ row }) => {
             const isActive = row.getValue("isActive") as boolean
             return (
-                <Badge variant={isActive ? "default" : "destructive"} className={isActive ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300" : ""}>
+                <Badge variant={isActive ? "green" : "red"}>
                     {isActive ? "Đang hoạt động" : "Ngừng kích hoạt"}
                 </Badge>
             )

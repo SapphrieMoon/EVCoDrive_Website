@@ -4,7 +4,7 @@ import { MainLayout } from "../layouts/MainLayout";
 import path from "../constants/path";
 import { PublicLayout } from "../layouts/PublicLayout";
 import { ProtectedRoute, RejectedRoute } from "./guards";
-import CubeLoader from "@/components/cube-loader/RouteLoader";
+import CubeLoader from "@/components/cube-loader/RouteLoader";;
 
 
 const Login = lazy(() => import("@/pages/Login"));
@@ -15,6 +15,7 @@ const ContractPage = lazy(() => import("@/pages/Contract"));
 const VehiclePage = lazy(() => import("@/pages/Vehicle"));
 const StationPage = lazy(() => import("@/pages/Station"));
 const StaffPage = lazy(() => import("@/pages/Staff"));
+const CoOwnerGroupPage = lazy(() => import("@/pages/Co-Owner-Group"));
 // const MainLayout = lazy(() => import("@/layouts/MainLayout"));
 // const PublicLayout = lazy(() => import("@/layouts/PublicLayout"));
 // const NotFound = lazy(() => import("@/pages/NotFound"));
@@ -60,6 +61,7 @@ export default function useRouteElements() {
                         { path: path.vehicleBrand, element: <VehicleBrandPage /> },
                         { path: path.vehicleModel, element: <VehicleModelPage /> },
                         { path: path.staff, element: <StaffPage /> },
+                        { path: path.coOwnerGroup, element: <CoOwnerGroupPage /> },
                     ]
                 }
             ]
