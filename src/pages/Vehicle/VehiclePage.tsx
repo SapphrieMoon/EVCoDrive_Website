@@ -5,7 +5,6 @@ import { useState } from "react";
 import { vehicleColumns } from "./vehicle-columns";
 import type { VehicleAction, VehicleStatus } from "@/types/vehicle.type";
 import { VEHICLE_STATUS_ACTIONS } from "@/constants/status/vehicle/vehicle-status-action";
-import { VehicleDetail } from "./vehicle-detail";
 
 export default function VehiclePage() {
     //========================== Pagination ==========================
@@ -47,14 +46,6 @@ export default function VehiclePage() {
     }
     //========================== End Update Status ==========================
 
-    //========================== View Detail ==========================
-    const [selectedId, setSelectedId] = useState<string | null>(null)
-    const [isDetailOpen, setIsDetailOpen] = useState(false)
-
-    const handleViewDetail = (id: string) => {
-        setSelectedId(id)
-        setIsDetailOpen(true)
-    }
 
 
     return (
@@ -88,19 +79,11 @@ export default function VehiclePage() {
                 onPaginationChange={setPagination}
                 meta={{
                     onAction: handleAction,
-                    onViewDetail: handleViewDetail
                 }}
 
                 isLoading={isFetching}
             />
 
-            {selectedId && (
-                <VehicleDetail
-                    id={selectedId}
-                    open={isDetailOpen}
-                    onOpenChange={setIsDetailOpen}
-                />
-            )}
         </div>
     )
 }

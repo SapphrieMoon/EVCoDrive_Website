@@ -123,7 +123,7 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
                         // onDetailClick={() => table.options.meta?.onViewDetail?.(id)}
                         detailUrl={detailPath}
                         onDetailMouseEnter={() => prefetch(id)}
-                        onEditClick={() => table.options.meta?.onEdit?.(id)}
+                    // onEditClick={() => table.options.meta?.onEdit?.(id)}
                     >
                         {/* <DeleteAction
                         onConfirm={() => mutate(id)}
