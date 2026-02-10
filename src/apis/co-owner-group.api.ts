@@ -12,7 +12,7 @@ export const coOwnerGroupApi = {
     getAllPagination: async (params: CoOwnerGroupPaginationParams) =>
         await http.get<CoOwnerGroupPaginationResponse>(COOWNERGROUP_API.PAGINATION, { params }),
     getDetail: async (id: string) =>
-        await http.get<CoOwnerGroupDetailResponse>(`${COOWNERGROUP_API.BASE}/${id}`),
+        await http.get<CoOwnerGroupDetailResponse>(`${COOWNERGROUP_API.BASE}/${id}/details`),
     // create: async (data: CoOwnerGroupFormValues) =>
     //     await http.post<CoOwnerGroupDetailResponse>(COOWNERGROUP_API.BASE, data),
     // update: async (id: string, data: CoOwnerGroupFormValues) =>

@@ -1,11 +1,13 @@
 import { TableActionCell } from "@/common/table-action-cell";
 import { DeleteAction } from "@/common/table-delete-action";
 import { Badge } from "@/components/ui/badge";
+import path from "@/constants/path";
 import coOwnerGroupQueries from "@/queries/co-owner-group.query";
 import type { CoOwnerGroup } from "@/types/co-owner-group.type";
 import { formatDate } from "@/utils/date";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Users2, Wallet } from "lucide-react";
+import { generatePath, useNavigate } from "react-router-dom";
 
 export const coOwnerGroupColumns: ColumnDef<CoOwnerGroup>[] = [
     {
@@ -73,18 +75,22 @@ export const coOwnerGroupColumns: ColumnDef<CoOwnerGroup>[] = [
     {
         id: "actions",
         header: "",
-        cell: ({ row, table }) => {
+        cell: ({ row }) => {
             const id = row.original.coOwnerGroupId;
-            const { mutate, isPending } = coOwnerGroupQueries.useDelete();
+            // const { mutate, isPending } = coOwnerGroupQueries.useDelete();
+            const prefetch = coOwnerGroupQueries.usePrefetchDetail();
+            const detailPath = generatePath(path.coOwnerGroupDetail, { id });
+
             return (
                 <TableActionCell
-                    onDetailClick={() => table.options.meta?.onViewDetail?.(id)}
-                    onEditClick={() => table.options.meta?.onEdit?.(id)}
+                    detailUrl={detailPath}
+                    onDetailMouseEnter={() => prefetch(id)}
+                // onEditClick={() => table.options.meta?.onEdit?.(id)}
                 >
-                    <DeleteAction
+                    {/* <DeleteAction
                         onConfirm={() => mutate(id)}
                         isLoading={isPending}
-                    />
+                    /> */}
                 </TableActionCell>
             );
         }

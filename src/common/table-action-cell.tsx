@@ -8,10 +8,11 @@ interface TableActionCellProps {
     detailUrl?: string
     onDetailClick?: () => void
     onEditClick?: () => void
+    onDetailMouseEnter?: () => void
     children?: ReactNode
 }
 
-export const TableActionCell = ({ editUrl, detailUrl, onDetailClick, onEditClick, children }: TableActionCellProps) => {
+export const TableActionCell = ({ editUrl, detailUrl, onDetailClick, onEditClick, onDetailMouseEnter, children }: TableActionCellProps) => {
     return (
         <div>
             {editUrl ? (
@@ -32,7 +33,7 @@ export const TableActionCell = ({ editUrl, detailUrl, onDetailClick, onEditClick
             )}
 
             {detailUrl ? (
-                <Button variant="ghost" size="icon" asChild title="Chi tiết">
+                <Button variant="ghost" size="icon" asChild title="Chi tiết" onMouseEnter={onDetailMouseEnter}>
                     <Link to={detailUrl}>
                         <Eye className="h-4 w-4" />
                     </Link>

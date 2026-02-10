@@ -64,10 +64,10 @@ export default function CoOwnerGroupPage() {
                     className="max-w-sm"
                 />
 
-                <Button >
+                {/* <Button >
                     <PlusIcon className="w-4 h-4" />
                     Thêm nhóm đồng sở hữu
-                </Button>
+                </Button> */}
             </div>
 
             <DataTable
