@@ -1,5 +1,4 @@
 import { TableActionCell } from "@/common/table-action-cell";
-import { DeleteAction } from "@/common/table-delete-action";
 import { Badge } from "@/components/ui/badge";
 import path from "@/constants/path";
 import coOwnerGroupQueries from "@/queries/co-owner-group.query";
@@ -7,7 +6,7 @@ import type { CoOwnerGroup } from "@/types/co-owner-group.type";
 import { formatDate } from "@/utils/date";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Users2, Wallet } from "lucide-react";
-import { generatePath, useNavigate } from "react-router-dom";
+import { generatePath } from "react-router-dom";
 
 export const coOwnerGroupColumns: ColumnDef<CoOwnerGroup>[] = [
     {
