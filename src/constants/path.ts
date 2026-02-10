@@ -8,6 +8,7 @@ const path = {
     station: "/stations",
     staff: "/staffs",
     coOwnerGroup: "/co-owner-groups",
+    coOwnerGroupDetail: "/co-owner-groups/:id"
 
 } as const
 

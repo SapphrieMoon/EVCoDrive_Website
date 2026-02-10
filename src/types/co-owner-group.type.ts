@@ -1,6 +1,8 @@
 import type { BaseCrudFormProps } from "./commons/crud-form.type"
 import type { PaginationParams, PaginationResponse } from "./commons/pagination.type"
 import type { SuccessResponse } from "./commons/utils.type"
+import type { ShareHolder } from "./share-holder"
+import type { ShareUnit } from "./share-unit"
 
 export enum CoOwnerGroupStatus {
     Active = "Active",
@@ -18,13 +20,26 @@ export interface CoOwnerGroup {
     updatedDate: string
 }
 
+export interface CoOwnerGroupDetail {
+    coOwnerGroupId: string;
+    groupName: string;
+    description: string;
+    vehicleId: string;
+    vehicleLicensePlate: string;
+    totalShares: number;
+    sharePrice: number;
+    status: "Active" | "Inactive" | string;
+    shareHolders: ShareHolder[];
+    shareUnits: ShareUnit[];
+}
+
 export type CoOwnerGroupPaginationParams = PaginationParams & {
     searchTerm?: string
 }
 
 export type CoOwnerGroupPaginationResponse = SuccessResponse<PaginationResponse<CoOwnerGroup>>
 
-export type CoOwnerGroupDetailResponse = SuccessResponse<CoOwnerGroup>
+export type CoOwnerGroupDetailResponse = SuccessResponse<CoOwnerGroupDetail>
 
 export type CoOwnerGroupListResponse = SuccessResponse<CoOwnerGroup[]>
 

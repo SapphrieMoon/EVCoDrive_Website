@@ -66,6 +66,19 @@ const coOwnerGroupQueries = {
                 })
             }
         })
+    },
+
+    usePrefetchDetail: () => {
+        const queryClient = useQueryClient()
+
+        return (id: string) => {
+            if (!id) return;
+            queryClient.prefetchQuery({
+                queryKey: coOwnerGroupKey.detail(id),
+                queryFn: () => coOwnerGroupApi.getDetail(id),
+                staleTime: 5 * 60 * 1000, //giữ data trong 5 phút
+            })
+        }
     }
 }
 

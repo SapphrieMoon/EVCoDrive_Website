@@ -1,8 +1,6 @@
 import { DataTable } from "@/common/data-table";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import coOwnerGroupQueries from "@/queries/co-owner-group.query";
-import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { coOwnerGroupColumns } from "./co-owner-group-columns";
 
@@ -64,10 +62,10 @@ export default function CoOwnerGroupPage() {
                     className="max-w-sm"
                 />
 
-                <Button >
+                {/* <Button >
                     <PlusIcon className="w-4 h-4" />
                     Thêm nhóm đồng sở hữu
-                </Button>
+                </Button> */}
             </div>
 
             <DataTable
