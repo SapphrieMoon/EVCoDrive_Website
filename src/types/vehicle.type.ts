@@ -1,6 +1,10 @@
 import type { LucideIcon } from "lucide-react";
 import type { PaginationParams, PaginationResponse } from "./commons/pagination.type";
 import type { SuccessResponse } from "./commons/utils.type";
+import type { VehicleModelSummary } from "./vehicle-model.type";
+import type { CoOwnerGroupSummary } from "./co-owner-group.type";
+import type { CurrentStation } from "./station.type";
+import type { VehicleImage } from "./commons/media.type";
 
 export enum VehicleStatus {
     Pending = "Pending",
@@ -29,6 +33,25 @@ export interface Vehicle {
     createdDate: string;         // ISO string
 };
 
+export interface VehicleDetail {
+    vehicleId: string;
+    memberId: string | null;
+    licensePlate: string;
+    color: string;
+    year: number;
+    odometer: number;
+    batteryHealth: number;
+    isBrandNew: string; // Lưu ý: BE trả về string "True"/"False"
+    vehicleStatus: VehicleStatus;
+    lastMaintenanceDate: string | null;
+    createdDate: string;
+    updatedDate: string;
+    vehicleModel: VehicleModelSummary;
+    coOwnerGroup: CoOwnerGroupSummary | null;
+    currentStation: CurrentStation | null;
+    images: VehicleImage[];
+}
+
 export interface VehiclePaginationParams extends PaginationParams {
     searchTerm?: string;
     status?: VehicleStatus;
@@ -41,7 +64,7 @@ export interface VehiclePaginationParams extends PaginationParams {
 
 export type VehiclePaginationResponse = SuccessResponse<PaginationResponse<Vehicle>>
 
-export type VehicleDetailResponse = SuccessResponse<Vehicle>
+export type VehicleDetailResponse = SuccessResponse<VehicleDetail>
 
 
 //============================== Vehicle Status Action=======================

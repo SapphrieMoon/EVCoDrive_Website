@@ -32,6 +32,19 @@ const vehicleQueries = {
         })
     },
 
+    usePrefetchDetail: () => {
+        const queryClient = useQueryClient()
+
+        return (id: string) => {
+            if (!id) return;
+            queryClient.prefetchQuery({
+                queryKey: vehicleKey.detail(id),
+                queryFn: () => vehicleApi.getDetail(id),
+                staleTime: 5 * 60 * 1000
+            })
+        }
+    },
+
     useUpdateStatus: () => {
         const queryClient = useQueryClient()
 

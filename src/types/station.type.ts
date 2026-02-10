@@ -26,6 +26,14 @@ export interface Station {
     updatedDate: string
 }
 
+export interface CurrentStation {
+    stationId: string;
+    name: string;
+    address: string;
+    latitude: number;
+    longitude: number;
+}
+
 export type StationPaginationParams = PaginationParams & {
     searchTerm?: string,
     status?: StationStatus,

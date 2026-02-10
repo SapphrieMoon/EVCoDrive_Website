@@ -1,12 +1,15 @@
 import { TableActionCell } from "@/common/table-action-cell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import path from "@/constants/path";
 import { VEHICLE_STATUS_MAPPING } from "@/constants/status/vehicle/vehicle-status";
 import { VEHICLE_STATUS_ACTIONS } from "@/constants/status/vehicle/vehicle-status-action";
 import { cn } from "@/lib/utils";
+import vehicleQueries from "@/queries/vehicle.query";
 import { VehicleStatus, type Vehicle } from "@/types/vehicle.type";
 import { formatDate } from "@/utils/date";
 import type { ColumnDef } from "@tanstack/react-table";
+import { generatePath } from "react-router-dom";
 
 export const vehicleColumns: ColumnDef<Vehicle>[] = [
     {
@@ -93,6 +96,9 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
             const status = row.original.vehicleStatus
             const actions = VEHICLE_STATUS_ACTIONS[status] ?? []
 
+            const detailPath = generatePath(path.vehicleDetail, { id })
+            const prefetch = vehicleQueries.usePrefetchDetail()
+
             return (
                 <div className="flex items-center gap-2">
                     {actions.map(action => (
@@ -113,7 +119,10 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
                         </Button>
                     ))}
 
-                    <TableActionCell onDetailClick={() => table.options.meta?.onViewDetail?.(id)}
+                    <TableActionCell
+                        // onDetailClick={() => table.options.meta?.onViewDetail?.(id)}
+                        detailUrl={detailPath}
+                        onDetailMouseEnter={() => prefetch(id)}
                         onEditClick={() => table.options.meta?.onEdit?.(id)}
                     >
                         {/* <DeleteAction
