@@ -60,6 +60,8 @@ export interface VehiclePaginationParams extends PaginationParams {
     currentStationId?: string;
     yearFrom?: number;
     yearTo?: number;
+    sortBy?: string;
+    sortOrder?: string;
 }
 
 export type VehiclePaginationResponse = SuccessResponse<PaginationResponse<Vehicle>>
