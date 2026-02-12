@@ -25,7 +25,7 @@ export interface VehicleModelSummary {
     vehicleModelId: string;
     name: string;
     brandName: string;
-    gearShiftType: string;
+    gearShiftType: GearShiftType;
     range: number;
     batteryCapacity: number;
     seatingCapacity: number;

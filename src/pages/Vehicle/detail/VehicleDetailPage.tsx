@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { VEHICLE_STATUS_MAPPING } from "@/constants/status/vehicle/vehicle-status"
@@ -12,12 +11,20 @@ import { CoOwnerCard } from "./_components/co-owner-card"
 import { DetailSkeleton } from "@/common/skeletons/detail-skeleton"
 import type { VehicleImage } from "@/types/commons/media.type"
 import type { VehicleStatusAction } from "@/types/vehicle.type"
+import { getGearShiftLabel } from "@/constants/vehicle-model/gear-shift"
+import { useState } from "react"
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 export default function VehicleDetailPage() {
+    const [index, setIndex] = useState(-1);
+
     const { id } = useParams<{ id: string }>()
 
     const { data, isLoading } = vehicleQueries.useDetail(id!)
     const vehicle = data?.data.data
+
+    const slides = vehicle?.images.map((img: VehicleImage) => ({ src: img.secureUrl }));
 
     if (isLoading) return <div className="p-10 text-center font-bold italic"><DetailSkeleton /></div>
     if (!vehicle) return <div className="p-10 text-center">Không tìm thấy xe</div>
@@ -26,13 +33,13 @@ export default function VehicleDetailPage() {
     const actions = VEHICLE_STATUS_ACTIONS[vehicle.vehicleStatus] ?? []
 
     return (
-        <ScrollArea className="h-full bg-slate-50/50 dark:bg-transparent">
+        <div className="h-full bg-slate-50/50 dark:bg-transparent">
             <div className="max-w-7xl mx-auto p-6 space-y-8">
 
                 {/* 1. Header Section */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                     <div className="space-y-1">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-10">
                             <h1 className="text-4xl font-black italic tracking-tighter uppercase text-primary">
                                 {vehicle.vehicleModel.name}
                             </h1>
@@ -44,9 +51,9 @@ export default function VehicleDetailPage() {
                     </div>
 
                     {/* Quick Actions (Duyệt/Từ chối) */}
-                    <div className="flex items-center gap-2 bg-white dark:bg-slate-900 p-2 rounded-xl shadow-sm border">
+                    <div className="flex items-center gap-4 p-2 ">
                         {actions.map((action: VehicleStatusAction) => (
-                            <Button key={action.type} variant={action.variant || "outline"} size="sm" className="font-bold uppercase text-[10px]">
+                            <Button key={action.type} variant={action.variant || "outline"} size="lg" className="font-bold uppercase text-[10px]">
                                 <action.icon className="mr-2 h-3.5 w-3.5" /> {action.label}
                             </Button>
                         ))}
@@ -58,17 +65,48 @@ export default function VehicleDetailPage() {
                     <div className="lg:col-span-8 space-y-8">
 
                         {/* 2. Gallery Section */}
-                        <div className="grid grid-cols-4 gap-3 h-[450px]">
-                            <div className="col-span-3 rounded-3xl overflow-hidden border-4 border-white shadow-xl bg-muted">
-                                <img src={vehicle.images[0]?.secureUrl} className="w-full h-full object-cover" alt="Main" />
+                        <div className="grid grid-cols-4 gap-3 h-[360px] ">
+                            {/* Ảnh chính - Luôn chiếm 3 cột hoặc 4 cột nếu không có ảnh phụ */}
+                            <div
+                                className={cn("rounded-3xl overflow-hidden border-4 border-white shadow-xl bg-muted relative group cursor-pointer",
+                                    vehicle.images.length > 1 ? "col-span-3 aspect-square lg:aspect-auto lg:h-full" : "col-span-4")}
+                                onClick={() => setIndex(0)}
+                            >
+                                <img
+                                    src={vehicle.images[0]?.secureUrl}
+                                    className="absolute inset-0 w-full h-full object-cover"
+                                    alt="Main"
+                                />
                             </div>
-                            <div className="col-span-1 grid grid-rows-3 gap-3">
-                                {vehicle.images.slice(1, 4).map((img: VehicleImage, i: number) => (
-                                    <div key={i} className="rounded-2xl overflow-hidden border-2 border-white shadow-md bg-muted">
-                                        <img src={img.secureUrl} className="w-full h-full object-cover" alt="Sub" />
-                                    </div>
-                                ))}
-                            </div>
+
+                            {/* Cột ảnh phụ - Chỉ hiện nếu có nhiều hơn 1 ảnh */}
+                            {vehicle.images.length > 1 && (
+                                <div className="col-span-1 grid grid-rows-3 gap-3 h-full">
+                                    {vehicle.images.slice(1, 4).map((img, i) => {
+                                        const isLastItem = i === 2 || i === vehicle.images.slice(1, 4).length - 1;
+                                        const remainingCount = vehicle.images.length - 4;
+
+                                        return (
+                                            <div
+                                                key={img.mediaId}
+                                                className="relative h-full rounded-2xl overflow-hidden border-2 border-white shadow-md bg-muted group cursor-pointer"
+                                                onClick={() => setIndex(i + 1)}
+                                            >
+                                                <img
+                                                    src={img.secureUrl}
+                                                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                                    alt={`Sub ${i}`}
+                                                />
+                                                {isLastItem && remainingCount > 0 && (
+                                                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-[2px]">
+                                                        <p className="text-white text-xl font-black italic">+{remainingCount}</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
                         </div>
 
                         {/* 3. Thông số xe */}
@@ -78,10 +116,10 @@ export default function VehicleDetailPage() {
                         </div>
 
                         {/* 4. Thông tin Model (Card ngang) */}
-                        <div className="bg-primary/5 border border-primary/10 rounded-3xl p-6 flex flex-wrap justify-between gap-8">
+                        <div className="bg-card/50 border border-primary/10 rounded-3xl p-6 flex flex-wrap justify-between gap-8">
                             <div>
                                 <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Hộp số</p>
-                                <p className="font-bold">{vehicle.vehicleModel.gearShiftType}</p>
+                                <p className="font-bold">{getGearShiftLabel(vehicle.vehicleModel.gearShiftType)}</p>
                             </div>
                             <div>
                                 <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Quãng đường</p>
@@ -105,6 +143,18 @@ export default function VehicleDetailPage() {
                     </div>
                 </div>
             </div>
-        </ScrollArea>
+            {/* Lightobx để xem preview ảnh */}
+            <Lightbox
+                open={index >= 0}
+                index={index}
+                close={() => setIndex(-1)}
+                slides={slides ?? []}
+                portal={{ root: document.body }}
+                render={{
+                    buttonPrev: slides && slides.length <= 1 ? () => null : undefined,
+                    buttonNext: slides && slides.length <= 1 ? () => null : undefined,
+                }}
+            />
+        </div >
     )
 }

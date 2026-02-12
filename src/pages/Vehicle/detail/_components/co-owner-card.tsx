@@ -5,9 +5,19 @@ import { useNavigate } from "react-router-dom"
 import path from "@/constants/path"
 import { generatePath } from "react-router-dom"
 import type { CoOwnerGroupSummary } from "@/types/co-owner-group.type"
+import { CO_OWNER_GROUP_STATUS_MAPPING } from "@/constants/status/co-owner-group/co-owner-group-status"
+import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
 
 export const CoOwnerCard = ({ group }: { group: CoOwnerGroupSummary | null }) => {
     const navigate = useNavigate()
+
+    if (!group) return null
+
+    const statusConfig = CO_OWNER_GROUP_STATUS_MAPPING[group.status] || {
+        label: group.status,
+        color: "text-slate-500"
+    };
 
     if (!group) return null
 
@@ -26,7 +36,12 @@ export const CoOwnerCard = ({ group }: { group: CoOwnerGroupSummary | null }) =>
 
                 <div className="flex items-center justify-between text-xs py-2 border-y border-primary/10">
                     <span className="flex items-center gap-1"><ShieldCheck className="h-3 w-3" /> Trạng thái</span>
-                    <span className="font-bold text-emerald-600 uppercase">{group.status}</span>
+                    <Badge
+                        variant="outline"
+                        className={cn("text-[10px] font-bold border-none px-2 py-0", statusConfig.color)}
+                    >
+                        {statusConfig.label}
+                    </Badge>
                 </div>
 
                 <Button

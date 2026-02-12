@@ -39,7 +39,7 @@ export interface CoOwnerGroupSummary {
     description: string;
     totalShare: number;
     sharePrice: number;
-    status: string;
+    status: CoOwnerGroupStatus;
 }
 
 export type CoOwnerGroupPaginationParams = PaginationParams & {
