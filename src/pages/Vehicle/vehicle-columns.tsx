@@ -91,17 +91,17 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
     {
         id: "actions",
         header: "",
-        cell: ({ row, table }) => {
+        cell: ({ row }) => {
             const id = row.original.vehicleId
-            const status = row.original.vehicleStatus
-            const actions = VEHICLE_STATUS_ACTIONS[status] ?? []
+            // const status = row.original.vehicleStatus
+            // const actions = VEHICLE_STATUS_ACTIONS[status] ?? []
 
             const detailPath = generatePath(path.vehicleDetail, { id })
             const prefetch = vehicleQueries.usePrefetchDetail()
 
             return (
                 <div className="flex items-center gap-2">
-                    {actions.map(action => (
+                    {/* {actions.map(action => (
                         <Button
                             key={action.type}
                             size="icon"
@@ -117,7 +117,7 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
                         >
                             <action.icon className="h-4 w-4" />
                         </Button>
-                    ))}
+                    ))} */}
 
                     <TableActionCell
                         // onDetailClick={() => table.options.meta?.onViewDetail?.(id)}

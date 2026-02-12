@@ -10,14 +10,16 @@ import { StationCard } from "./_components/station-card"
 import { CoOwnerCard } from "./_components/co-owner-card"
 import { DetailSkeleton } from "@/common/skeletons/detail-skeleton"
 import type { VehicleImage } from "@/types/commons/media.type"
-import type { VehicleStatusAction } from "@/types/vehicle.type"
+import { VehicleAction, VehicleStatus, type VehicleStatusAction } from "@/types/vehicle.type"
 import { getGearShiftLabel } from "@/constants/vehicle-model/gear-shift"
 import { useState } from "react"
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+import { RejectDialog } from "./_components/reject-dialog"
 
 export default function VehicleDetailPage() {
-    const [index, setIndex] = useState(-1);
+    const [index, setIndex] = useState(-1); //index cho ảnh gallery
+    const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
 
     const { id } = useParams<{ id: string }>()
 
@@ -31,6 +33,46 @@ export default function VehicleDetailPage() {
 
     const statusConfig = VEHICLE_STATUS_MAPPING[vehicle.vehicleStatus]
     const actions = VEHICLE_STATUS_ACTIONS[vehicle.vehicleStatus] ?? []
+
+    //========================== Update Status ==========================
+
+    const updateStatusMutation = vehicleQueries.useUpdateStatus()
+
+
+    const handleAction = (
+        id: string,
+        currentStatus: VehicleStatus,
+        action: VehicleAction
+    ) => {
+        const actionConfig =
+            VEHICLE_STATUS_ACTIONS[vehicle.vehicleStatus]?.find(
+                a => a.type === action
+            )
+
+        if (!actionConfig) return
+
+        // Nếu là hành động REJECT, thì mở Dialog thay vì gọi mutate ngay
+        if (action === VehicleAction.REJECT) {
+            setIsRejectDialogOpen(true);
+            return;
+        }
+
+        // Các hành động khác (Approve, v.v.) thì gọi luôn
+        updateStatusMutation.mutate({ id, status: actionConfig.nextStatus });
+    }
+
+    const confirmReject = (reason: string) => {
+        const rejectAction = actions.find(a => a.type === VehicleAction.REJECT);
+        if (rejectAction) {
+            updateStatusMutation.mutate({
+                id: vehicle.vehicleId,
+                status: rejectAction.nextStatus,
+                rejectionReason: reason
+            }, {
+                onSuccess: () => setIsRejectDialogOpen(false) // Đóng dialog khi xong
+            });
+        }
+    };
 
     return (
         <div className="h-full bg-slate-50/50 dark:bg-transparent">
@@ -48,12 +90,16 @@ export default function VehicleDetailPage() {
                             </Badge>
                         </div>
                         <p className="text-muted-foreground font-medium">Biển số: <span className="text-foreground">{vehicle.licensePlate}</span> • Hãng: {vehicle.vehicleModel.brandName}</p>
+                        <p className="text-foreground text-sm">Mã định danh xe: <span className="text-muted-foreground">{vehicle.vehicleId}</span></p>
                     </div>
 
                     {/* Quick Actions (Duyệt/Từ chối) */}
                     <div className="flex items-center gap-4 p-2 ">
                         {actions.map((action: VehicleStatusAction) => (
-                            <Button key={action.type} variant={action.variant || "outline"} size="lg" className="font-bold uppercase text-[10px]">
+                            <Button key={action.type} variant={action.variant || "outline"} size="lg"
+                                className="font-bold uppercase text-[10px]"
+                                onClick={() => handleAction(vehicle.vehicleId, vehicle.vehicleStatus, action.type)}
+                            >
                                 <action.icon className="mr-2 h-3.5 w-3.5" /> {action.label}
                             </Button>
                         ))}
@@ -154,6 +200,12 @@ export default function VehicleDetailPage() {
                     buttonPrev: slides && slides.length <= 1 ? () => null : undefined,
                     buttonNext: slides && slides.length <= 1 ? () => null : undefined,
                 }}
+            />
+            <RejectDialog
+                open={isRejectDialogOpen}
+                onOpenChange={setIsRejectDialogOpen}
+                onConfirm={confirmReject}
+                isLoading={updateStatusMutation.isPending}
             />
         </div >
     )

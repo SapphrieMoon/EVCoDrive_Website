@@ -49,11 +49,14 @@ const vehicleQueries = {
         const queryClient = useQueryClient()
 
         return useMutation({
-            mutationFn: ({ id, status }: { id: string, status: VehicleStatus }) => vehicleApi.updateStatus(id, status),
+            mutationFn: ({ id, status, rejectionReason }: { id: string, status: VehicleStatus, rejectionReason?: string }) => vehicleApi.updateStatus(id, status, rejectionReason),
 
-            onSuccess: () => {
+            onSuccess: (_data, variables) => {
                 queryClient.invalidateQueries({
                     queryKey: vehicleKey.lists(),
+                })
+                queryClient.invalidateQueries({
+                    queryKey: vehicleKey.detail(variables.id)
                 })
                 toast.success("Cập nhật trạng thái thành công")
             }
