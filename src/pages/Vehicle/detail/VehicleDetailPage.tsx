@@ -41,7 +41,6 @@ export default function VehicleDetailPage() {
 
     const handleAction = (
         id: string,
-        currentStatus: VehicleStatus,
         action: VehicleAction
     ) => {
         const actionConfig =
@@ -98,7 +97,7 @@ export default function VehicleDetailPage() {
                         {actions.map((action: VehicleStatusAction) => (
                             <Button key={action.type} variant={action.variant || "outline"} size="lg"
                                 className="font-bold uppercase text-[10px]"
-                                onClick={() => handleAction(vehicle.vehicleId, vehicle.vehicleStatus, action.type)}
+                                onClick={() => handleAction(vehicle.vehicleId, action.type)}
                             >
                                 <action.icon className="mr-2 h-3.5 w-3.5" /> {action.label}
                             </Button>

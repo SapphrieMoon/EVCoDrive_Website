@@ -1,9 +1,7 @@
 import { TableActionCell } from "@/common/table-action-cell";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import path from "@/constants/path";
 import { VEHICLE_STATUS_MAPPING } from "@/constants/status/vehicle/vehicle-status";
-import { VEHICLE_STATUS_ACTIONS } from "@/constants/status/vehicle/vehicle-status-action";
 import { cn } from "@/lib/utils";
 import vehicleQueries from "@/queries/vehicle.query";
 import { VehicleStatus, type Vehicle } from "@/types/vehicle.type";
