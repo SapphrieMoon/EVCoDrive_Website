@@ -10,7 +10,7 @@ import { StationCard } from "./_components/station-card"
 import { CoOwnerCard } from "./_components/co-owner-card"
 import { DetailSkeleton } from "@/common/skeletons/detail-skeleton"
 import type { VehicleImage } from "@/types/commons/media.type"
-import { VehicleAction, VehicleStatus, type VehicleStatusAction } from "@/types/vehicle.type"
+import { VehicleAction, type VehicleStatusAction } from "@/types/vehicle.type"
 import { getGearShiftLabel } from "@/constants/vehicle-model/gear-shift"
 import { useState } from "react"
 import Lightbox from "yet-another-react-lightbox";
