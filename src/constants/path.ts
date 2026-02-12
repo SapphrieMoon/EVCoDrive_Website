@@ -5,6 +5,7 @@ const path = {
     vehicleModel: '/vehicle-models',
     contract: '/contracts',
     vehicle: "/vehicles",
+    vehicleDetail: "/vehicles/:id",
     station: "/stations",
     staff: "/staffs",
     coOwnerGroup: "/co-owner-groups",

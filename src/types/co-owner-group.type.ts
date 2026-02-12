@@ -33,6 +33,15 @@ export interface CoOwnerGroupDetail {
     shareUnits: ShareUnit[];
 }
 
+export interface CoOwnerGroupSummary {
+    coOwnerGroupId: string;
+    name: string;
+    description: string;
+    totalShare: number;
+    sharePrice: number;
+    status: CoOwnerGroupStatus;
+}
+
 export type CoOwnerGroupPaginationParams = PaginationParams & {
     searchTerm?: string
 }

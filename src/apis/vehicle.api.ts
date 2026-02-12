@@ -17,8 +17,8 @@ export const vehicleApi = {
     //     await http.post<VehicleDetailResponse>(VEHICLE_URL.CREATE, data),
     // update: async (id: string, data: VehicleFormValues) =>
     //     await http.put<VehicleDetailResponse>(VEHICLE_URL.UPDATE, { params: { id }, data }),
-    updateStatus: (id: string, status: VehicleStatus) =>
-        http.patch(`${VEHICLE_URL.BASE}/${id}/status`, null, { params: { status } }),
+    updateStatus: (id: string, status: VehicleStatus, rejectionReason?: string) =>
+        http.patch(`${VEHICLE_URL.BASE}/${id}/status`, null, { params: { status, rejectionReason } }),
     delete: async (id: string) =>
         await http.delete<VehicleDetailResponse>(VEHICLE_URL.BASE, { params: { id } }),
 }

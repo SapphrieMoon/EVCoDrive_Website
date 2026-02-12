@@ -32,15 +32,31 @@ const vehicleQueries = {
         })
     },
 
+    usePrefetchDetail: () => {
+        const queryClient = useQueryClient()
+
+        return (id: string) => {
+            if (!id) return;
+            queryClient.prefetchQuery({
+                queryKey: vehicleKey.detail(id),
+                queryFn: () => vehicleApi.getDetail(id),
+                staleTime: 5 * 60 * 1000
+            })
+        }
+    },
+
     useUpdateStatus: () => {
         const queryClient = useQueryClient()
 
         return useMutation({
-            mutationFn: ({ id, status }: { id: string, status: VehicleStatus }) => vehicleApi.updateStatus(id, status),
+            mutationFn: ({ id, status, rejectionReason }: { id: string, status: VehicleStatus, rejectionReason?: string }) => vehicleApi.updateStatus(id, status, rejectionReason),
 
-            onSuccess: () => {
+            onSuccess: (_data, variables) => {
                 queryClient.invalidateQueries({
                     queryKey: vehicleKey.lists(),
+                })
+                queryClient.invalidateQueries({
+                    queryKey: vehicleKey.detail(variables.id)
                 })
                 toast.success("Cập nhật trạng thái thành công")
             }

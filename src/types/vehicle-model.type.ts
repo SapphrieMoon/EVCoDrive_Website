@@ -21,6 +21,16 @@ export interface VehicleModel {
     updatedAt: string
 }
 
+export interface VehicleModelSummary {
+    vehicleModelId: string;
+    name: string;
+    brandName: string;
+    gearShiftType: GearShiftType;
+    range: number;
+    batteryCapacity: number;
+    seatingCapacity: number;
+}
+
 export type VehicleModelPaginationParams = PaginationParams & {
     searchTermByName?: string
 }

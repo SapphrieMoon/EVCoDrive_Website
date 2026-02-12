@@ -13,6 +13,7 @@ const VehicleBrandPage = lazy(() => import("@/pages/Vehicle-Brand"));
 const VehicleModelPage = lazy(() => import("@/pages/Vehicle-Model"));
 const ContractPage = lazy(() => import("@/pages/Contract"));
 const VehiclePage = lazy(() => import("@/pages/Vehicle"));
+const VehicleDetailPage = lazy(() => import(`@/pages/Vehicle/detail/index`))
 const StationPage = lazy(() => import("@/pages/Station"));
 const StaffPage = lazy(() => import("@/pages/Staff"));
 const CoOwnerGroupPage = lazy(() => import("@/pages/Co-Owner-Group"));
@@ -58,6 +59,7 @@ export default function useRouteElements() {
                     children: [
                         { path: path.contract, element: <ContractPage /> },
                         { path: path.vehicle, element: <VehiclePage /> },
+                        { path: path.vehicleDetail, element: <VehicleDetailPage /> },
                         { path: path.station, element: <StationPage /> },
                         { path: path.vehicleBrand, element: <VehicleBrandPage /> },
                         { path: path.vehicleModel, element: <VehicleModelPage /> },
