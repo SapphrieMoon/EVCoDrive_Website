@@ -7,6 +7,8 @@ import type { VehicleAction, VehiclePaginationParams, VehicleStatus } from "@/ty
 import { VEHICLE_STATUS_ACTIONS } from "@/constants/status/vehicle/vehicle-status-action";
 import { useDebounce } from "use-debounce";
 import { VehicleFilterSidebar } from "./vehicle-filter-sidebar";
+import { DataTableFacetedFilter } from "./filters/data-table-faceted-filter";
+import { VEHICLE_STATUS_MAPPING } from "@/constants/status/vehicle/vehicle-status";
 
 export default function VehiclePage() {
     //========================== Pagination & Search & Filter ==========================
@@ -26,12 +28,13 @@ export default function VehiclePage() {
         sortOrder: "desc",
     });
 
-    const [debouncedFilters] = useDebounce(filters, 500);
+    const [debouncedFilters] = useDebounce(filters.searchTerm, 500);
 
     const { data, isFetching } = vehicleQueries.usePagination({
+        ...filters,
         pageNumber: pagination.pageIndex + 1,
         pageSize: pagination.pageSize,
-        ...debouncedFilters // Rải toàn bộ params vào đây
+        searchTerm: debouncedFilters,
     } as VehiclePaginationParams);
 
 
@@ -77,6 +80,20 @@ export default function VehiclePage() {
                         className="max-w-sm"
                     />
 
+                    {/* Lọc Status */}
+                    <DataTableFacetedFilter
+                        title="Trạng thái"
+                        options={Object.entries(VEHICLE_STATUS_MAPPING).map(([k, v]) => ({
+                            label: v.label,
+                            value: k
+                        }))}
+                        value={filters.status}
+                        onChange={(val) => {
+                            setFilters(prev => ({ ...prev, status: val as VehicleStatus }));
+                            setPagination(prev => ({ ...prev, pageIndex: 0 }));
+                        }}
+                    />
+
                     {/* Component này chúng ta sẽ viết ở Bước 2 */}
                     <VehicleFilterSidebar filters={filters} setFilters={setFilters} />
                 </div>
@@ -91,6 +108,20 @@ export default function VehiclePage() {
                 onPaginationChange={setPagination}
                 meta={{
                     onAction: handleAction,
+                }}
+                sorting={[{
+                    id: filters.sortBy || "createdDate",
+                    desc: filters.sortOrder === "desc",
+                }]}
+                onSortingChange={(s) => {
+                    const currentSort = s[0]; // Lấy cái đầu tiên vì mình sort đơn
+                    setFilters(prev => ({
+                        ...prev,
+                        sortBy: currentSort?.id || "createdDate",
+                        sortOrder: currentSort?.desc ? "desc" : "asc"
+                    }));
+                    // Reset về trang 1 khi sort để tránh lỗi dữ liệu
+                    setPagination(prev => ({ ...prev, pageIndex: 0 }));
                 }}
 
                 isLoading={isFetching}

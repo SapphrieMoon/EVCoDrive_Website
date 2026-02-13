@@ -20,6 +20,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { TableSkeleton } from "./skeletons/table-skeleton"
+import { ArrowDownWideNarrow, ArrowUpDown, ArrowUpNarrowWide } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -82,12 +84,28 @@ export function DataTable<TData, TValue>({
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
                                     <TableHead key={header.id} className="h-20">
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
+                                        {header.isPlaceholder ? null : (
+                                            <div
+                                                // Nếu cột đó cho phép sort thì hiện con trỏ pointer
+                                                className={cn(
+                                                    "flex items-center gap-2",
+                                                    header.column.getCanSort() && "cursor-pointer select-none"
+                                                )}
+                                                // Khi click vào header thì trigger hàm đổi trạng thái sort
+                                                onClick={header.column.getToggleSortingHandler()}
+                                            >
+                                                {/* Render tiêu đề cột (Biển số, Năm SX, v.v.) */}
+                                                {flexRender(header.column.columnDef.header, header.getContext())}
+
+                                                {/* Logic hiển thị Icon tương ứng */}
+                                                {header.column.getIsSorted() === "asc" && <ArrowUpNarrowWide className="ml-2 h-4 w-4 text-primary" />}
+                                                {header.column.getIsSorted() === "desc" && <ArrowDownWideNarrow className="ml-2 h-4 w-4 text-primary" />}
+                                                {/* Nếu chưa sort mà cột đó CÓ THỂ sort thì hiện icon mờ mờ */}
+                                                {!header.column.getIsSorted() && header.column.getCanSort() && (
+                                                    <ArrowUpDown className="ml-2 h-4 w-4 opacity-30" />
+                                                )}
+                                            </div>
+                                        )}
                                     </TableHead>
                                 ))}
                             </TableRow>

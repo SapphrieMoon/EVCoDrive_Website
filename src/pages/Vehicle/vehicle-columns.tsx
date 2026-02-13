@@ -13,6 +13,7 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
     {
         accessorKey: "thumbnailUrl",
         header: "Ảnh",
+        enableSorting: false,
         cell: ({ row }) => (
             <img
                 src={row.original.thumbnailUrl}
@@ -83,6 +84,7 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
     {
         accessorKey: "createdDate",
         header: "Ngày tạo",
+        enableSorting: true,
         cell: ({ row }) => formatDate(row.original.createdDate, false)
     },
 
