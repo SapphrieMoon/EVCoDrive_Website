@@ -10,12 +10,12 @@ import { Check, PlusCircle } from "lucide-react";
 interface FacetedFilterProps {
     title?: string
     options: { label: string; value: string; icon?: React.ComponentType<{ className?: string }> }[]
-    value?: string[]
-    onChange: (value?: string[]) => void
+    value?: string
+    onChange: (value?: string) => void
 }
 
-export function DataTableFacetedFilter({ title, options, value = [], onChange }: FacetedFilterProps) {
-    const selectedValues = new Set(value)
+export function DataTableFacetedFilter({ title, options, value, onChange }: FacetedFilterProps) {
+    const selectedOption = options.find(option => option.value === value)
 
     return (
         <Popover>
@@ -23,29 +23,12 @@ export function DataTableFacetedFilter({ title, options, value = [], onChange }:
                 <Button variant="outline" size="sm" className="h-10 border-dashed">
                     <PlusCircle className="mr-2 h-4 w-4" />
                     {title}
-                    {selectedValues.size > 0 && (
+                    {selectedOption && (
                         <>
                             <Separator orientation="vertical" className="mx-2 h-4" />
-                            {/* Hiện số lượng nếu chọn nhiều trên mobile */}
-                            <Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
-                                {selectedValues.size}
+                            <Badge variant="secondary" className="rounded-sm px-1 font-normal">
+                                {selectedOption.label}
                             </Badge>
-                            {/* Hiện tên các option trên desktop */}
-                            <div className="hidden space-x-1 lg:flex">
-                                {selectedValues.size > 2 ? (
-                                    <Badge variant="secondary" className="rounded-sm px-1 font-normal">
-                                        Đã chọn {selectedValues.size}
-                                    </Badge>
-                                ) : (
-                                    options
-                                        .filter((option) => selectedValues.has(option.value))
-                                        .map((option) => (
-                                            <Badge key={option.value} variant="secondary" className="rounded-sm px-1 font-normal">
-                                                {option.label}
-                                            </Badge>
-                                        ))
-                                )}
-                            </div>
                         </>
                     )}
                 </Button>
@@ -57,19 +40,16 @@ export function DataTableFacetedFilter({ title, options, value = [], onChange }:
                         <CommandEmpty>Không tìm thấy.</CommandEmpty>
                         <CommandGroup>
                             {options.map((option) => {
-                                const isSelected = selectedValues.has(option.value)
+                                const isSelected = value === option.value
                                 return (
                                     <CommandItem
                                         key={option.value}
                                         onSelect={() => {
-                                            const newValues = new Set(selectedValues)
                                             if (isSelected) {
-                                                newValues.delete(option.value)
+                                                onChange(undefined)
                                             } else {
-                                                newValues.add(option.value)
+                                                onChange(option.value)
                                             }
-                                            const filterValues = Array.from(newValues)
-                                            onChange(filterValues.length > 0 ? filterValues : undefined)
                                         }}
                                     >
                                         <div className={cn(
@@ -83,7 +63,7 @@ export function DataTableFacetedFilter({ title, options, value = [], onChange }:
                                 )
                             })}
                         </CommandGroup>
-                        {selectedValues.size > 0 && (
+                        {value && (
                             <>
                                 <CommandSeparator />
                                 <CommandGroup>
