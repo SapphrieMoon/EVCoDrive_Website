@@ -24,11 +24,13 @@ export const vehicleBrandColumns: ColumnDef<VehicleBrand>[] = [
     // },
     {
         accessorKey: "name",
-        header: "Tên hãng xe"
+        header: "Tên hãng xe",
+        enableSorting: false,
     },
     {
         accessorKey: "logoUrl",
         header: "Logo",
+        enableSorting: false,
         cell: ({ row }) => {
             const brand = row.original
 
@@ -44,16 +46,19 @@ export const vehicleBrandColumns: ColumnDef<VehicleBrand>[] = [
     {
         accessorKey: "createdDate",
         header: "Ngày tạo",
+        enableSorting: false,
         cell: ({ row }) => formatDate(row.original.createdDate, false)
     },
     {
         accessorKey: "updatedDate",
         header: "Ngày cập nhật",
+        enableSorting: false,
         cell: ({ row }) => formatDate(row.original.updatedDate, false)
     },
     {
         id: "actions",
         header: "Thao tác",
+        enableSorting: false,
         cell: ({ row, table }) => {
             const id = row.original.vehicleBrandId
             const { mutate, isPending } = vehicleBrandQueries.useDelete()

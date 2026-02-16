@@ -11,6 +11,7 @@ export const vehicleModelColumns: ColumnDef<VehicleModel>[] = [
     {
         accessorKey: "name",
         header: "Dòng xe & Hãng",
+        enableSorting: false,
         cell: ({ row }) => {
             const model = row.original
             return (
@@ -33,6 +34,7 @@ export const vehicleModelColumns: ColumnDef<VehicleModel>[] = [
     {
         accessorKey: "range",
         header: "Km/lần sạc",
+        enableSorting: false,
         cell: ({ row }) => (
             <div className="flex items-center gap-2">
                 <Milestone className="h-3 w-3 text-muted-foreground" />
@@ -43,6 +45,7 @@ export const vehicleModelColumns: ColumnDef<VehicleModel>[] = [
     {
         accessorKey: "batteryCapacity",
         header: "Dung lượng Pin",
+        enableSorting: false,
         cell: ({ row }) => (
             <div className="flex items-center gap-2">
                 <Battery className="h-3 w-3 text-muted-foreground" />
@@ -53,6 +56,7 @@ export const vehicleModelColumns: ColumnDef<VehicleModel>[] = [
     {
         accessorKey: "seatingCapacity",
         header: "Số chỗ",
+        enableSorting: false,
         cell: ({ row }) => (
             <Badge variant="secondary" className="font-normal">
                 {row.original.seatingCapacity} chỗ
@@ -62,11 +66,13 @@ export const vehicleModelColumns: ColumnDef<VehicleModel>[] = [
     {
         accessorKey: "updatedAt",
         header: "Cập nhật",
+        enableSorting: false,
         cell: ({ row }) => <span className="text-xs text-muted-foreground">{formatDate(row.original.updatedAt, false)}</span>
     },
     {
         id: "actions",
         header: "Thao tác",
+        enableSorting: false,
         cell: ({ row, table }) => {
             const id = row.original.vehicleModelId
             const { mutate, isPending } = vehicleModelQueries.useDelete()

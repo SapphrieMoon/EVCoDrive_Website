@@ -10,15 +10,18 @@ export const staffColumns: ColumnDef<Staff>[] = [
     {
         accessorKey: "fullName",
         header: "Họ và tên",
+        enableSorting: false,
         cell: ({ row }) => <div className="font-medium">{row.getValue("fullName")}</div>,
     },
     {
         accessorKey: "email",
         header: "Email",
+        enableSorting: false,
     },
     {
         accessorKey: "stationName",
         header: "Trạm quản lý",
+        enableSorting: false,
         cell: ({ row }) => (
             <Badge variant="outline" className="bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300">
                 {row.getValue("stationName")}
@@ -28,6 +31,7 @@ export const staffColumns: ColumnDef<Staff>[] = [
     {
         accessorKey: "isActive",
         header: "Trạng thái",
+        enableSorting: false,
         cell: ({ row }) => {
             const isActive = row.getValue("isActive") as boolean
             return (
@@ -40,6 +44,7 @@ export const staffColumns: ColumnDef<Staff>[] = [
     {
         accessorKey: "createdDate",
         header: "Ngày tạo",
+        enableSorting: false,
         cell: ({ row }) => {
             const createdDate = row.original.createdDate
             return <div>{formatDate(createdDate)}</div>
@@ -47,6 +52,7 @@ export const staffColumns: ColumnDef<Staff>[] = [
     },
     {
         id: "actions",
+        enableSorting: false,
         cell: ({ row, table }) => {
             const id = row.original.staffId
             const { mutate, isPending } = staffQueries.useDelete()
