@@ -12,6 +12,7 @@ export const coOwnerGroupColumns: ColumnDef<CoOwnerGroup>[] = [
     {
         accessorKey: "name",
         header: "Tên nhóm",
+        enableSorting: false,
         cell: ({ row }) => (
             <div className="flex flex-col space-y-0.5">
                 <span className="font-bold text-sm tracking-tight">{row.getValue("name")}</span>
@@ -24,6 +25,7 @@ export const coOwnerGroupColumns: ColumnDef<CoOwnerGroup>[] = [
     {
         accessorKey: "totalShare",
         header: "Tổng suất",
+        enableSorting: false,
         cell: ({ row }) => (
             <div className="flex items-center gap-2">
                 <Users2 className="h-4 w-4 text-muted-foreground" />
@@ -34,6 +36,7 @@ export const coOwnerGroupColumns: ColumnDef<CoOwnerGroup>[] = [
     {
         accessorKey: "sharePrice",
         header: "Giá mỗi suất",
+        enableSorting: false,
         cell: ({ row }) => {
             const price = row.getValue("sharePrice") as number;
             return (
@@ -49,6 +52,7 @@ export const coOwnerGroupColumns: ColumnDef<CoOwnerGroup>[] = [
     {
         accessorKey: "coOwnerGroupStatus",
         header: "Trạng thái",
+        enableSorting: false,
         cell: ({ row }) => {
             const status = row.original.coOwnerGroupStatus;
             const isActive = status === "Active";
@@ -65,6 +69,7 @@ export const coOwnerGroupColumns: ColumnDef<CoOwnerGroup>[] = [
     {
         accessorKey: "createdDate",
         header: "Ngày tạo",
+        enableSorting: false,
         cell: ({ row }) => (
             <div className="text-muted-foreground">
                 {formatDate(row.original.createdDate, false)}
@@ -74,6 +79,7 @@ export const coOwnerGroupColumns: ColumnDef<CoOwnerGroup>[] = [
     {
         id: "actions",
         header: "",
+        enableSorting: false,
         cell: ({ row }) => {
             const id = row.original.coOwnerGroupId;
             // const { mutate, isPending } = coOwnerGroupQueries.useDelete();

@@ -9,15 +9,18 @@ export const contractColumns: ColumnDef<Contract>[] = [
     {
         accessorKey: "contractNumber",
         header: "Số hợp đồng",
+        enableSorting: false,
         cell: ({ row }) => <span className="font-mono font-medium">{row.getValue("contractNumber")}</span>
     },
     {
         accessorKey: "title",
         header: "Tiêu đề",
+        enableSorting: false,
     },
     {
         accessorKey: "contractType",
         header: "Loại",
+        enableSorting: false,
         cell: ({ row }) => {
             const type = row.original.contractType as keyof typeof CONTRACT_TYPES;
             const config = CONTRACT_TYPES[type] || { label: "N/A", variant: "outline" };
@@ -27,6 +30,7 @@ export const contractColumns: ColumnDef<Contract>[] = [
     {
         accessorKey: "contractStatuses",
         header: "Trạng thái",
+        enableSorting: false,
         cell: ({ row }) => {
             const status = row.original.contractStatuses as keyof typeof CONTRACT_STATUSES;
             const config = CONTRACT_STATUSES[status] || { label: "N/A", variant: "secondary" };
@@ -36,6 +40,7 @@ export const contractColumns: ColumnDef<Contract>[] = [
     {
         accessorKey: "isFullyVerified",
         header: "Xác thực",
+        enableSorting: false,
         cell: ({ row }) => (
             <div className="">
                 {row.original.isFullyVerified ? (
@@ -49,11 +54,13 @@ export const contractColumns: ColumnDef<Contract>[] = [
     {
         accessorKey: "createdDate",
         header: "Ngày tạo",
+        enableSorting: false,
         cell: ({ row }) => formatDate(row.original.createdDate, false)
     },
     {
         id: "actions",
         header: "Thao tác",
+        enableSorting: false,
         cell: ({ row, table }) => {
             const id = row.original.contractId
             return (

@@ -13,6 +13,7 @@ export const stationColumns: ColumnDef<Station>[] = [
     {
         accessorKey: "name",
         header: "Trạm & Địa chỉ",
+        enableSorting: false,
         cell: ({ row }) => {
             const station = row.original
             return (
@@ -32,6 +33,7 @@ export const stationColumns: ColumnDef<Station>[] = [
     },
     {
         header: "Giờ hoạt động",
+        enableSorting: false,
         cell: ({ row }) => {
             const { openTime, closeTime } = row.original
 
@@ -47,6 +49,7 @@ export const stationColumns: ColumnDef<Station>[] = [
     },
     {
         header: "Vị trí",
+        enableSorting: false,
         cell: ({ row }) => {
             const { latitude, longitude } = row.original
             const googleMapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`
@@ -67,6 +70,7 @@ export const stationColumns: ColumnDef<Station>[] = [
     {
         accessorKey: "isOpen",
         header: "Đóng/Mở cửa",
+        enableSorting: false,
         cell: ({ row }) => {
             const isOpen = row.original.isOpen
             const config = STATION_ISOPEN_STATUS[isOpen]
@@ -80,6 +84,7 @@ export const stationColumns: ColumnDef<Station>[] = [
     {
         accessorKey: "status",
         header: "Trạng thái",
+        enableSorting: false,
         cell: ({ row }) => {
             const status = row.original.status
             const config = STATION_STATUS_MAPPING[status]
@@ -94,6 +99,7 @@ export const stationColumns: ColumnDef<Station>[] = [
     {
         id: "actions",
         header: "Thao tác",
+        enableSorting: false,
         cell: ({ row, table }) => {
             const id = row.original.stationId
             const { mutate, isPending } = stationQueries.useDelete()
