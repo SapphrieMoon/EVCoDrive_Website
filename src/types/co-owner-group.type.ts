@@ -4,10 +4,13 @@ import type { SuccessResponse } from "./commons/utils.type"
 import type { ShareHolder } from "./share-holder"
 import type { ShareUnit } from "./share-unit"
 
-export enum CoOwnerGroupStatus {
-    Active = "Active",
-    Inactive = "Inactive",
-}
+export const CoOwnerGroupStatus = {
+    Active: "Active",
+    Inactive: "Inactive",
+    Disbaned: "Disbaned",
+} as const
+
+export type CoOwnerGroupStatus = typeof CoOwnerGroupStatus[keyof typeof CoOwnerGroupStatus]
 
 export interface CoOwnerGroup {
     coOwnerGroupId: string
@@ -28,7 +31,7 @@ export interface CoOwnerGroupDetail {
     vehicleLicensePlate: string;
     totalShares: number;
     sharePrice: number;
-    status: "Active" | "Inactive" | string;
+    status: CoOwnerGroupStatus;
     shareHolders: ShareHolder[];
     shareUnits: ShareUnit[];
 }
