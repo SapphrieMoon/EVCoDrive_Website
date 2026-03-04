@@ -1,17 +1,28 @@
-import type { CoOwnerGroupStatus } from "@/types/co-owner-group.type";
+import type { BadgeVariant } from "@/components/ui/badge";
+import { CoOwnerGroupStatus } from "@/types/co-owner-group.type";
 
-export const CO_OWNER_GROUP_STATUS_MAPPING: Record<CoOwnerGroupStatus, { label: string; color: string }> = {
-    Active: {
+export const CO_OWNER_GROUP_STATUS_MAPPING: Record<CoOwnerGroupStatus,
+    { label: string; color: BadgeVariant, nextStatus: CoOwnerGroupStatus | null, actionLabel?: string }> = {
+    [CoOwnerGroupStatus.ReadyToActive]: {
+        label: "Sẵn sàng kích hoạt",
+        color: "blue",
+        nextStatus: CoOwnerGroupStatus.Active,
+        actionLabel: "Kích hoạt nhóm"
+    },
+    [CoOwnerGroupStatus.Active]: {
         label: "Đang hoạt động",
-        color: "text-emerald-600 bg-emerald-50 border-emerald-200 dark:bg-emerald-500/10",
+        color: "green",
+        nextStatus: CoOwnerGroupStatus.Disbaned,
+        actionLabel: "Giải tán nhóm"
     },
-    Inactive: {
-        label: "Ngừng hoạt động",
-        color: "text-slate-600 bg-slate-50 border-slate-200 dark:bg-slate-500/10",
+    [CoOwnerGroupStatus.Inactive]: {
+        label: "Chưa hoạt động",
+        color: "secondary",
+        nextStatus: null,
     },
-    // Pending: {
-    //     label: "Chờ duyệt",
-    //     color: "text-amber-600 bg-amber-50 border-amber-200 dark:bg-amber-500/10",
-    // },
-    // Thêm các status khác nếu BE có trả về
+    [CoOwnerGroupStatus.Disbaned]: {
+        label: "Đã giải tán",
+        color: "red",
+        nextStatus: null
+    },
 };

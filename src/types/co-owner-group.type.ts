@@ -8,6 +8,7 @@ export const CoOwnerGroupStatus = {
     Active: "Active",
     Inactive: "Inactive",
     Disbaned: "Disbaned",
+    ReadyToActive: "ReadyToActive",
 } as const
 
 export type CoOwnerGroupStatus = typeof CoOwnerGroupStatus[keyof typeof CoOwnerGroupStatus]

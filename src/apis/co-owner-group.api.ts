@@ -20,5 +20,6 @@ export const coOwnerGroupApi = {
     delete: async (id: string) =>
         await http.delete<CoOwnerGroupPaginationResponse>(`${COOWNERGROUP_API.BASE}/${id}`),
     updateStatus: async (id: string, status: CoOwnerGroupStatus) =>
-        await http.patch<CoOwnerGroupDetailResponse>(`${COOWNERGROUP_API.BASE}/${id}/status`, { status }),
+        await http.patch<CoOwnerGroupDetailResponse>(`${COOWNERGROUP_API.BASE}/${id}/status`, null,
+            { params: { status } }),
 }
