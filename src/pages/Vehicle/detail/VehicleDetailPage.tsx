@@ -23,6 +23,7 @@ export default function VehicleDetailPage() {
 
     const { id } = useParams<{ id: string }>()
 
+    const updateStatusMutation = vehicleQueries.useUpdateStatus()
     const { data, isLoading } = vehicleQueries.useDetail(id!)
     const vehicle = data?.data.data
 
@@ -36,7 +37,7 @@ export default function VehicleDetailPage() {
 
     //========================== Update Status ==========================
 
-    const updateStatusMutation = vehicleQueries.useUpdateStatus()
+
 
 
     const handleAction = (

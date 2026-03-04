@@ -6,7 +6,7 @@ import { StatsOverview } from "./_components/stats-overview"
 import { ShareUnitGrid } from "./_components/share-unit-grid"
 import { Badge } from "@/components/ui/badge"
 import type { ShareHolder } from "@/types/share-holder"
-import { cn } from "@/lib/utils"
+import { GroupStatusActions } from "./_components/status-actions"
 
 export default function CoOwnerGroupDetailPage() {
     const { id } = useParams<{ id: string }>()
@@ -15,8 +15,6 @@ export default function CoOwnerGroupDetailPage() {
 
     if (isLoading) return <div className="p-8"><DetailSkeleton /></div>
     if (!group) return <div>Không tìm thấy dữ liệu</div>
-
-    const isActive = group.status === "Active";
 
     return (
         <ScrollArea className="h-full">
@@ -33,17 +31,7 @@ export default function CoOwnerGroupDetailPage() {
                         </div>
 
                         {/* Bên phải: Badge trạng thái */}
-                        <Badge
-                            variant="outline"
-                            className={cn(
-                                "mt-2 text-[10px] uppercase tracking-widest px-3 py-1 font-bold shrink-0 shadow-sm transition-all",
-                                isActive
-                                    ? "border-emerald-500/50 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400"
-                                    : "border-destructive/50 bg-destructive/5 text-destructive dark:bg-destructive/10"
-                            )}
-                        >
-                            {isActive ? "Đang hoạt động" : "Ngừng kích hoạt"}
-                        </Badge>
+                        <GroupStatusActions id={id as string} />
                     </div>
                 </div>
 

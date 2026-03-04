@@ -1,6 +1,6 @@
 import { coOwnerGroupApi } from "@/apis/co-owner-group.api"
 import { coOwnerGroupKey } from "@/constants/query-keys/co-owner-group.key"
-import type { CoOwnerGroupPaginationParams } from "@/types/co-owner-group.type"
+import type { CoOwnerGroupPaginationParams, CoOwnerGroupStatus } from "@/types/co-owner-group.type"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 const coOwnerGroupQueries = {
@@ -79,6 +79,22 @@ const coOwnerGroupQueries = {
                 staleTime: 5 * 60 * 1000, //giữ data trong 5 phút
             })
         }
+    },
+
+    useUpdateStatus: () => {
+        const queryClient = useQueryClient()
+
+        return useMutation({
+            mutationFn: ({ id, status }: { id: string, status: CoOwnerGroupStatus }) => coOwnerGroupApi.updateStatus(id, status),
+            onSuccess: (_, variables) => {
+                queryClient.invalidateQueries({
+                    queryKey: coOwnerGroupKey.lists()
+                })
+                queryClient.invalidateQueries({
+                    queryKey: coOwnerGroupKey.detail(variables.id)
+                })
+            }
+        })
     }
 }
 

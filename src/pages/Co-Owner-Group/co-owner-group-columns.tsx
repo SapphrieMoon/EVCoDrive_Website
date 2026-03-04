@@ -1,8 +1,9 @@
 import { TableActionCell } from "@/common/table-action-cell";
 import { Badge } from "@/components/ui/badge";
 import path from "@/constants/path";
+import { CO_OWNER_GROUP_STATUS_MAPPING } from "@/constants/status/co-owner-group/co-owner-group-status";
 import coOwnerGroupQueries from "@/queries/co-owner-group.query";
-import type { CoOwnerGroup } from "@/types/co-owner-group.type";
+import type { CoOwnerGroup, CoOwnerGroupStatus } from "@/types/co-owner-group.type";
 import { formatDate } from "@/utils/date";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Users2, Wallet } from "lucide-react";
@@ -55,13 +56,13 @@ export const coOwnerGroupColumns: ColumnDef<CoOwnerGroup>[] = [
         enableSorting: false,
         cell: ({ row }) => {
             const status = row.original.coOwnerGroupStatus;
-            const isActive = status === "Active";
+            const statusConfig = CO_OWNER_GROUP_STATUS_MAPPING[status as CoOwnerGroupStatus]
 
             return (
                 <Badge
-                    variant={isActive ? "green" : "red"}
+                    variant={statusConfig.color}
                 >
-                    {isActive ? "Đang hoạt động" : "Ngừng kích hoạt"}
+                    {statusConfig.label}
                 </Badge>
             );
         }
