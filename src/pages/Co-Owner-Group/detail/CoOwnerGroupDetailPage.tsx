@@ -6,7 +6,6 @@ import { StatsOverview } from "./_components/stats-overview"
 import { ShareUnitGrid } from "./_components/share-unit-grid"
 import { Badge } from "@/components/ui/badge"
 import type { ShareHolder } from "@/types/share-holder"
-import { cn } from "@/lib/utils"
 import { GroupStatusActions } from "./_components/status-actions"
 
 export default function CoOwnerGroupDetailPage() {
@@ -16,8 +15,6 @@ export default function CoOwnerGroupDetailPage() {
 
     if (isLoading) return <div className="p-8"><DetailSkeleton /></div>
     if (!group) return <div>Không tìm thấy dữ liệu</div>
-
-    const isActive = group.status === "Active";
 
     return (
         <ScrollArea className="h-full">
