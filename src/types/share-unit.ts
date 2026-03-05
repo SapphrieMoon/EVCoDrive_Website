@@ -1,4 +1,11 @@
-export type ShareUnitStatus = "Available" | "Selling" | "Occupied" | string;
+export const ShareUnitStatus = {
+    Available: "Available",
+    Selling: "Selling",
+    Reserved: "Reserved",
+    Resale: "Resale",
+} as const
+
+export type ShareUnitStatus = typeof ShareUnitStatus[keyof typeof ShareUnitStatus]
 
 export interface ShareUnit {
     shareUnitId: string;
