@@ -8,6 +8,7 @@ import coOwnerGroupQueries from "@/queries/co-owner-group.query"
 import { CoOwnerGroupStatus } from "@/types/co-owner-group.type"
 import { ChevronDown } from "lucide-react"
 import { useState } from "react"
+import { toast } from "sonner"
 
 export function GroupStatusActions({ id }: { id: string }) {
     const { data } = coOwnerGroupQueries.useDetail(id)
@@ -28,12 +29,32 @@ export function GroupStatusActions({ id }: { id: string }) {
                     {
                         coOwnerGroupId: id,
                     },
-                    { onSuccess: (res) => console.log("chạy create quotas nè", res) }
-                )
+                    {
+                        onSuccess: () => {
+                            updateStatusMutation.mutate(
+                                { id, status: nextStatus },
+                                {
+                                    onSuccess: () => {
+                                        setNextStatus(null)
+                                        toast.success("Khởi tạo định mức sử dụng và kích hoạt nhóm thành công")
+                                    }
+                                }
+                            );
+                        }
+                    },
+
+                );
+                return;
             }
+
             updateStatusMutation.mutate(
                 { id, status: nextStatus },
-                { onSuccess: () => setNextStatus(null) }
+                {
+                    onSuccess: () => {
+                        setNextStatus(null)
+                        toast.success("Cập nhật trạng thái nhóm thành công!")
+                    }
+                }
             )
         }
     }
