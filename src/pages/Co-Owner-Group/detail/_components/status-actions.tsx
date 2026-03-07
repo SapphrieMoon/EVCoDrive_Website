@@ -5,6 +5,7 @@ import { CO_OWNER_GROUP_STATUS_MAPPING } from "@/constants/status/co-owner-group
 import { cn } from "@/lib/utils"
 import bookingQueries from "@/queries/booking.query"
 import coOwnerGroupQueries from "@/queries/co-owner-group.query"
+import groupWalletQueries from "@/queries/group-wallet.query"
 import { CoOwnerGroupStatus } from "@/types/co-owner-group.type"
 import { ChevronDown } from "lucide-react"
 import { useState } from "react"
@@ -15,6 +16,7 @@ export function GroupStatusActions({ id }: { id: string }) {
     const group = data?.data.data
     const updateStatusMutation = coOwnerGroupQueries.useUpdateStatus()
     const postUsageQuotasMutation = bookingQueries.usePostUsageQuotas()
+    const createGroupWalletMutation = groupWalletQueries.useCreate()
     const [nextStatus, setNextStatus] = useState<CoOwnerGroupStatus | null>(null)
 
     if (!group) return null
@@ -44,6 +46,11 @@ export function GroupStatusActions({ id }: { id: string }) {
                     },
 
                 );
+                createGroupWalletMutation.mutate(id, {
+                    onSuccess: () => {
+                        toast.success("Tạo ví nhóm thành công")
+                    }
+                })
                 return;
             }
 
