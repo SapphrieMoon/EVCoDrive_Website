@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { formatDate } from "@/utils/date"
 import { toast } from "sonner"
+import { BookingStatus } from "@/types/booking.type"
 
 export function BookingDetail({ id, open, onOpenChange }: BaseDetailProps) {
     const { data, isLoading } = bookingQueries.useDetail(id as string)
@@ -35,7 +36,7 @@ export function BookingDetail({ id, open, onOpenChange }: BaseDetailProps) {
                     }
                 }
             )
-        } else {
+        } else if (isCheckedIn) {
             checkOutMutation.mutate({ id, endOdometer: odo },
                 {
                     onSuccess: () => {
@@ -116,7 +117,7 @@ export function BookingDetail({ id, open, onOpenChange }: BaseDetailProps) {
                         )}
 
                         {/* ACTION SECTION: CHECK-IN / CHECK-OUT */}
-                        {(isPending || isCheckedIn) && (
+                        {(isPending || isCheckedIn) && (booking?.bookingStatus != BookingStatus.Cancelled) && (
                             <div className="space-y-4 p-4 rounded-2xl border-2 border-primary/20 bg-primary/5 shadow-inner mt-4">
                                 <h4 className="text-sm font-black uppercase italic flex items-center gap-2">
                                     <Gauge className="h-4 w-4" />
