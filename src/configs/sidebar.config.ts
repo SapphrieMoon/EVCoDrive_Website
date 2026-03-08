@@ -17,7 +17,13 @@ export const adminSidebar: SidebarItem[] = [
         children: [
             { label: "Xe đăng ký", path: path.vehicle },    // Vehicle
             { label: "Hãng xe", path: path.vehicleBrand },   // VehicleBrand
-            { label: "Dòng xe", path: "/vehicle-models" },   // VehicleModel
+            { label: "Dòng xe", path: path.vehicleModel },   // VehicleModel
+        ],
+    },
+    {
+        label: "Quản lý vận hành",
+        children: [
+            { label: "Quản lý đặt xe", path: path.booking },
         ],
     },
 ]
