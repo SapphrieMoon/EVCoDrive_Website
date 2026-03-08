@@ -2,15 +2,19 @@ import type { BaseCrudFormProps } from "./commons/crud-form.type"
 import type { PaginationParams, PaginationResponse } from "./commons/pagination.type"
 import type { SuccessResponse } from "./commons/utils.type"
 
-export enum StationStatus {
-    Active = "Active",
-    Inactive = "Inactive",
-}
+export const StationStatus = {
+    Active: "Active",
+    Inactive: "Inactive",
+} as const
 
-export enum OpenStatus {
-    Open = "open",
-    Closed = "closed",
-}
+export type StationStatus = typeof StationStatus[keyof typeof StationStatus]
+
+export const OpenStatus = {
+    Open: "open",
+    Closed: "closed",
+} as const
+
+export type OpenStatus = typeof OpenStatus[keyof typeof OpenStatus]
 
 export interface Station {
     stationId: string
