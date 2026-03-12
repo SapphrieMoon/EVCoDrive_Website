@@ -1,15 +1,15 @@
-import staffQueries from "@/queries/staff.query";
+import operatorQueries from "@/queries/operator.query";
 import { useState } from "react";
-import { staffColumns } from "./staff-columns";
 import { DataTable } from "@/common/data-table";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { StaffDetail } from "./staff-detail";
+import { OperatorDetail } from "./operator-detail";
 import type { CrudFormMode } from "@/types/commons/crud-form.type";
-import { StaffForm } from "./staff-form";
+import { operatorColumns } from "./operator-columns";
+import { OperatorForm } from "./operator-form";
 
-export default function StaffPage() {
+export default function OperatorPage() {
     //========================== Pagination ==========================
     const [pagination, setPagination] = useState({
         pageIndex: 0,
@@ -18,7 +18,7 @@ export default function StaffPage() {
 
     const [search, setSearch] = useState("");
 
-    const { data, isFetching } = staffQueries.usePagination({
+    const { data, isFetching } = operatorQueries.usePagination({
         pageNumber: pagination.pageIndex + 1,
         pageSize: pagination.pageSize,
         searchTermByNameOrEmail: search
@@ -74,7 +74,7 @@ export default function StaffPage() {
             </div>
 
             <DataTable
-                columns={staffColumns}
+                columns={operatorColumns}
                 data={data?.data.data.items ?? []}
                 pageCount={data?.data.data.totalPages ?? 0}
                 pagination={pagination}
@@ -88,14 +88,14 @@ export default function StaffPage() {
             />
 
             {selectedId && (
-                <StaffDetail
+                <OperatorDetail
                     id={selectedId}
                     open={isDetailOpen}
                     onOpenChange={setIsDetailOpen}
                 />
             )}
 
-            <StaffForm
+            <OperatorForm
                 open={dialogOpen}
                 onOpenChange={setDialogOpen}
                 mode={dialogMode}
