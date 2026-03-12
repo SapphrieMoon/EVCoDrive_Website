@@ -7,7 +7,7 @@ const path = {
     vehicle: "/vehicles",
     vehicleDetail: "/vehicles/:id",
     station: "/stations",
-    staff: "/staffs",
+    operator: "/operators",
     coOwnerGroup: "/co-owner-groups",
     coOwnerGroupDetail: "/co-owner-groups/:id",
     booking: "/bookings",

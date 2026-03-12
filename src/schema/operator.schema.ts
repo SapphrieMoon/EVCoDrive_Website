@@ -1,6 +1,6 @@
 import z from "zod"
 
-export const staffSchema = z.object({
+export const operatorSchema = z.object({
     email: z
         .string()
         .trim()
@@ -25,4 +25,4 @@ export const staffSchema = z.object({
         .uuid("ID trạm sạc không hợp lệ")
 })
 
-export type StaffFormValues = z.infer<typeof staffSchema>
+export type OperatorFormValues = z.infer<typeof operatorSchema>

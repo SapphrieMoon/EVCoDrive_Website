@@ -2,8 +2,8 @@ import type { BaseCrudFormProps } from "./commons/crud-form.type"
 import type { PaginationParams, PaginationResponse } from "./commons/pagination.type"
 import type { SuccessResponse } from "./commons/utils.type"
 
-export interface Staff {
-    staffId: string
+export interface Operator {
+    operatorId: string
     accountId: string
     email: string
     fullName: string
@@ -15,13 +15,13 @@ export interface Staff {
     updatedDate: string
 }
 
-export type StaffPaginationParams = PaginationParams & {
+export type OperatorPaginationParams = PaginationParams & {
     searchTermByNameOrEmail?: string
 }
 
-export type StaffPaginationResponse = SuccessResponse<PaginationResponse<Staff>>
+export type OperatorPaginationResponse = SuccessResponse<PaginationResponse<Operator>>
 
-export type StaffDetailResponse = SuccessResponse<Staff>
+export type OperatorDetailResponse = SuccessResponse<Operator>
 
-export type StaffFormProps = BaseCrudFormProps & {}
+export type OperatorFormProps = BaseCrudFormProps & {}
 

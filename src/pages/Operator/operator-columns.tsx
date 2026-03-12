@@ -1,12 +1,12 @@
 import { TableActionCell } from "@/common/table-action-cell"
 import { DeleteAction } from "@/common/table-delete-action"
 import { Badge } from "@/components/ui/badge"
-import staffQueries from "@/queries/staff.query"
-import type { Staff } from "@/types/staff.type"
+import operatorQueries from "@/queries/operator.query"
+import type { Operator } from "@/types/operator"
 import { formatDate } from "@/utils/date"
 import type { ColumnDef } from "@tanstack/react-table"
 
-export const staffColumns: ColumnDef<Staff>[] = [
+export const operatorColumns: ColumnDef<Operator>[] = [
     {
         accessorKey: "fullName",
         header: "Họ và tên",
@@ -54,8 +54,8 @@ export const staffColumns: ColumnDef<Staff>[] = [
         id: "actions",
         enableSorting: false,
         cell: ({ row, table }) => {
-            const id = row.original.staffId
-            const { mutate, isPending } = staffQueries.useDelete()
+            const id = row.original.operatorId
+            const { mutate, isPending } = operatorQueries.useDelete()
 
             return (
                 <TableActionCell

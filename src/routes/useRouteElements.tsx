@@ -15,7 +15,7 @@ const ContractPage = lazy(() => import("@/pages/Contract"));
 const VehiclePage = lazy(() => import("@/pages/Vehicle"));
 const VehicleDetailPage = lazy(() => import(`@/pages/Vehicle/detail/index`))
 const StationPage = lazy(() => import("@/pages/Station"));
-const StaffPage = lazy(() => import("@/pages/Staff"));
+const OperatorPage = lazy(() => import("@/pages/Operator"));
 const CoOwnerGroupPage = lazy(() => import("@/pages/Co-Owner-Group"));
 const CoOwnerGroupDetailPage = lazy(() => import("@/pages/Co-Owner-Group/detail/index"));
 const BookingPage = lazy(() => import("@/pages/Booking"));
@@ -64,7 +64,7 @@ export default function useRouteElements() {
                         { path: path.station, element: <StationPage /> },
                         { path: path.vehicleBrand, element: <VehicleBrandPage /> },
                         { path: path.vehicleModel, element: <VehicleModelPage /> },
-                        { path: path.staff, element: <StaffPage /> },
+                        { path: path.operator, element: <OperatorPage /> },
                         { path: path.coOwnerGroup, element: <CoOwnerGroupPage /> },
                         { path: path.coOwnerGroupDetail, element: <CoOwnerGroupDetailPage /> },
                         { path: path.booking, element: <BookingPage /> },

@@ -3,10 +3,10 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import staffQueries from "@/queries/staff.query"
+import operatorQueries from "@/queries/operator.query"
 import stationQueries from "@/queries/station.query"
-import { staffSchema, type StaffFormValues } from "@/schema/staff.schema"
-import type { StaffFormProps } from "@/types/staff.type"
+import { operatorSchema, type OperatorFormValues } from "@/schema/operator.schema"
+import type { OperatorFormProps } from "@/types/operator"
 import type { Station } from "@/types/station.type"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Building2, Loader2, Mail, Phone, User2 } from "lucide-react"
@@ -14,11 +14,11 @@ import { useEffect } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
-export const StaffForm = ({ open, onOpenChange, mode, id }: StaffFormProps) => {
+export const OperatorForm = ({ open, onOpenChange, mode, id }: OperatorFormProps) => {
     const isUpdate = mode === "update"
 
-    const { register, handleSubmit, reset, control, formState: { errors } } = useForm<StaffFormValues>({
-        resolver: zodResolver(staffSchema),
+    const { register, handleSubmit, reset, control, formState: { errors } } = useForm<OperatorFormValues>({
+        resolver: zodResolver(operatorSchema),
         defaultValues: {
             fullName: "",
             email: "",
@@ -30,12 +30,12 @@ export const StaffForm = ({ open, onOpenChange, mode, id }: StaffFormProps) => {
     const { data: stationsData, isLoading: isLoadingStations } = stationQueries.useAll()
     const stations = stationsData?.data.data || []
 
-    const { data: staffDetail } = staffQueries.useDetail(id as string)
+    const { data: operatorDetail } = operatorQueries.useDetail(id as string)
 
     useEffect(() => {
         if (open) {
-            if (isUpdate && staffDetail) {
-                reset(staffDetail.data.data)
+            if (isUpdate && operatorDetail) {
+                reset(operatorDetail.data.data)
             } else if (!isUpdate) {
                 reset({
                     fullName: "",
@@ -45,10 +45,10 @@ export const StaffForm = ({ open, onOpenChange, mode, id }: StaffFormProps) => {
                 })
             }
         }
-    }, [isUpdate, staffDetail, reset, open])
+    }, [isUpdate, operatorDetail, reset, open])
 
-    const createMutation = staffQueries.useCreate()
-    const updateMutation = staffQueries.useUpdate()
+    const createMutation = operatorQueries.useCreate()
+    const updateMutation = operatorQueries.useUpdate()
 
     const isPending = createMutation.isPending || updateMutation.isPending
 
@@ -110,7 +110,7 @@ export const StaffForm = ({ open, onOpenChange, mode, id }: StaffFormProps) => {
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="staff@evcodrive.com"
+                                placeholder="operator@evcodrive.com"
                                 className="pl-9"
                                 {...register("email")}
                             />
