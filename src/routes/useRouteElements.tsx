@@ -19,6 +19,7 @@ const OperatorPage = lazy(() => import("@/pages/Operator"));
 const CoOwnerGroupPage = lazy(() => import("@/pages/Co-Owner-Group"));
 const CoOwnerGroupDetailPage = lazy(() => import("@/pages/Co-Owner-Group/detail/index"));
 const BookingPage = lazy(() => import("@/pages/Booking"));
+const BookingDetailPage = lazy(() => import("@/pages/Booking/detail/index"));
 // const MainLayout = lazy(() => import("@/layouts/MainLayout"));
 // const PublicLayout = lazy(() => import("@/layouts/PublicLayout"));
 // const NotFound = lazy(() => import("@/pages/NotFound"));
@@ -68,6 +69,7 @@ export default function useRouteElements() {
                         { path: path.coOwnerGroup, element: <CoOwnerGroupPage /> },
                         { path: path.coOwnerGroupDetail, element: <CoOwnerGroupDetailPage /> },
                         { path: path.booking, element: <BookingPage /> },
+                        { path: path.bookingDetail, element: <BookingDetailPage /> }
                     ]
                 }
             ]

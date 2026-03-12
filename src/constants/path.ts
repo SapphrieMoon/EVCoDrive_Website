@@ -11,6 +11,7 @@ const path = {
     coOwnerGroup: "/co-owner-groups",
     coOwnerGroupDetail: "/co-owner-groups/:id",
     booking: "/bookings",
+    bookingDetail: "/bookings/:id",
 
 } as const
 
