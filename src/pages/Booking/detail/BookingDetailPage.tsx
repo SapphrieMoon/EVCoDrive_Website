@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom"
 import UserCard from "./_components/user-card"
 import VehicleCard from "./_components/vehicle-card"
 import PeriodCard from "./_components/period-card"
+import SegmentTable from "./_components/segment-table"
+import SegmentDetail from "./_components/segment-detail"
 
 export default function BookingDetailPage() {
     const { id } = useParams<{ id: string }>()
@@ -36,6 +38,14 @@ export default function BookingDetailPage() {
                 <UserCard id={booking.memberId} />
                 <VehicleCard id={booking.vehicleId} />
                 <PeriodCard id={booking.bookingId} />
+            </div>
+
+            <div className="grid grid-cols-12 gap-6">
+                {/* Bên trái: Bảng danh sách - chiếm 8 cột */}
+                <SegmentTable segments={booking.segments} />
+
+                {/* Bên phải: Form hành động - chiếm 4 cột */}
+                <SegmentDetail />
             </div>
         </div>
     )
