@@ -2,7 +2,9 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Image as ImageIcon } from "lucide-react"
 
-export default function SegmentDetail() {
+
+export default function SegmentDetail({ segmentId }: { segmentId?: string | null }) {
+    console.log("segment ", segmentId)
     return (
         <Card className="col-span-5 p-0 sticky top-6 h-fit border border-border shadow-sm flex flex-col rounded-lg bg-card text-card-foreground ">
             {/* Header */}
@@ -11,7 +13,7 @@ export default function SegmentDetail() {
                     i
                 </div>
                 <div className="flex items-baseline gap-2">
-                    <h3 className="font-bold text-foreground text-lg tracking-tight">Segment Detail</h3>
+                    <h3 className="font-bold text-foreground text-lg tracking-tight">Segment Detail: {segmentId}</h3>
                     <span className="text-muted-foreground font-medium text-sm">(Mar 18)</span>
                 </div>
             </div>

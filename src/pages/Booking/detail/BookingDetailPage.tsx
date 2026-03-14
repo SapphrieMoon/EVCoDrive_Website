@@ -7,11 +7,27 @@ import VehicleCard from "./_components/vehicle-card"
 import PeriodCard from "./_components/period-card"
 import SegmentTable from "./_components/segment-table"
 import SegmentDetail from "./_components/segment-detail"
+import { useEffect, useMemo, useState } from "react"
 
 export default function BookingDetailPage() {
     const { id } = useParams<{ id: string }>()
     const { data, isPending } = bookingQueries.useDetail(id as string)
     const booking = data?.data.data
+    const [selectedSegmentId, setSelectedSegmentId] = useState<string | null>(null)
+
+    useEffect(() => {
+        if (booking?.segments && booking.segments.length > 0 && !selectedSegmentId) {
+            setSelectedSegmentId(booking.segments[0].handoverLogId)
+        }
+    }, [booking?.segments, selectedSegmentId])
+
+    // Tìm object chứa toàn bộ data của segment đó ngay trong lúc render
+    // Dùng useMemo để tối ưu, chỉ tìm lại khi segments hoặc ID thay đổi
+    const selectedSegmentData = useMemo(() => {
+        if (!booking?.segments || !selectedSegmentId)
+            return null;
+        return booking.segments.find(s => s.handoverLogId === selectedSegmentId) || null;
+    }, [booking?.segments, selectedSegmentId])
 
     if (isPending) return <div className="p-8"><DetailSkeleton /></div>
     if (!booking) return <div>Không tìm thấy dữ liệu</div>
@@ -42,10 +58,14 @@ export default function BookingDetailPage() {
 
             <div className="grid grid-cols-12 gap-6">
                 {/* Bên trái: Bảng danh sách - chiếm 8 cột */}
-                <SegmentTable segments={booking.segments} />
+                <SegmentTable
+                    segments={booking.segments}
+                    selectedSegmentId={selectedSegmentId}
+                    onSelectSegment={setSelectedSegmentId}
+                />
 
                 {/* Bên phải: Form hành động - chiếm 4 cột */}
-                <SegmentDetail />
+                <SegmentDetail segmentId={selectedSegmentData?.handoverLogId} />
             </div>
         </div>
     )
