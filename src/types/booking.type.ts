@@ -5,6 +5,16 @@ export type UsageQuotasRequest = {
     coOwnerGroupId: string;
 }
 
+export interface CheckInRequest {
+    startOdometer: number;
+    images: File[];
+}
+
+export interface CheckOutRequest {
+    endOdometer: number;
+    images: File[];
+}
+
 export const BookingStatus = {
     Booked: "Booked",
     InUsed: "InUsed",
@@ -53,6 +63,32 @@ export interface Booking {
     updatedDate: string;
 }
 
+export interface BookingSegmentDetail {
+    handoverLogId: string;
+    bookingId: string;
+    operatorId: string | null;
+    checkInDate: string;
+    checkOutDate: string;
+    actualCheckInDate: string | null;
+    actualCheckOutDate: string | null;
+    status: SegmentStatus;
+    startOdo: number;
+    endOdo: number;
+    handoverType: string;
+    odometerReading: number;
+    batteryLevel: number;
+    fuelLevel: string;
+    exteriorCondition: string;
+    interiorCondition: string;
+    notes: string;
+    signatureUrl: string;
+    checkInImages: string[];
+    checkOutImages: string[];
+    handoverDate: string; // ISO 8601 Date string
+    createdDate: string;  // ISO 8601 Date string
+    updatedDate: string;  // ISO 8601 Date string
+}
+
 export type BookingPaginationParams = PaginationParams & {
     bookingCode?: string,
 }
@@ -60,3 +96,5 @@ export type BookingPaginationParams = PaginationParams & {
 export type BookingPaginationResponse = SuccessResponse<PaginationResponse<Booking>>
 
 export type BookingDetailResponse = SuccessResponse<Booking>
+
+export type BookingSegmentDetailResponse = SuccessResponse<BookingSegmentDetail>

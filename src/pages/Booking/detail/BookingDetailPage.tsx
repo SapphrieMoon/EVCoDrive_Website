@@ -15,6 +15,7 @@ export default function BookingDetailPage() {
     const booking = data?.data.data
     const [selectedSegmentId, setSelectedSegmentId] = useState<string | null>(null)
 
+    // Mặc định chọn segment đầu tiên khi vừa load API xong
     useEffect(() => {
         if (booking?.segments && booking.segments.length > 0 && !selectedSegmentId) {
             setSelectedSegmentId(booking.segments[0].handoverLogId)

@@ -11,4 +11,5 @@ export const bookingKey = {
     ],
     details: () => ["booking", "detail"],
     detail: (id: string) => ["booking", "detail", id],
+    handoverLogs: (id: string) => ["booking", "handover-logs", id],
 }

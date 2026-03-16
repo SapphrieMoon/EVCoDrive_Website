@@ -1,6 +1,6 @@
 import bookingApi from "@/apis/booking.api"
 import { bookingKey } from "@/constants/query-keys/booking.key"
-import type { BookingPaginationParams, UsageQuotasRequest } from "@/types/booking.type"
+import type { BookingPaginationParams, CheckInRequest, CheckOutRequest, UsageQuotasRequest } from "@/types/booking.type"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 const bookingQueries = {
@@ -43,14 +43,14 @@ const bookingQueries = {
         const queryClient = useQueryClient();
 
         return useMutation({
-            mutationFn: ({ id, startOdometer }: { id: string; startOdometer: number }) =>
-                bookingApi.patchCheckIn(id, startOdometer),
-            onSuccess: (_, { id }) => {
+            mutationFn: ({ bookingId, handoverLogId, body }: { bookingId: string; handoverLogId: string, body: CheckInRequest }) =>
+                bookingApi.patchCheckIn(bookingId, handoverLogId, body),
+            onSuccess: (_, { bookingId }) => {
                 queryClient.invalidateQueries({
                     queryKey: bookingKey.lists()
                 });
                 queryClient.invalidateQueries({
-                    queryKey: bookingKey.detail(id)
+                    queryKey: bookingKey.detail(bookingId)
                 });
             },
         })
@@ -60,16 +60,24 @@ const bookingQueries = {
         const queryClient = useQueryClient();
 
         return useMutation({
-            mutationFn: ({ id, endOdometer }: { id: string; endOdometer: number }) =>
-                bookingApi.patchCheckOut(id, endOdometer),
-            onSuccess: (_, { id }) => {
+            mutationFn: ({ bookingId, handoverLogId, body }: { bookingId: string; handoverLogId: string, body: CheckOutRequest }) =>
+                bookingApi.patchCheckOut(bookingId, handoverLogId, body),
+            onSuccess: (_, { bookingId }) => {
                 queryClient.invalidateQueries({
                     queryKey: bookingKey.lists()
                 });
                 queryClient.invalidateQueries({
-                    queryKey: bookingKey.detail(id)
+                    queryKey: bookingKey.detail(bookingId)
                 });
             },
+        })
+    },
+
+    useHandoverLogs: (id: string) => {
+        return useQuery({
+            queryKey: bookingKey.handoverLogs(id),
+            queryFn: () => bookingApi.getHandoverLogs(id),
+            enabled: !!id,
         })
     },
 }
