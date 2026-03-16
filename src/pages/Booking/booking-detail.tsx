@@ -10,42 +10,41 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { formatDate } from "@/utils/date"
-import { toast } from "sonner"
 import { BookingStatus } from "@/types/booking.type"
 
 export function BookingDetail({ id, open, onOpenChange }: BaseDetailProps) {
     const { data, isLoading } = bookingQueries.useDetail(id as string)
     const booking = data?.data.data
     const [odoValue, setOdoValue] = useState<number>(0)
-    const checkInMutation = bookingQueries.useCheckIn()
-    const checkOutMutation = bookingQueries.useCheckOut()
+    // const checkInMutation = bookingQueries.useCheckIn()
+    // const checkOutMutation = bookingQueries.useCheckOut()
 
     // Giả sử lấy segment đầu tiên để xử lý check-in/out
     const activeSegment = booking?.segments?.[0]
     const isPending = activeSegment?.status === "Pending"
     const isCheckedIn = activeSegment?.status === "CheckedIn"
 
-    const handleAction = (id: string | undefined, odo: number) => {
-        if (!id) return;
+    // const handleAction = (id: string | undefined, odo: number) => {
+    //     if (!id) return;
 
-        if (isPending) {
-            checkInMutation.mutate({ id, startOdometer: odo },
-                {
-                    onSuccess: () => {
-                        toast.success("Check-in thành công!")
-                    }
-                }
-            )
-        } else if (isCheckedIn) {
-            checkOutMutation.mutate({ id, endOdometer: odo },
-                {
-                    onSuccess: () => {
-                        toast.success("Check-out thành công!")
-                    }
-                }
-            )
-        }
-    }
+    //     if (isPending) {
+    //         checkInMutation.mutate({ id, startOdometer: odo },
+    //             {
+    //                 onSuccess: () => {
+    //                     toast.success("Check-in thành công!")
+    //                 }
+    //             }
+    //         )
+    //     } else if (isCheckedIn) {
+    //         checkOutMutation.mutate({ id, endOdometer: odo },
+    //             {
+    //                 onSuccess: () => {
+    //                     toast.success("Check-out thành công!")
+    //                 }
+    //             }
+    //         )
+    //     }
+    // }
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
@@ -139,7 +138,7 @@ export function BookingDetail({ id, open, onOpenChange }: BaseDetailProps) {
 
                                 <Button
                                     className="w-full font-bold uppercase italic tracking-wider"
-                                    onClick={() => handleAction(booking?.bookingId, odoValue)}
+                                // onClick={() => handleAction(booking?.bookingId, odoValue)}
                                 >
                                     Xác nhận {isPending ? "Bắt đầu chuyến đi" : "Kết thúc chuyến đi"}
                                 </Button>
