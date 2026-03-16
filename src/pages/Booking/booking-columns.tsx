@@ -1,10 +1,13 @@
 import { TableActionCell } from "@/common/table-action-cell";
 import { Badge } from "@/components/ui/badge";
+import path from "@/constants/path";
 import { BOOKING_STATUS_MAPPING } from "@/constants/status/booking/booking-status";
+import bookingQueries from "@/queries/booking.query";
 import type { Booking, BookingStatus } from "@/types/booking.type";
 import { formatDate } from "@/utils/date";
 import type { ColumnDef } from "@tanstack/react-table";
 import { CalendarDays, Car, Hash } from "lucide-react";
+import { generatePath } from "react-router-dom";
 
 export const bookingColumns: ColumnDef<Booking>[] = [
     {
@@ -90,14 +93,18 @@ export const bookingColumns: ColumnDef<Booking>[] = [
         id: "actions",
         header: "",
         enableSorting: false,
-        cell: ({ row, table }) => {
+        cell: ({ row }) => {
             const id = row.original.bookingId;
+            const prefetch = bookingQueries.usePrefetchDetail();
+            const detailPath = generatePath(path.bookingDetail, { id });
 
             return (
                 <TableActionCell
-                    onDetailClick={() => table.options.meta?.onViewDetail?.(id)}
+                    // onDetailClick={() => table.options.meta?.onViewDetail?.(id)}
+                    detailUrl={detailPath}
+                    onDetailMouseEnter={() => prefetch(id)}
                 >
-                    {/* SapphireMoon có thể thêm nút Hủy booking nhanh ở đây nếu cần */}
+
                 </TableActionCell>
             );
         }

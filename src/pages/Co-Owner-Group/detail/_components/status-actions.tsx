@@ -25,7 +25,6 @@ export function GroupStatusActions({ id }: { id: string }) {
 
     const handleConfirmUpdate = async () => {
         if (nextStatus) {
-            console.log("data: ", nextStatus, CoOwnerGroupStatus.ReadyToActive)
             if (group.status === CoOwnerGroupStatus.ReadyToActive) {
                 try {
                     // 1. Chạy song song 2 API tiền đề bằng Promise.all

@@ -4,7 +4,7 @@ import type { BadgeVariant } from "@/components/ui/badge";
 export const SEGMENT_STATUS_MAPPING: Record<SegmentStatus, { label: string; color: BadgeVariant }> = {
     [SegmentStatus.Pending]: {
         label: "Chờ nhận xe",
-        color: "secondary"
+        color: "teal"
     },
     [SegmentStatus.CheckedIn]: {
         label: "Đã nhận xe",
