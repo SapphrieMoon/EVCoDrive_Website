@@ -8,12 +8,14 @@ import PeriodCard from "./_components/period-card"
 import SegmentTable from "./_components/segment-table"
 import SegmentDetail from "./_components/segment-detail"
 import { useEffect, useMemo, useState } from "react"
+import { BOOKING_STATUS_MAPPING } from "@/constants/status/booking/booking-status"
 
 export default function BookingDetailPage() {
     const { id } = useParams<{ id: string }>()
     const { data, isPending } = bookingQueries.useDetail(id as string)
     const booking = data?.data.data
     const [selectedSegmentId, setSelectedSegmentId] = useState<string | null>(null)
+    const configStatus = booking?.bookingStatus ? BOOKING_STATUS_MAPPING[booking.bookingStatus] : null;
 
     // Mặc định chọn segment đầu tiên khi vừa load API xong
     useEffect(() => {
@@ -45,8 +47,8 @@ export default function BookingDetailPage() {
                         <p className="text-sm text-muted-foreground">{booking.bookingId}</p>
                     </div>
 
-                    <Badge className="cursor-pointer uppercase tracking-widest px-3 py-1.5 font-bold p-4">
-                        {booking.bookingStatus}
+                    <Badge className="cursor-pointer uppercase tracking-widest px-3 py-1.5 font-bold p-4" variant={configStatus?.color}>
+                        {configStatus?.label}
                     </Badge>
                 </div>
             </div>

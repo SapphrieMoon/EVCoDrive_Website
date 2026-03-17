@@ -3,8 +3,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { BookingSegment } from "@/types/booking.type";
+import { SegmentStatus, type BookingSegment } from "@/types/booking.type";
 import { formatDate } from "@/utils/date";
+import { SEGMENT_STATUS_MAPPING } from "@/constants/status/booking/segment-status";
 
 interface SegmentTableProps {
     segments: BookingSegment[];
@@ -21,11 +22,14 @@ export default function SegmentTable({ segments, selectedSegmentId, onSelectSegm
     };
 
     const getStatusClasses = (status: BookingSegment['status']) => {
+        const config = status ? SEGMENT_STATUS_MAPPING[status] : null;
+        if (!config) return { dot: 'bg-muted-foreground', text: 'text-muted-foreground', label: status || 'Không rõ' };
+
         switch (status) {
-            case 'CheckedIn': return { dot: 'bg-chart-3', text: 'text-chart-3' };
-            case 'CheckedOut': return { dot: 'bg-chart-2', text: 'text-chart-2' };
-            case 'Pending': return { dot: 'bg-muted-foreground', text: 'text-muted-foreground' };
-            default: return { dot: 'bg-muted-foreground', text: 'text-muted-foreground' };
+            case SegmentStatus.Pending: return { dot: 'bg-teal-500', text: 'text-teal-500', label: config.label };
+            case SegmentStatus.CheckedIn: return { dot: 'bg-blue-500', text: 'text-blue-500', label: config.label };
+            case SegmentStatus.CheckedOut: return { dot: 'bg-green-500', text: 'text-green-500', label: config.label };
+            default: return { dot: 'bg-muted-foreground', text: 'text-muted-foreground', label: config.label };
         }
     };
 
@@ -68,7 +72,7 @@ export default function SegmentTable({ segments, selectedSegmentId, onSelectSegm
                                     <TableCell className="py-4">
                                         <div className="flex items-center gap-2">
                                             <span className={`h-1.5 w-1.5 rounded-full ${statusStyle.dot}`}></span>
-                                            <span className={`text-sm font-medium ${statusStyle.text}`}>{segment.status}</span>
+                                            <span className={`text-sm font-medium ${statusStyle.text}`}>{statusStyle.label}</span>
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-muted-foreground py-4 font-medium text-sm">
