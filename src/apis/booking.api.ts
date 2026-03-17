@@ -17,22 +17,22 @@ const bookingApi = {
         await http.get<BookingDetailResponse>(`${BOOKING_URL.BASE}/${id}`),
     patchCheckIn: async (bookingId: string, handoverLogId: string, body: CheckInRequest) => {
         const formData = new FormData();
-        formData.append("startOdo", body.startOdometer.toString());
+        formData.append("startOdometer", body.startOdometer.toString());
         body.images.forEach((file) => formData.append("images", file));
 
         return await http.patch(
-            `${BOOKING_URL.BASE}/${bookingId}/${BOOKING_URL.HANDOVER_LOGS}/${handoverLogId}/check-in`,
+            `${BOOKING_URL.BASE}/${bookingId}${BOOKING_URL.HANDOVER_LOGS}/${handoverLogId}/check-in`,
             formData,
             { headers: { 'Content-Type': 'multipart/form-data' } }
         );
     },
     patchCheckOut: async (bookingId: string, handoverLogId: string, body: CheckOutRequest) => {
         const formData = new FormData();
-        formData.append("endOdo", body.endOdometer.toString());
+        formData.append("endOdometer", body.endOdometer.toString());
         body.images.forEach((file) => formData.append("images", file));
 
         return await http.patch(
-            `${BOOKING_URL.BASE}/${bookingId}/${BOOKING_URL.HANDOVER_LOGS}/${handoverLogId}/check-out`,
+            `${BOOKING_URL.BASE}/${bookingId}${BOOKING_URL.HANDOVER_LOGS}/${handoverLogId}/check-out`,
             formData,
             { headers: { 'Content-Type': 'multipart/form-data' } }
         );

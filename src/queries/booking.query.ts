@@ -45,12 +45,15 @@ const bookingQueries = {
         return useMutation({
             mutationFn: ({ bookingId, handoverLogId, body }: { bookingId: string; handoverLogId: string, body: CheckInRequest }) =>
                 bookingApi.patchCheckIn(bookingId, handoverLogId, body),
-            onSuccess: (_, { bookingId }) => {
+            onSuccess: (_, { bookingId, handoverLogId }) => {
                 queryClient.invalidateQueries({
                     queryKey: bookingKey.lists()
                 });
                 queryClient.invalidateQueries({
                     queryKey: bookingKey.detail(bookingId)
+                });
+                queryClient.invalidateQueries({
+                    queryKey: bookingKey.handoverLogs(handoverLogId)
                 });
             },
         })
@@ -62,12 +65,15 @@ const bookingQueries = {
         return useMutation({
             mutationFn: ({ bookingId, handoverLogId, body }: { bookingId: string; handoverLogId: string, body: CheckOutRequest }) =>
                 bookingApi.patchCheckOut(bookingId, handoverLogId, body),
-            onSuccess: (_, { bookingId }) => {
+            onSuccess: (_, { bookingId, handoverLogId }) => {
                 queryClient.invalidateQueries({
                     queryKey: bookingKey.lists()
                 });
                 queryClient.invalidateQueries({
                     queryKey: bookingKey.detail(bookingId)
+                });
+                queryClient.invalidateQueries({
+                    queryKey: bookingKey.handoverLogs(handoverLogId)
                 });
             },
         })
