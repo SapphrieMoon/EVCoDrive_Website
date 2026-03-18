@@ -2,13 +2,13 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Image as ImageIcon, Plus, X } from "lucide-react"
 import bookingQueries from "@/queries/booking.query"
-import { DetailSkeleton } from "@/common/skeletons/detail-skeleton"
 import { formatDate, formatTime } from "@/utils/date"
 import { Badge } from "@/components/ui/badge"
 import { useState } from "react"
 import { useDropzone } from 'react-dropzone'
 import { SEGMENT_STATUS_MAPPING } from "@/constants/status/booking/segment-status"
 import { toast } from "sonner"
+import { CardSkeleton } from "@/common/skeletons/card-skeleton"
 
 
 export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
@@ -50,6 +50,11 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
     };
 
     const handleSubmit = () => {
+        if (!segment?.bookingId || !segmentId) {
+            toast.error("Thiếu thông tin lịch trình!");
+            return;
+        }
+
         // 1. Tạo FormData để chứa cả text và files
         const formData = new FormData();
 
@@ -62,7 +67,7 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
             // --- LOGIC CHECK-IN ---
             // Gửi ID và object chứa startOdometer kèm formData
             checkInMutation.mutate({
-                bookingId: segment?.bookingId!,
+                bookingId: segment.bookingId,
                 handoverLogId: segmentId!,
                 body: {
                     startOdometer: odoStart,
@@ -80,7 +85,7 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
         } else if (segment?.status === 'CheckedIn') {
             // --- LOGIC CHECK-OUT ---
             checkOutMutation.mutate({
-                bookingId: segment?.bookingId!,
+                bookingId: segment.bookingId,
                 handoverLogId: segmentId!,
                 body: {
                     endOdometer: odoEnd,
@@ -97,7 +102,12 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
     };
 
 
-    if (isPending) return <div className="p-8"><DetailSkeleton /></div>
+    if (isPending) return (
+        <div className="col-span-5 p-0 sticky top-6 h-fit shadow-sm flex flex-col text-card-foreground">
+            <CardSkeleton />
+        </div>
+    );
+    if (!segment) return <div>Không tìm thấy dữ liệu</div>
     return (
         <Card className="col-span-5 p-0 sticky top-6 h-fit border border-border shadow-sm flex flex-col rounded-lg bg-card text-card-foreground ">
             {/* Header */}
@@ -139,8 +149,8 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                         </p>
                     </div>
                     <div>
-                        <p className="text-[11px] font-bold text-muted-foreground mb-1.5 tracking-wider uppercase">Giờ check out</p>
-                        <p className="text-[15px] font-bold text-muted-foreground">
+                        <p className="text-[11px] font-bold text-muted-primary mb-1.5 tracking-wider uppercase">Giờ check out</p>
+                        <p className="text-[15px] font-bold text-muted-primary">
                             {segment?.actualCheckOutDate ? formatTime(segment?.actualCheckOutDate) : "---"}
                         </p>
                     </div>
@@ -190,10 +200,17 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                                 <span className="text-xs text-muted-foreground font-semibold">km</span>
                             </div>
                         ) : (
-                            <p className="text-[15px] font-bold text-muted-foreground italic">
-                                {segment?.status === 'CheckedOut'
-                                    ? `${segment?.endOdo?.toLocaleString()} km`
-                                    : "—"}
+                            <p className="text-[15px] font-bold text-foreground italic">
+                                {segment?.status === 'CheckedOut' ? (
+                                    <>
+                                        {segment?.endOdo?.toLocaleString()}
+                                        <span className="text-xs text-muted-foreground font-semibold ml-0.5">
+                                            km
+                                        </span>
+                                    </>
+                                ) : (
+                                    "—"
+                                )}
                             </p>
                         )}
                     </div>
