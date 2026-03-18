@@ -9,7 +9,7 @@ export const adminSidebar: SidebarItem[] = [
             { label: "Nhóm đồng sở hữu", path: path.coOwnerGroup },
             { label: "Hợp đồng", path: path.contract },
             { label: "Trạm kiểm tra", path: path.station },
-            { label: "Nhân viên", path: path.operator },
+            { label: "Nhân viên điều hành trạm", path: path.operator },
         ],
     },
     {
@@ -34,6 +34,6 @@ export const staffSidebar: SidebarItem[] = [
 ]
 
 export const operatorSidebar: SidebarItem[] = [
-    { label: "Tài khoản", path: "/accounts" },
-    { label: "Đơn hàng", path: "/orders" },
+    { label: "Xe đăng ký", path: path.vehicle },
+    { label: "Quản lý đặt xe", path: path.booking },
 ]

@@ -53,7 +53,7 @@ export default function OperatorPage() {
     return (
         <div className="space-y-2 m-4">
 
-            <h1 className="text-4xl font-bold">Quản lý danh sách nhân viên</h1>
+            <h1 className="text-4xl font-bold">Quản lý nhân viên điều hành trạm</h1>
 
 
             <div className="flex items-center py-4 justify-between mt-6">
@@ -69,7 +69,7 @@ export default function OperatorPage() {
 
                 <Button onClick={handleCreate}>
                     <PlusIcon className="w-4 h-4" />
-                    Thêm nhân viên mới
+                    Thêm nhân viên điều hành trạm mới
                 </Button>
             </div>
 
