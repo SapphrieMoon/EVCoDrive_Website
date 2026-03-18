@@ -1,12 +1,16 @@
+import { CardSkeleton } from "@/common/skeletons/card-skeleton"
 import { Card } from "@/components/ui/card"
 import vehicleQueries from "@/queries/vehicle.query"
 import { Car, Gauge } from "lucide-react"
 
 export default function VehicleCard({ id }: { id: string }) {
-    const { data } = vehicleQueries.useDetail(id as string)
+    const { data, isPending } = vehicleQueries.useDetail(id as string)
     const vehicle = data?.data.data
+
+    if (isPending) return <CardSkeleton />
+    if (!vehicle) return <div>Không tìm thấy dữ liệu</div>
     return (
-        <Card className="p-5 flex items-start gap-4 shadow-sm flex flex-row">
+        <Card className="p-5 items-start gap-4 shadow-sm flex flex-row">
             <div className="flex-none h-14 w-14 bg-slate-100 dark:bg-slate-800/60 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-400">
                 <Car size={28} className="fill-current" />
             </div>

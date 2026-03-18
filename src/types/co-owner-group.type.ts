@@ -46,6 +46,16 @@ export interface CoOwnerGroupSummary {
     status: CoOwnerGroupStatus;
 }
 
+export interface MemberProfileGroup {
+    coOwnerGroupId: string;
+    groupName: string;
+    groupDescription: string;
+    vehicleLicensePlate: string;
+    ownedShares: number;
+    status: CoOwnerGroupStatus;
+    joinedDate: string;
+}
+
 export type CoOwnerGroupPaginationParams = PaginationParams & {
     searchTerm?: string
 }

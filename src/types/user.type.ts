@@ -1,3 +1,7 @@
+import type { MemberProfileGroup } from "./co-owner-group.type";
+import type { SuccessResponse } from "./commons/utils.type";
+import type { MemberProfileSellHistory } from "./sell-request.type";
+
 export type UserRole = 'Admin' | 'Operator' | 'Staff';
 
 export interface User {
@@ -17,3 +21,16 @@ export interface User {
     createdAt: string;
     updatedAt: string | null;
 }
+
+export interface MemberProfile {
+    memberId: string;
+    accountId: string;
+    fullName: string;
+    avatar: string;
+    memberSince: string;
+    currentGroups: MemberProfileGroup[];
+    purchaseHistory: [];
+    sellHistory: MemberProfileSellHistory[];
+}
+
+export type MemberProfileResponse = SuccessResponse<MemberProfile>

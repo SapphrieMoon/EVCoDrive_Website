@@ -7,30 +7,26 @@ import VehicleCard from "./_components/vehicle-card"
 import PeriodCard from "./_components/period-card"
 import SegmentTable from "./_components/segment-table"
 import SegmentDetail from "./_components/segment-detail"
-import { useEffect, useMemo, useState } from "react"
+import { useState } from "react"
 import { BOOKING_STATUS_MAPPING } from "@/constants/status/booking/booking-status"
 
 export default function BookingDetailPage() {
     const { id } = useParams<{ id: string }>()
     const { data, isPending } = bookingQueries.useDetail(id as string)
     const booking = data?.data.data
-    const [selectedSegmentId, setSelectedSegmentId] = useState<string | null>(null)
+    const [selectedSegmentId, setSelectedSegmentId] = useState<string | null>(() => {
+        return booking?.segments?.[0]?.handoverLogId ?? null;
+    });
     const configStatus = booking?.bookingStatus ? BOOKING_STATUS_MAPPING[booking.bookingStatus] : null;
 
-    // Mặc định chọn segment đầu tiên khi vừa load API xong
-    useEffect(() => {
-        if (booking?.segments && booking.segments.length > 0 && !selectedSegmentId) {
-            setSelectedSegmentId(booking.segments[0].handoverLogId)
-        }
-    }, [booking?.segments, selectedSegmentId])
+    const sortedSegments = booking?.segments
+        ? [...booking.segments].sort((a, b) => {
+            return new Date(a.checkInDate).getTime() - new Date(b.checkInDate).getTime();
+        })
+        : [];
 
-    // Tìm object chứa toàn bộ data của segment đó ngay trong lúc render
-    // Dùng useMemo để tối ưu, chỉ tìm lại khi segments hoặc ID thay đổi
-    const selectedSegmentData = useMemo(() => {
-        if (!booking?.segments || !selectedSegmentId)
-            return null;
-        return booking.segments.find(s => s.handoverLogId === selectedSegmentId) || null;
-    }, [booking?.segments, selectedSegmentId])
+    const selectedSegmentData =
+        sortedSegments.find(s => s.handoverLogId === selectedSegmentId) ?? null;
 
     if (isPending) return <div className="p-8"><DetailSkeleton /></div>
     if (!booking) return <div>Không tìm thấy dữ liệu</div>
@@ -54,7 +50,7 @@ export default function BookingDetailPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <UserCard id={booking.memberId} />
+                <UserCard id={booking.memberId} purpose={booking.purpose} />
                 <VehicleCard id={booking.vehicleId} />
                 <PeriodCard id={booking.bookingId} />
             </div>
@@ -62,7 +58,7 @@ export default function BookingDetailPage() {
             <div className="grid grid-cols-12 gap-6">
                 {/* Bên trái: Bảng danh sách - chiếm 8 cột */}
                 <SegmentTable
-                    segments={booking.segments}
+                    segments={sortedSegments}
                     selectedSegmentId={selectedSegmentId}
                     onSelectSegment={setSelectedSegmentId}
                 />
