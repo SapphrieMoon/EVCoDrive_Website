@@ -3,7 +3,7 @@ import { CoOwnerGroupStatus } from "@/types/co-owner-group.type";
 
 export const CO_OWNER_GROUP_STATUS_MAPPING: Record<CoOwnerGroupStatus,
     { label: string; color: BadgeVariant, nextStatus: CoOwnerGroupStatus | null, actionLabel?: string }> = {
-    [CoOwnerGroupStatus.ReadyToActive]: {
+    [CoOwnerGroupStatus.PendingApproval]: {
         label: "Sẵn sàng kích hoạt",
         color: "blue",
         nextStatus: CoOwnerGroupStatus.Active,
@@ -22,6 +22,11 @@ export const CO_OWNER_GROUP_STATUS_MAPPING: Record<CoOwnerGroupStatus,
     },
     [CoOwnerGroupStatus.Disbaned]: {
         label: "Đã giải tán",
+        color: "red",
+        nextStatus: null
+    },
+    [CoOwnerGroupStatus.Rejected]: {
+        label: "Đã từ chối",
         color: "red",
         nextStatus: null
     },

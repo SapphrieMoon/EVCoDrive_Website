@@ -131,11 +131,11 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                 {/* Scheduled Times */}
                 <div className="grid grid-cols-2 gap-4">
                     <div>
-                        <p className="text-[11px] font-bold text-muted-foreground mb-1.5 tracking-wider uppercase">Ngày check in</p>
+                        <p className="text-[11px] font-bold text-muted-foreground mb-1.5 tracking-wider uppercase">Ngày bàn giao xe dự kiến</p>
                         <p className="text-[15px] font-bold text-foreground">{formatDate(segment?.checkInDate, false)}</p>
                     </div>
                     <div>
-                        <p className="text-[11px] font-bold text-muted-foreground mb-1.5 tracking-wider uppercase">Ngày check out</p>
+                        <p className="text-[11px] font-bold text-muted-foreground mb-1.5 tracking-wider uppercase">Ngày trả xe dự kiến</p>
                         <p className="text-[15px] font-bold text-foreground">{formatDate(segment?.checkOutDate, false)}</p>
                     </div>
                 </div>
@@ -143,13 +143,13 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                 {/* Actual Times */}
                 <div className="grid grid-cols-2 gap-4">
                     <div>
-                        <p className="text-[11px] font-bold text-primary mb-1.5 tracking-wider uppercase">Giờ check in</p>
+                        <p className="text-[11px] font-bold text-primary mb-1.5 tracking-wider uppercase">Ngày nhận xe thực tế</p>
                         <p className="text-[15px] font-bold text-foreground">
                             {segment?.actualCheckInDate ? formatTime(segment?.actualCheckInDate) : "---"}
                         </p>
                     </div>
                     <div>
-                        <p className="text-[11px] font-bold text-muted-primary mb-1.5 tracking-wider uppercase">Giờ check out</p>
+                        <p className="text-[11px] font-bold text-muted-primary mb-1.5 tracking-wider uppercase">Ngày trả xe thực tế</p>
                         <p className="text-[15px] font-bold text-muted-primary">
                             {segment?.actualCheckOutDate ? formatTime(segment?.actualCheckOutDate) : "---"}
                         </p>
@@ -222,7 +222,7 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                         {/* Check-in */}
                         <div className="flex items-center gap-2 mb-3">
                             <ImageIcon className="w-4 h-4 text-muted-foreground" />
-                            <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">Ảnh khi check-in</p>
+                            <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">Ảnh khi bàn giao xe</p>
                         </div>
                         <div className="flex flex-row flex-wrap gap-4">
                             {/* 1. Hiển thị ảnh ĐÃ CÓ từ API (Dành cho lúc đang sử dụng xe hoặc đã trả xe) */}
@@ -256,7 +256,7 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                         <div className="flex flex-col gap-3 pt-4 border-t border-dashed">
                             <div className="flex items-center gap-2">
                                 <ImageIcon className="w-4 h-4 text-muted-foreground" />
-                                <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">Ảnh khi check-out</p>
+                                <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">Ảnh khi trả xe</p>
                             </div>
                             <div className="flex flex-row flex-wrap gap-4">
                                 {/* 1. Hiển thị ảnh ĐÃ CÓ từ API (Khi đã hoàn thành lượt thuê) */}
@@ -295,7 +295,7 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                         onClick={handleSubmit}
                         disabled={isSubmitting}
                         className="w-full text-[13px] font-bold text-foreground h-11 border-border shadow-sm mt-4 rounded-xl hover:bg-muted transition-none">
-                        {isSubmitting ? "Đang xử lý..." : (segment?.status === 'Pending' ? 'Check In' : 'Check Out')}
+                        {isSubmitting ? "Đang xử lý..." : (segment?.status === 'Pending' ? 'Xác nhận bàn giao xe' : 'Xác nhận trả xe')}
                     </Button>
                 )}
             </div>
