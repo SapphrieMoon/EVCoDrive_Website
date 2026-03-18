@@ -25,7 +25,7 @@ export function GroupStatusActions({ id }: { id: string }) {
 
     const handleConfirmUpdate = async () => {
         if (nextStatus) {
-            if (group.status === CoOwnerGroupStatus.ReadyToActive) {
+            if (group.status === CoOwnerGroupStatus.PendingApproval) {
                 try {
                     // 1. Chạy song song 2 API tiền đề bằng Promise.all
                     // dùng .mutateAsync để có thể dùng await và bắt lỗi bằng try-catch
