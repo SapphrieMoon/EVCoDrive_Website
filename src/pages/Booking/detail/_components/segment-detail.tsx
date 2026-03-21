@@ -9,7 +9,15 @@ import { useDropzone } from 'react-dropzone'
 import { SEGMENT_STATUS_MAPPING } from "@/constants/status/booking/segment-status"
 import { toast } from "sonner"
 import { CardSkeleton } from "@/common/skeletons/card-skeleton"
+import imageCompression from 'browser-image-compression';
+import { SegmentStatus } from "@/types/booking.type"
 
+interface DamageResult {
+    isDamaged: boolean;
+    summary: string;
+    damagePercentage: number;
+    detailsByImage: Record<string, string>;
+}
 
 export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
     const { data, isPending } = bookingQueries.useHandoverLogs(segmentId as string)
@@ -19,14 +27,24 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
     const [previews, setPreviews] = useState<string[]>([]); // Dùng để show UI
     const [odoStart, setOdoStart] = useState<number>(segment?.startOdo || 0);
     const [odoEnd, setOdoEnd] = useState<number>(segment?.endOdo || 0);
+    const [damageResult, setDamageResult] = useState<DamageResult | null>(null);
     const checkInMutation = bookingQueries.useCheckIn();
     const checkOutMutation = bookingQueries.useCheckOut();
     const isSubmitting = checkInMutation.isPending || checkOutMutation.isPending;
+    const detectDamageMutation = bookingQueries.useDetectDamage();
+    const urlToFile = async (url: string, filename: string) => {
+        const res = await fetch(url);
+        const blob = await res.blob();
+
+        return new File([blob], filename, { type: blob.type });
+    };
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
             'image/*': ['.jpeg', '.png', '.jpg']
         },
+        maxFiles: 5,
+        maxSize: 5 * 1024 * 1024, // 5MB
         onDrop: (acceptedFiles) => {
             onDrop(acceptedFiles)
         }
@@ -40,28 +58,44 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
         setPreviews(prev => prev.filter((_, i) => i !== index));
     };
 
-    const onDrop = (acceptedFiles: File[]) => {
-        // 1. Lưu file để sau này ném vào FormData
-        setImages(prev => [...prev, ...acceptedFiles]);
+    // Nén ảnh trước khi submit
+    const compressImage = async (file: File) => {
+        const options = {
+            maxSizeMB: 1,            // tối đa 1MB
+            maxWidthOrHeight: 1280,  // resize nếu quá lớn
+            useWebWorker: true,      // chạy nền cho mượt
+        };
 
-        // 2. Tạo URL tạm thời để hiển thị ngay lập tức
-        const newPreviews = acceptedFiles.map(file => URL.createObjectURL(file));
-        setPreviews(prev => [...prev, ...newPreviews]);
+        try {
+            const compressedFile = await imageCompression(file, options);
+            return compressedFile;
+        } catch (error) {
+            console.error("Compress error:", error);
+            return file; // fallback nếu lỗi
+        }
     };
 
-    const handleSubmit = () => {
+    const onDrop = async (acceptedFiles: File[]) => {
+        const compressedFiles = await Promise.all(
+            acceptedFiles.map(file => compressImage(file))
+        );
+
+        setImages(prev => {
+            const newList = [...prev, ...compressedFiles].slice(0, 5);
+            return newList;
+        });
+
+        setPreviews(prev => {
+            const newPreviews = compressedFiles.map(file => URL.createObjectURL(file));
+            return [...prev, ...newPreviews].slice(0, 5);
+        });
+    };
+
+    const handleSubmit = async () => {
         if (!segment?.bookingId || !segmentId) {
             toast.error("Thiếu thông tin lịch trình!");
             return;
         }
-
-        // 1. Tạo FormData để chứa cả text và files
-        const formData = new FormData();
-
-        // Thêm các file ảnh đã chọn vào FormData
-        images.forEach((file) => {
-            formData.append("images", file);
-        });
 
         if (segment?.status === 'Pending') {
             // --- LOGIC CHECK-IN ---
@@ -101,6 +135,38 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
         }
     };
 
+    const handleAnalyzeDamage = async () => {
+        if (!segment?.checkOutImages?.length) {
+            toast.error("Không có ảnh để phân tích!");
+            return;
+        }
+
+        try {
+            const files = await Promise.all(
+                segment.checkOutImages.map((url, index) =>
+                    urlToFile(url, `checkout-${index}.jpg`)
+                )
+            );
+
+            // gọi API damage detect
+            detectDamageMutation.mutate(files, {
+                onSuccess: (res: any) => {
+                    const data = res.data?.data || res.data;
+                    setDamageResult(data);
+                    toast.success("Phân tích hoàn tất!");
+                },
+                onError: (error) => {
+                    console.error("Lỗi AI:", error);
+                    toast.error("Phân tích thất bại!");
+                }
+            });
+
+        } catch (error) {
+            console.error("Lỗi khi xử lý file:", error);
+            toast.error("Lỗi khi chuẩn bị ảnh!");
+        }
+    };
+
 
     if (isPending) return (
         <div className="col-span-5 p-0 sticky top-6 h-fit shadow-sm flex flex-col text-card-foreground">
@@ -108,6 +174,7 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
         </div>
     );
     if (!segment) return <div>Không tìm thấy dữ liệu</div>
+
     return (
         <Card className="col-span-5 p-0 sticky top-6 h-fit border border-border shadow-sm flex flex-col rounded-lg bg-card text-card-foreground ">
             {/* Header */}
@@ -288,14 +355,63 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                     )}
                 </div>
 
+                {/* Damage Result */}
+                {damageResult && (
+                    <div className="bg-muted/50 p-4 rounded-xl border border-border flex flex-col gap-3">
+                        <div className="flex items-center justify-between">
+                            <h4 className="font-bold text-[13px] uppercase tracking-wider text-primary">
+                                🔍 Kết quả phân tích AI
+                            </h4>
+                            <Badge variant={damageResult.isDamaged ? "destructive" : "secondary"}>
+                                {damageResult.isDamaged ? "Phát hiện hư hại" : "Bình thường"}
+                            </Badge>
+                        </div>
+                        <p className="text-[14px] font-medium text-foreground">{damageResult.summary}</p>
+
+                        {damageResult.isDamaged && (
+                            <div className="flex flex-col gap-2 border-t border-border pt-3">
+                                <p className="text-[13px]">
+                                    <span className="font-semibold text-muted-foreground mr-1">Tỷ lệ hư hại:</span>
+                                    <span className="font-bold text-destructive">{damageResult.damagePercentage}%</span>
+                                </p>
+                                <div className="text-[13px] flex flex-col gap-1.5 mt-1">
+                                    <span className="font-semibold text-muted-foreground">Chi tiết:</span>
+                                    <ul className="list-disc list-inside space-y-1">
+                                        {Object.entries(damageResult.detailsByImage).map(([imgKey, desc]) => (
+                                            <li key={imgKey} className="text-foreground leading-relaxed">
+                                                <span className="font-medium mr-1">{imgKey}:</span>
+                                                <span className="text-muted-foreground">{desc}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
                 {/* Action button */}
-                {segment?.status !== "CheckedOut" && (
+                {segment?.status !== SegmentStatus.CheckedOut ? (
                     <Button
-                        variant="outline"
+                        variant="default"
                         onClick={handleSubmit}
                         disabled={isSubmitting}
-                        className="w-full text-[13px] font-bold text-foreground h-11 border-border shadow-sm mt-4 rounded-xl hover:bg-muted transition-none">
-                        {isSubmitting ? "Đang xử lý..." : (segment?.status === 'Pending' ? 'Xác nhận bàn giao xe' : 'Xác nhận trả xe')}
+                        className="w-full text-[13px] font-bold text-primary-foreground h-11 border-border shadow-sm mt-4 rounded-xl hover:bg-muted transition-none"
+                    >
+                        {isSubmitting
+                            ? "Đang xử lý..."
+                            : (segment?.status === SegmentStatus.Pending
+                                ? 'Xác nhận bàn giao xe'
+                                : 'Xác nhận trả xe')}
+                    </Button>
+                ) : (
+                    <Button
+                        variant="default"
+                        onClick={() => handleAnalyzeDamage()}
+                        disabled={detectDamageMutation.isPending}
+                        className="w-full text-[13px] font-bold h-11 mt-4 rounded-xl bg-primary text-primary-foreground"
+                    >
+                        {detectDamageMutation.isPending ? "Đang phân tích..." : "🔍 Phân tích hư hỏng bằng AI"}
                     </Button>
                 )}
             </div>
