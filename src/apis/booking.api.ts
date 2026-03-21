@@ -5,7 +5,8 @@ export const BOOKING_URL = {
     BASE: "/bookings",
     PAGINATION: "/bookings/pagination",
     USAGE_QUOTAS: "/usage-quotas",
-    HANDOVER_LOGS: "/handover-logs"
+    HANDOVER_LOGS: "/handover-logs",
+    DETECT_DAMAGE: "/detect-damage",
 }
 
 const bookingApi = {
@@ -39,6 +40,11 @@ const bookingApi = {
     },
     getHandoverLogs: async (id: string) =>
         await http.get<BookingSegmentDetailResponse>(`${BOOKING_URL.HANDOVER_LOGS}/${id}`),
+    postDetectDamage: async (images: File[]) => {
+        const formData = new FormData();
+        images.forEach((file) => formData.append("images", file));
+        return await http.post(BOOKING_URL.DETECT_DAMAGE, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+    },
 }
 
 export default bookingApi

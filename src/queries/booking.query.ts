@@ -86,6 +86,23 @@ const bookingQueries = {
             enabled: !!id,
         })
     },
+
+    useDetectDamage: () => {
+        return useMutation({
+            mutationFn: (images: File[]) => bookingApi.postDetectDamage(images),
+            // onSuccess: () => {
+            //     queryClient.invalidateQueries({
+            //         queryKey: bookingKey.lists()
+            //     });
+            //     queryClient.invalidateQueries({
+            //         queryKey: bookingKey.detail(bookingId)
+            //     });
+            //     queryClient.invalidateQueries({
+            //         queryKey: bookingKey.handoverLogs(handoverLogId)
+            //     });
+            // },
+        })
+    },
 }
 
 export default bookingQueries

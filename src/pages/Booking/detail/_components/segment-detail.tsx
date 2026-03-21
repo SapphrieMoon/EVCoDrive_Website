@@ -9,6 +9,8 @@ import { useDropzone } from 'react-dropzone'
 import { SEGMENT_STATUS_MAPPING } from "@/constants/status/booking/segment-status"
 import { toast } from "sonner"
 import { CardSkeleton } from "@/common/skeletons/card-skeleton"
+import imageCompression from 'browser-image-compression';
+import { SegmentStatus } from "@/types/booking.type"
 
 
 export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
@@ -27,6 +29,8 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
         accept: {
             'image/*': ['.jpeg', '.png', '.jpg']
         },
+        maxFiles: 5,
+        maxSize: 5 * 1024 * 1024, // 5MB
         onDrop: (acceptedFiles) => {
             onDrop(acceptedFiles)
         }
@@ -40,28 +44,44 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
         setPreviews(prev => prev.filter((_, i) => i !== index));
     };
 
-    const onDrop = (acceptedFiles: File[]) => {
-        // 1. Lưu file để sau này ném vào FormData
-        setImages(prev => [...prev, ...acceptedFiles]);
+    // Nén ảnh trước khi submit
+    const compressImage = async (file: File) => {
+        const options = {
+            maxSizeMB: 1,            // tối đa 1MB
+            maxWidthOrHeight: 1280,  // resize nếu quá lớn
+            useWebWorker: true,      // chạy nền cho mượt
+        };
 
-        // 2. Tạo URL tạm thời để hiển thị ngay lập tức
-        const newPreviews = acceptedFiles.map(file => URL.createObjectURL(file));
-        setPreviews(prev => [...prev, ...newPreviews]);
+        try {
+            const compressedFile = await imageCompression(file, options);
+            return compressedFile;
+        } catch (error) {
+            console.error("Compress error:", error);
+            return file; // fallback nếu lỗi
+        }
     };
 
-    const handleSubmit = () => {
+    const onDrop = async (acceptedFiles: File[]) => {
+        const compressedFiles = await Promise.all(
+            acceptedFiles.map(file => compressImage(file))
+        );
+
+        setImages(prev => {
+            const newList = [...prev, ...compressedFiles].slice(0, 5);
+            return newList;
+        });
+
+        setPreviews(prev => {
+            const newPreviews = compressedFiles.map(file => URL.createObjectURL(file));
+            return [...prev, ...newPreviews].slice(0, 5);
+        });
+    };
+
+    const handleSubmit = async () => {
         if (!segment?.bookingId || !segmentId) {
             toast.error("Thiếu thông tin lịch trình!");
             return;
         }
-
-        // 1. Tạo FormData để chứa cả text và files
-        const formData = new FormData();
-
-        // Thêm các file ảnh đã chọn vào FormData
-        images.forEach((file) => {
-            formData.append("images", file);
-        });
 
         if (segment?.status === 'Pending') {
             // --- LOGIC CHECK-IN ---
@@ -108,6 +128,7 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
         </div>
     );
     if (!segment) return <div>Không tìm thấy dữ liệu</div>
+
     return (
         <Card className="col-span-5 p-0 sticky top-6 h-fit border border-border shadow-sm flex flex-col rounded-lg bg-card text-card-foreground ">
             {/* Header */}
@@ -289,13 +310,26 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                 </div>
 
                 {/* Action button */}
-                {segment?.status !== "CheckedOut" && (
+                {segment?.status !== "CheckedOut" ? (
                     <Button
-                        variant="outline"
+                        variant="default"
                         onClick={handleSubmit}
                         disabled={isSubmitting}
-                        className="w-full text-[13px] font-bold text-foreground h-11 border-border shadow-sm mt-4 rounded-xl hover:bg-muted transition-none">
-                        {isSubmitting ? "Đang xử lý..." : (segment?.status === 'Pending' ? 'Xác nhận bàn giao xe' : 'Xác nhận trả xe')}
+                        className="w-full text-[13px] font-bold text-primary-foreground h-11 border-border shadow-sm mt-4 rounded-xl hover:bg-muted transition-none"
+                    >
+                        {isSubmitting
+                            ? "Đang xử lý..."
+                            : (segment?.status === 'Pending'
+                                ? 'Xác nhận bàn giao xe'
+                                : 'Xác nhận trả xe')}
+                    </Button>
+                ) : (
+                    <Button
+                        variant="default"
+
+                        className="w-full text-[13px] font-bold h-11 mt-4 rounded-xl bg-primary text-primary-foreground"
+                    >
+                        🔍 Phân tích hư hỏng bằng AI
                     </Button>
                 )}
             </div>
