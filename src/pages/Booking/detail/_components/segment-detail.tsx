@@ -12,6 +12,12 @@ import { CardSkeleton } from "@/common/skeletons/card-skeleton"
 import imageCompression from 'browser-image-compression';
 import { SegmentStatus } from "@/types/booking.type"
 
+interface DamageResult {
+    isDamaged: boolean;
+    summary: string;
+    damagePercentage: number;
+    detailsByImage: Record<string, string>;
+}
 
 export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
     const { data, isPending } = bookingQueries.useHandoverLogs(segmentId as string)
@@ -21,9 +27,17 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
     const [previews, setPreviews] = useState<string[]>([]); // Dùng để show UI
     const [odoStart, setOdoStart] = useState<number>(segment?.startOdo || 0);
     const [odoEnd, setOdoEnd] = useState<number>(segment?.endOdo || 0);
+    const [damageResult, setDamageResult] = useState<DamageResult | null>(null);
     const checkInMutation = bookingQueries.useCheckIn();
     const checkOutMutation = bookingQueries.useCheckOut();
     const isSubmitting = checkInMutation.isPending || checkOutMutation.isPending;
+    const detectDamageMutation = bookingQueries.useDetectDamage();
+    const urlToFile = async (url: string, filename: string) => {
+        const res = await fetch(url);
+        const blob = await res.blob();
+
+        return new File([blob], filename, { type: blob.type });
+    };
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
@@ -118,6 +132,38 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                     toast.success("Check-out thành công!");
                 }
             });
+        }
+    };
+
+    const handleAnalyzeDamage = async () => {
+        if (!segment?.checkOutImages?.length) {
+            toast.error("Không có ảnh để phân tích!");
+            return;
+        }
+
+        try {
+            const files = await Promise.all(
+                segment.checkOutImages.map((url, index) =>
+                    urlToFile(url, `checkout-${index}.jpg`)
+                )
+            );
+
+            // gọi API damage detect
+            detectDamageMutation.mutate(files, {
+                onSuccess: (res: any) => {
+                    const data = res.data?.data || res.data;
+                    setDamageResult(data);
+                    toast.success("Phân tích hoàn tất!");
+                },
+                onError: (error) => {
+                    console.error("Lỗi AI:", error);
+                    toast.error("Phân tích thất bại!");
+                }
+            });
+
+        } catch (error) {
+            console.error("Lỗi khi xử lý file:", error);
+            toast.error("Lỗi khi chuẩn bị ảnh!");
         }
     };
 
@@ -309,8 +355,43 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                     )}
                 </div>
 
+                {/* Damage Result */}
+                {damageResult && (
+                    <div className="bg-muted/50 p-4 rounded-xl border border-border flex flex-col gap-3">
+                        <div className="flex items-center justify-between">
+                            <h4 className="font-bold text-[13px] uppercase tracking-wider text-primary">
+                                🔍 Kết quả phân tích AI
+                            </h4>
+                            <Badge variant={damageResult.isDamaged ? "destructive" : "secondary"}>
+                                {damageResult.isDamaged ? "Phát hiện hư hại" : "Bình thường"}
+                            </Badge>
+                        </div>
+                        <p className="text-[14px] font-medium text-foreground">{damageResult.summary}</p>
+
+                        {damageResult.isDamaged && (
+                            <div className="flex flex-col gap-2 border-t border-border pt-3">
+                                <p className="text-[13px]">
+                                    <span className="font-semibold text-muted-foreground mr-1">Tỷ lệ hư hại:</span>
+                                    <span className="font-bold text-destructive">{damageResult.damagePercentage}%</span>
+                                </p>
+                                <div className="text-[13px] flex flex-col gap-1.5 mt-1">
+                                    <span className="font-semibold text-muted-foreground">Chi tiết:</span>
+                                    <ul className="list-disc list-inside space-y-1">
+                                        {Object.entries(damageResult.detailsByImage).map(([imgKey, desc]) => (
+                                            <li key={imgKey} className="text-foreground leading-relaxed">
+                                                <span className="font-medium mr-1">{imgKey}:</span>
+                                                <span className="text-muted-foreground">{desc}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
                 {/* Action button */}
-                {segment?.status !== "CheckedOut" ? (
+                {segment?.status !== SegmentStatus.CheckedOut ? (
                     <Button
                         variant="default"
                         onClick={handleSubmit}
@@ -319,17 +400,18 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                     >
                         {isSubmitting
                             ? "Đang xử lý..."
-                            : (segment?.status === 'Pending'
+                            : (segment?.status === SegmentStatus.Pending
                                 ? 'Xác nhận bàn giao xe'
                                 : 'Xác nhận trả xe')}
                     </Button>
                 ) : (
                     <Button
                         variant="default"
-
+                        onClick={() => handleAnalyzeDamage()}
+                        disabled={detectDamageMutation.isPending}
                         className="w-full text-[13px] font-bold h-11 mt-4 rounded-xl bg-primary text-primary-foreground"
                     >
-                        🔍 Phân tích hư hỏng bằng AI
+                        {detectDamageMutation.isPending ? "Đang phân tích..." : "🔍 Phân tích hư hỏng bằng AI"}
                     </Button>
                 )}
             </div>

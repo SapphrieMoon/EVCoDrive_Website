@@ -7,23 +7,29 @@ import VehicleCard from "./_components/vehicle-card"
 import PeriodCard from "./_components/period-card"
 import SegmentTable from "./_components/segment-table"
 import SegmentDetail from "./_components/segment-detail"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { BOOKING_STATUS_MAPPING } from "@/constants/status/booking/booking-status"
 
 export default function BookingDetailPage() {
     const { id } = useParams<{ id: string }>()
     const { data, isPending } = bookingQueries.useDetail(id as string)
     const booking = data?.data.data
-    const [selectedSegmentId, setSelectedSegmentId] = useState<string | null>(() => {
-        return booking?.segments?.[0]?.handoverLogId ?? null;
-    });
-    const configStatus = booking?.bookingStatus ? BOOKING_STATUS_MAPPING[booking.bookingStatus] : null;
+    const [selectedSegmentId, setSelectedSegmentId] = useState<string | null>(null);
 
     const sortedSegments = booking?.segments
         ? [...booking.segments].sort((a, b) => {
             return new Date(a.checkInDate).getTime() - new Date(b.checkInDate).getTime();
         })
         : [];
+
+    useEffect(() => {
+        if (!selectedSegmentId && sortedSegments.length > 0) {
+            // Mặc định chọn segment có ngày sớm nhất (bắt đầu hành trình)
+            setSelectedSegmentId(sortedSegments[0].handoverLogId);
+        }
+    }, [sortedSegments, selectedSegmentId]);
+
+    const configStatus = booking?.bookingStatus ? BOOKING_STATUS_MAPPING[booking.bookingStatus] : null;
 
     const selectedSegmentData =
         sortedSegments.find(s => s.handoverLogId === selectedSegmentId) ?? null;
@@ -64,7 +70,7 @@ export default function BookingDetailPage() {
                 />
 
                 {/* Bên phải: Form hành động - chiếm 4 cột */}
-                <SegmentDetail segmentId={selectedSegmentData?.handoverLogId} />
+                <SegmentDetail key={selectedSegmentData?.handoverLogId || 'empty'} segmentId={selectedSegmentData?.handoverLogId} />
             </div>
         </div>
     )
