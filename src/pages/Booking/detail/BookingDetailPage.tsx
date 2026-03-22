@@ -9,6 +9,7 @@ import SegmentTable from "./_components/segment-table"
 import SegmentDetail from "./_components/segment-detail"
 import { useState, useEffect } from "react"
 import { BOOKING_STATUS_MAPPING } from "@/constants/status/booking/booking-status"
+import ExtraFeeTable from "./_components/extra-fee-table"
 
 export default function BookingDetailPage() {
     const { id } = useParams<{ id: string }>()
@@ -60,6 +61,8 @@ export default function BookingDetailPage() {
                 <VehicleCard id={booking.vehicleId} />
                 <PeriodCard id={booking.bookingId} />
             </div>
+
+            <ExtraFeeTable id={booking.bookingId} />
 
             <div className="grid grid-cols-12 gap-6">
                 {/* Bên trái: Bảng danh sách - chiếm 8 cột */}
