@@ -62,7 +62,7 @@ export default function BookingDetailPage() {
                 <PeriodCard id={booking.bookingId} />
             </div>
 
-            <ExtraFeeTable id={booking.bookingId} />
+            <ExtraFeeTable id={booking.bookingId} segments={sortedSegments} />
 
             <div className="grid grid-cols-12 gap-6">
                 {/* Bên trái: Bảng danh sách - chiếm 8 cột */}

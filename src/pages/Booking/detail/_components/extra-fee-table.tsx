@@ -4,19 +4,25 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { extraFeeQueries } from "@/queries/extra-fee.query";
 import { formatDate } from "@/utils/date";
+import type { BookingSegment } from "@/types/booking.type";
+import ExtraFeeForm from "./extra-fee-form";
 
-export default function ExtraFeeTable({ id }: { id: string }) {
+export default function ExtraFeeTable({ id, segments }: { id: string, segments: BookingSegment[] }) {
     const { data: extraFeeData } = extraFeeQueries.useDetail(id)
     const extraFees = extraFeeData?.data.data
     return (
         <Card className="mb-6 shadow-sm border border-border rounded-lg bg-card text-card-foreground p-0 gap-0 overflow-hidden">
             {/* Header matches segment-detail style */}
-            <div className="flex items-center justify-start px-5 py-4 gap-3 border-b border-border">
-                <div className="bg-primary rounded-full w-6 h-6 flex items-center justify-center text-primary-foreground font-bold shrink-0">
-                    <Banknote className="w-3.5 h-3.5" />
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+                <div className="flex items-center gap-3">
+                    <div className="bg-primary rounded-full w-6 h-6 flex items-center justify-center text-primary-foreground font-bold shrink-0">
+                        <Banknote className="w-3.5 h-3.5" />
+                    </div>
+                    {/* Thêm leading-none và đệm nhẹ để chữ căn giữa tâm hình học với vòng tròn */}
+                    <h3 className="font-bold text-foreground text-lg tracking-tight leading-none pt-0.5">Phí Phụ Thu</h3>
                 </div>
-                {/* Thêm leading-none và đệm nhẹ để chữ căn giữa tâm hình học với vòng tròn */}
-                <h3 className="font-bold text-foreground text-lg tracking-tight leading-none pt-0.5">Phí Phụ Thu</h3>
+                
+                <ExtraFeeForm bookingId={id} segments={segments} />
             </div>
 
             <div className="">

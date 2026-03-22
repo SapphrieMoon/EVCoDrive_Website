@@ -205,13 +205,13 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                     <div>
                         <p className="text-[11px] font-bold text-primary mb-1.5 tracking-wider uppercase">Ngày nhận xe thực tế</p>
                         <p className="text-[15px] font-bold text-foreground">
-                            {segment?.actualCheckInDate ? formatTime(segment?.actualCheckInDate) : "---"}
+                            {segment?.actualCheckInDate ? formatDate(segment?.actualCheckInDate, false) : "---"}
                         </p>
                     </div>
                     <div>
                         <p className="text-[11px] font-bold text-muted-primary mb-1.5 tracking-wider uppercase">Ngày trả xe thực tế</p>
                         <p className="text-[15px] font-bold text-muted-primary">
-                            {segment?.actualCheckOutDate ? formatTime(segment?.actualCheckOutDate) : "---"}
+                            {segment?.actualCheckOutDate ? formatDate(segment?.actualCheckOutDate, false) : "---"}
                         </p>
                     </div>
                 </div>
