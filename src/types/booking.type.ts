@@ -15,6 +15,13 @@ export interface CheckOutRequest {
     images: File[];
 }
 
+export interface DamageResult {
+    isDamaged: boolean;
+    summary: string;
+    damagePercentage: number;
+    detailsByImage: Record<string, string>;
+}
+
 export const BookingStatus = {
     Booked: "Booked",
     InUsed: "InUsed",

@@ -34,6 +34,18 @@ export const staffSidebar: SidebarItem[] = [
 ]
 
 export const operatorSidebar: SidebarItem[] = [
-    { label: "Xe đăng ký", path: path.vehicle },
-    { label: "Quản lý đặt xe", path: path.booking },
+    {
+        label: "Quản lý xe",
+        children: [
+            { label: "Nhóm đồng sở hữu", path: path.coOwnerGroup },
+            { label: "Xe đăng ký", path: path.vehicle },
+            // { label: "Hợp đồng", path: path.contract },
+        ]
+    },
+    {
+        label: "Vận hành",
+        children: [
+            { label: "Quản lý đặt xe", path: path.booking },
+        ]
+    },
 ]

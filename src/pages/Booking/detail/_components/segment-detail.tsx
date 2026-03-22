@@ -10,14 +10,7 @@ import { SEGMENT_STATUS_MAPPING } from "@/constants/status/booking/segment-statu
 import { toast } from "sonner"
 import { CardSkeleton } from "@/common/skeletons/card-skeleton"
 import imageCompression from 'browser-image-compression';
-import { SegmentStatus } from "@/types/booking.type"
-
-interface DamageResult {
-    isDamaged: boolean;
-    summary: string;
-    damagePercentage: number;
-    detailsByImage: Record<string, string>;
-}
+import { SegmentStatus, type DamageResult } from "@/types/booking.type"
 
 export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
     const { data, isPending } = bookingQueries.useHandoverLogs(segmentId as string)
