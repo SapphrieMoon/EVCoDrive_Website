@@ -17,5 +17,5 @@ export function ProtectedRoute() {
 
 export function RejectedRoute() {
     const { isAuthenticated } = useContext(AppContext)
-    return !isAuthenticated ? <Outlet /> : <Navigate to={path.station} />
+    return !isAuthenticated ? <Outlet /> : <Navigate to={path.vehicle} />
 }

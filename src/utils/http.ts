@@ -32,7 +32,7 @@ class Http {
             (config) => {
                 const accessToken = getAccessTokenFromLocalStorage()
                 if (accessToken) {
-                    config.headers.Authorization = accessToken
+                    config.headers.Authorization = `Bearer ${accessToken}`
                 }
                 return config
             },
@@ -102,7 +102,7 @@ class Http {
                         ...config,
                         headers: {
                             ...config?.headers,
-                            Authorization: accessToken
+                            Authorization: `Bearer ${accessToken}`
                         }
                     })
                 })

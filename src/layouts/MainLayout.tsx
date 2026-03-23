@@ -14,7 +14,7 @@ export const MainLayout = () => {
         ? staffSidebar
         : user?.role === "Operator"
           ? operatorSidebar
-          : [];
+          : adminSidebar;
 
   return (
     <div className="min-h-screen bg-background">

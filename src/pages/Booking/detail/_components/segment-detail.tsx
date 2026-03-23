@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Image as ImageIcon, Plus, X } from "lucide-react"
 import bookingQueries from "@/queries/booking.query"
-import { formatDate, formatTime } from "@/utils/date"
+import { formatDate } from "@/utils/date"
 import { Badge } from "@/components/ui/badge"
 import { useState } from "react"
 import { useDropzone } from 'react-dropzone'
@@ -10,14 +10,7 @@ import { SEGMENT_STATUS_MAPPING } from "@/constants/status/booking/segment-statu
 import { toast } from "sonner"
 import { CardSkeleton } from "@/common/skeletons/card-skeleton"
 import imageCompression from 'browser-image-compression';
-import { SegmentStatus } from "@/types/booking.type"
-
-interface DamageResult {
-    isDamaged: boolean;
-    summary: string;
-    damagePercentage: number;
-    detailsByImage: Record<string, string>;
-}
+import { SegmentStatus, type DamageResult } from "@/types/booking.type"
 
 export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
     const { data, isPending } = bookingQueries.useHandoverLogs(segmentId as string)
@@ -212,13 +205,13 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                     <div>
                         <p className="text-[11px] font-bold text-primary mb-1.5 tracking-wider uppercase">Ngày nhận xe thực tế</p>
                         <p className="text-[15px] font-bold text-foreground">
-                            {segment?.actualCheckInDate ? formatTime(segment?.actualCheckInDate) : "---"}
+                            {segment?.actualCheckInDate ? formatDate(segment?.actualCheckInDate, false) : "---"}
                         </p>
                     </div>
                     <div>
                         <p className="text-[11px] font-bold text-muted-primary mb-1.5 tracking-wider uppercase">Ngày trả xe thực tế</p>
                         <p className="text-[15px] font-bold text-muted-primary">
-                            {segment?.actualCheckOutDate ? formatTime(segment?.actualCheckOutDate) : "---"}
+                            {segment?.actualCheckOutDate ? formatDate(segment?.actualCheckOutDate, false) : "---"}
                         </p>
                     </div>
                 </div>
