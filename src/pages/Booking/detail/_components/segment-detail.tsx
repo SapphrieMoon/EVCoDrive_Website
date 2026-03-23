@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Image as ImageIcon, Plus, X } from "lucide-react"
 import bookingQueries from "@/queries/booking.query"
-import { formatDate, formatTime } from "@/utils/date"
+import { formatDate } from "@/utils/date"
 import { Badge } from "@/components/ui/badge"
 import { useState } from "react"
 import { useDropzone } from 'react-dropzone'
