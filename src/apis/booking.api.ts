@@ -1,4 +1,4 @@
-import type { BookingDetailResponse, BookingPaginationParams, BookingPaginationResponse, BookingSegmentDetailResponse, CheckInRequest, CheckOutRequest, UsageQuotasRequest } from "@/types/booking.type"
+import type { BookingDetailResponse, BookingPaginationParams, BookingPaginationResponse, BookingSegmentDetailResponse, CheckInRequest, CheckOutRequest, FaceSearchBookingResponse, UsageQuotasRequest } from "@/types/booking.type"
 import http from "@/utils/http"
 
 export const BOOKING_URL = {
@@ -7,6 +7,7 @@ export const BOOKING_URL = {
     USAGE_QUOTAS: "/usage-quotas",
     HANDOVER_LOGS: "/handover-logs",
     DETECT_DAMAGE: "/detect-damage",
+    FACE_SEARCH_BOOKING: "/face/search-booking"
 }
 
 const bookingApi = {
@@ -45,6 +46,11 @@ const bookingApi = {
         images.forEach((file) => formData.append("images", file));
         return await http.post(BOOKING_URL.DETECT_DAMAGE, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
     },
+    postFaceSearchBooking: async (image: File) => {
+        const formData = new FormData();
+        formData.append("faceImage", image);
+        return await http.post<FaceSearchBookingResponse>(BOOKING_URL.FACE_SEARCH_BOOKING, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+    }
 }
 
 export default bookingApi

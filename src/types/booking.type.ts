@@ -70,6 +70,13 @@ export interface Booking {
     updatedDate: string;
 }
 
+export type FaceSearchBookingResponse = SuccessResponse<{
+    memberId: string;
+    memberName: string;
+    confidence: number;
+    bookings: Booking[];
+}>;
+
 export interface BookingSegmentDetail {
     handoverLogId: string;
     bookingId: string;

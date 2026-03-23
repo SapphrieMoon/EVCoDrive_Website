@@ -2,13 +2,14 @@ import { useTheme } from "next-themes"
 import { Button } from "../ui/button";
 import { Moon, Sun } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { getProfileFromLocalStorage } from "@/utils/auth";
+import { getProfileFromLocalStorage, getStationNameFromLocalStorage } from "@/utils/auth";
 import type { User } from "@/types/user.type";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { useLogoutMutation } from "@/queries/auth.query";
 export const Header = () => {
   const { theme, setTheme } = useTheme();
   const user: User | null = getProfileFromLocalStorage();
+  const stationName = getStationNameFromLocalStorage();
   const logoutMutation = useLogoutMutation();
 
   const handleLogout = () => {
@@ -23,12 +24,12 @@ export const Header = () => {
         text-sidebar-foreground
         border-b border-sidebar-border
         px-4
-        flex items-center justify-end"
+        flex items-center justify-between"
     >
       {/* Logo / title */}
-      {/* <div className="font-semibold tracking-tight">
-        EVCodrive
-      </div> */}
+      <div className="font-semibold tracking-tight px-3 py-1 bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-full text-sm inline-flex items-center justify-center shadow-sm">
+        Trạm {stationName}
+      </div>
 
       {/* Actions */}
       <div className="flex items-center gap-4">
