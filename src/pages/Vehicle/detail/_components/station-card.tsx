@@ -18,7 +18,7 @@ export const StationCard = ({ station }: { station: CurrentStation | null }) => 
         <Card>
             <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-bold flex items-center gap-2 uppercase">
-                    <MapPin className="h-4 w-4 text-primary" /> Vị trí hiện tại
+                    <MapPin className="h-4 w-4 text-primary" /> Vị trí trạm đăng ký
                 </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">

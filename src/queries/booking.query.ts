@@ -103,6 +103,12 @@ const bookingQueries = {
             // },
         })
     },
+
+    useFaceSearchBooking: () => {
+        return useMutation({
+            mutationFn: (image: File) => bookingApi.postFaceSearchBooking(image),
+        })
+    },
 }
 
 export default bookingQueries

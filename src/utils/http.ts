@@ -1,5 +1,5 @@
 import type { AxiosError, AxiosInstance } from "axios";
-import { clearLocalStorage, getAccessTokenFromLocalStorage, getRefreshTokenFromLocalStorage, setAccessTokenToLocalStorage, setProfileToLocalStorage, setRefreshTokenToLocalStorage } from "./auth";
+import { clearLocalStorage, getAccessTokenFromLocalStorage, getRefreshTokenFromLocalStorage, setAccessTokenToLocalStorage, setProfileToLocalStorage, setRefreshTokenToLocalStorage, setStationIdToLocalStorage, setStationNameToLocalStorage } from "./auth";
 import axios from "axios";
 import config from "@/constants/config";
 import { URL_AUTH } from "@/apis/auth.api";
@@ -55,6 +55,8 @@ class Http {
                     setAccessTokenToLocalStorage(accessToken)
                     setRefreshTokenToLocalStorage(refreshToken)
                     setProfileToLocalStorage(data.data.user)
+                    setStationIdToLocalStorage(data.data.stationId)
+                    setStationNameToLocalStorage(data.data.stationName)
                 }
 
                 //Logout
