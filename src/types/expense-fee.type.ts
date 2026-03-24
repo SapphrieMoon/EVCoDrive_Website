@@ -1,3 +1,4 @@
+import type { BaseCrudFormProps } from "./commons/crud-form.type";
 import type { PaginationParams, PaginationResponse } from "./commons/pagination.type";
 import type { SuccessResponse } from "./commons/utils.type";
 
@@ -54,6 +55,11 @@ export interface ExpenseFeeType {
     updatedDate: string; // ISO string
 }
 
+export type ExpenseFeeQuoteRequest = {
+    expenseFeeId: string;
+    amount: number;
+    operatorNote?: string;
+}
 
 export type ExpenseFeePaginationParams = PaginationParams & {}
 
@@ -64,3 +70,5 @@ export type ExpenseFeeDetailResponse = SuccessResponse<ExpenseFeeDetail>
 export type ExpenseFeeTypeResponse = SuccessResponse<ExpenseFeeType[]>
 
 export type ExpenseFeeTypeDetailResponse = SuccessResponse<ExpenseFeeType>
+
+export type ExpenseFeeFormProps = BaseCrudFormProps & {}
