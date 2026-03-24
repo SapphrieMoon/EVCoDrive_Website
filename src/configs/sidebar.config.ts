@@ -24,6 +24,7 @@ export const adminSidebar: SidebarItem[] = [
         label: "Quản lý vận hành",
         children: [
             { label: "Quản lý đặt xe", path: path.booking },
+            { label: "Chi phí", path: path.expenseFee },
         ],
     },
 ]
@@ -31,6 +32,7 @@ export const adminSidebar: SidebarItem[] = [
 export const staffSidebar: SidebarItem[] = [
     { label: "Tài khoản", path: "/accounts" },
     { label: "Đơn hàng", path: "/orders" },
+
 ]
 
 export const operatorSidebar: SidebarItem[] = [
@@ -46,6 +48,7 @@ export const operatorSidebar: SidebarItem[] = [
         label: "Vận hành",
         children: [
             { label: "Quản lý đặt xe", path: path.booking },
+            { label: "Chi phí", path: path.expenseFee },
         ]
     },
 ]
