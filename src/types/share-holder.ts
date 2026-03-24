@@ -3,8 +3,8 @@ export interface ShareHolder {
     memberId: string;
     memberName: string;
     memberEmail: string;
+    avatarUrl: string;
     ownedShares: number;
     ownershipPercentage: number;
     status: "Active" | "Inactive" | string;
-    avatarUrl?: string;
 }

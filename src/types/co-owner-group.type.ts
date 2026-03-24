@@ -34,6 +34,8 @@ export interface CoOwnerGroupDetail {
     totalShares: number;
     sharePrice: number;
     status: CoOwnerGroupStatus;
+    coOwnershipContractUrl: string;
+    vehicleRegistrationCertificateUrl: string;
     shareHolders: ShareHolder[];
     shareUnits: ShareUnit[];
 }
