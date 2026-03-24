@@ -1,7 +1,7 @@
 import { expenseFeeApi, expenseFeeTypeApi } from "@/apis/expense-fee.api";
 import { expenseFeeKey, expenseFeeTypeKey } from "@/constants/query-keys/expense-fee.key";
-import type { ExpenseFeePaginationParams } from "@/types/expense-fee.type";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import type { ExpenseFeePaginationParams, ExpenseFeeQuoteRequest } from "@/types/expense-fee.type";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const expenseFeeQueries = {
     usePagination: (params: ExpenseFeePaginationParams) => {
@@ -32,6 +32,18 @@ const expenseFeeQueries = {
             })
         }
     },
+
+    useQuote: () => {
+        const queryClient = useQueryClient()
+
+        return useMutation({
+            mutationFn: (params: ExpenseFeeQuoteRequest) => expenseFeeApi.putQuote(params),
+            onSuccess: (_, params) => {
+                queryClient.invalidateQueries({ queryKey: expenseFeeKey.detail(params.expenseFeeId) })
+                queryClient.invalidateQueries({ queryKey: expenseFeeKey.listPagination({ pageNumber: 1, pageSize: 10 }) })
+            }
+        })
+    }
 }
 
 const expenseFeeTypeQueries = {

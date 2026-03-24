@@ -2,14 +2,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Banknote, FileText, History, Plus } from "lucide-react";
+import { ArrowLeft, Banknote, FileText, History } from "lucide-react";
 import { DetailSkeleton } from "@/common/skeletons/detail-skeleton";
 import { formatDate } from "@/utils/date";
 import { expenseFeeQueries } from "@/queries/expense-fee.query";
 import { EXPENSE_FEE_STATUS_MAPPING } from "@/constants/status/expense-fee/expense-fee-status";
-import GroupCard from "./group-card";
-import ExpenseFeeTypeCard from "./expense-fee-type-card";
-
+import GroupCard from "./_components/group-card";
+import ExpenseFeeTypeCard from "./_components/expense-fee-type-card";
+import ExpenseFeeForm from "./expense-fee-form";
 
 export default function ExpenseDetailPage() {
     const { id } = useParams<{ id: string }>();
@@ -36,7 +36,7 @@ export default function ExpenseDetailPage() {
                     </div>
                 </div>
                 <div>
-                    <Badge className="px-5 py-2 text-sm font-bold uppercase shadow-sm" variant={configStatus?.color}>
+                    <Badge className="px-5 py-2 text-sm font-bold uppercase shadow-sm p-4" variant={configStatus?.color}>
                         {configStatus?.label}
                     </Badge>
                 </div>
@@ -44,9 +44,7 @@ export default function ExpenseDetailPage() {
 
             {/* Actions Toolbar */}
             <div className="flex justify-end">
-                <Button variant="default" size="sm" className="font-semibold shadow-sm h-8 px-4 bg-primary/90 hover:bg-primary">
-                    <Plus className="h-3.5 w-3.5 mr-1" /> Tạo hóa đơn
-                </Button>
+                <ExpenseFeeForm expenseFeeId={expense.expenseFeeId} />
             </div>
 
             <div className="grid grid-cols-12 gap-6">

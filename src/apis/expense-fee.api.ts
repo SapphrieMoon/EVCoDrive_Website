@@ -1,4 +1,4 @@
-import type { ExpenseFeeDetailResponse, ExpenseFeePaginationParams, ExpenseFeePaginationResponse, ExpenseFeeTypeDetailResponse, ExpenseFeeTypeResponse } from "@/types/expense-fee.type";
+import type { ExpenseFeeDetailResponse, ExpenseFeePaginationParams, ExpenseFeePaginationResponse, ExpenseFeeQuoteRequest, ExpenseFeeTypeDetailResponse, ExpenseFeeTypeResponse } from "@/types/expense-fee.type";
 import http from "@/utils/http";
 
 export const EXPENSE_FEE_API = {
@@ -13,6 +13,12 @@ export const expenseFeeApi = {
     getDetail: async (id: string) => {
         return await http.get<ExpenseFeeDetailResponse>(`${EXPENSE_FEE_API.EXPENSE_FEE}/${id}`);
     },
+    putQuote: async (params: ExpenseFeeQuoteRequest) => {
+        return http.put<ExpenseFeeDetailResponse>(
+            `${EXPENSE_FEE_API.EXPENSE_FEE}/${params.expenseFeeId}/quote`,
+            params
+        );
+    }
 }
 
 export const expenseFeeTypeApi = {
