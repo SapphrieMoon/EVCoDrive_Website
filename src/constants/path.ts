@@ -13,7 +13,7 @@ const path = {
     booking: "/bookings",
     bookingDetail: "/bookings/:id",
     expenseFee: "/expense-fees",
-
+    expenseFeeDetail: "/expense-fees/:id",
 } as const
 
 export default path

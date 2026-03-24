@@ -18,15 +18,6 @@ export default function ExpenseFeePage() {
         pageSize: pagination.pageSize,
     })
 
-    //========================== Detail ==========================
-    const [isDetailOpen, setIsDetailOpen] = useState(false);
-    const [selectedId, setSelectedId] = useState<string | null>(null);
-
-    const handleViewDetail = (id: string) => {
-        setSelectedId(id);
-        setIsDetailOpen(true);
-    }
-
     return (
         <div className="space-y-2 m-4">
 
@@ -63,7 +54,7 @@ export default function ExpenseFeePage() {
             />
 
             {/* {selectedId && (
-                <StationDetail
+                <ExpenseFeeDetailPage
                     id={selectedId}
                     open={isDetailOpen}
                     onOpenChange={setIsDetailOpen}

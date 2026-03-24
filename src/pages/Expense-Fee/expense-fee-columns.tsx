@@ -1,11 +1,14 @@
 import { TableActionCell } from "@/common/table-action-cell";
 import { Badge } from "@/components/ui/badge";
+import path from "@/constants/path";
 import { EXPENSE_FEE_STATUS_MAPPING } from "@/constants/status/expense-fee/expense-fee-status";
 import { cn } from "@/lib/utils";
+import { expenseFeeQueries } from "@/queries/expense-fee.query";
 import type { ExpenseFee } from "@/types/expense-fee.type";
 import { formatDate } from "@/utils/date";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Banknote, Calendar, ReceiptText } from "lucide-react";
+import { generatePath } from "react-router-dom";
 
 export const expenseColumns: ColumnDef<ExpenseFee>[] = [
     {
@@ -86,11 +89,15 @@ export const expenseColumns: ColumnDef<ExpenseFee>[] = [
         id: "actions",
         header: "Thao tác",
         enableSorting: false,
-        cell: ({ row, table }) => {
+        cell: ({ row }) => {
             const id = row.original.expenseFeeId
+            const detailPath = generatePath(path.expenseFeeDetail, { id })
+            const prefetch = expenseFeeQueries.usePrefetchDetail()
+
             return (
                 <TableActionCell
-                    onDetailClick={() => table.options.meta?.onViewDetail?.(id)}
+                    detailUrl={detailPath}
+                    onDetailMouseEnter={() => prefetch(id)}
                 >
                 </TableActionCell>
             )
