@@ -1,7 +1,7 @@
 import { expenseFeeApi, expenseFeeTypeApi } from "@/apis/expense-fee.api";
-import { expenseFeeKey, expenseFeeTypeKey } from "@/constants/query-keys/expense-fee.type";
+import { expenseFeeKey, expenseFeeTypeKey } from "@/constants/query-keys/expense-fee.key";
 import type { ExpenseFeePaginationParams } from "@/types/expense-fee.type";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const expenseFeeQueries = {
     usePagination: (params: ExpenseFeePaginationParams) => {
@@ -19,6 +19,19 @@ const expenseFeeQueries = {
             enabled: !!id
         })
     },
+
+    usePrefetchDetail: () => {
+        const queryClient = useQueryClient()
+
+        return (id: string) => {
+            if (!id) return;
+            queryClient.prefetchQuery({
+                queryKey: expenseFeeKey.detail(id),
+                queryFn: () => expenseFeeApi.getDetail(id),
+                staleTime: 5 * 60 * 1000
+            })
+        }
+    },
 }
 
 const expenseFeeTypeQueries = {
@@ -26,6 +39,14 @@ const expenseFeeTypeQueries = {
         return useQuery({
             queryKey: expenseFeeTypeKey.all(),
             queryFn: expenseFeeTypeApi.getAll,
+        })
+    },
+
+    useDetail: (id: string) => {
+        return useQuery({
+            queryKey: expenseFeeTypeKey.detail(id),
+            queryFn: () => expenseFeeTypeApi.getDetail(id),
+            enabled: !!id
         })
     },
 }

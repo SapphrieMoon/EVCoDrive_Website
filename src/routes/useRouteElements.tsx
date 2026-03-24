@@ -21,6 +21,7 @@ const CoOwnerGroupDetailPage = lazy(() => import("@/pages/Co-Owner-Group/detail/
 const BookingPage = lazy(() => import("@/pages/Booking"));
 const BookingDetailPage = lazy(() => import("@/pages/Booking/detail/index"));
 const ExpenseFeePage = lazy(() => import("@/pages/Expense-Fee"));
+const ExpenseFeeDetailPage = lazy(() => import("@/pages/Expense-Fee/detail/index"));
 // const MainLayout = lazy(() => import("@/layouts/MainLayout"));
 // const PublicLayout = lazy(() => import("@/layouts/PublicLayout"));
 // const NotFound = lazy(() => import("@/pages/NotFound"));
@@ -71,7 +72,8 @@ export default function useRouteElements() {
                         { path: path.coOwnerGroupDetail, element: <CoOwnerGroupDetailPage /> },
                         { path: path.booking, element: <BookingPage /> },
                         { path: path.bookingDetail, element: <BookingDetailPage /> },
-                        { path: path.expenseFee, element: <ExpenseFeePage /> }
+                        { path: path.expenseFee, element: <ExpenseFeePage /> },
+                        { path: path.expenseFeeDetail, element: <ExpenseFeeDetailPage /> }
                     ]
                 }
             ]

@@ -62,3 +62,5 @@ export type ExpenseFeePaginationResponse = SuccessResponse<PaginationResponse<Ex
 export type ExpenseFeeDetailResponse = SuccessResponse<ExpenseFeeDetail>
 
 export type ExpenseFeeTypeResponse = SuccessResponse<ExpenseFeeType[]>
+
+export type ExpenseFeeTypeDetailResponse = SuccessResponse<ExpenseFeeType>

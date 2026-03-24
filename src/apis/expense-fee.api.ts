@@ -1,4 +1,4 @@
-import type { ExpenseFeeDetailResponse, ExpenseFeePaginationParams, ExpenseFeePaginationResponse, ExpenseFeeTypeResponse } from "@/types/expense-fee.type";
+import type { ExpenseFeeDetailResponse, ExpenseFeePaginationParams, ExpenseFeePaginationResponse, ExpenseFeeTypeDetailResponse, ExpenseFeeTypeResponse } from "@/types/expense-fee.type";
 import http from "@/utils/http";
 
 export const EXPENSE_FEE_API = {
@@ -18,5 +18,8 @@ export const expenseFeeApi = {
 export const expenseFeeTypeApi = {
     getAll: async () => {
         return await http.get<ExpenseFeeTypeResponse>(EXPENSE_FEE_API.EXPENSE_FEE_TYPE);
+    },
+    getDetail: async (id: string) => {
+        return await http.get<ExpenseFeeTypeDetailResponse>(`${EXPENSE_FEE_API.EXPENSE_FEE_TYPE}/${id}`);
     },
 }
