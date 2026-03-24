@@ -3,8 +3,10 @@ import type { SuccessResponse } from "./commons/utils.type";
 
 export const ExpenseFeeStatus = {
     SubmittedToSystem: "SubmittedToSystem",
-    Approved: "Approved",
-    Rejected: "Rejected",
+    PendingPayment: "PendingPayment",
+    Processing: "Processing",
+    Paid: "Paid",
+    Cancelled: "Cancelled",
 } as const
 
 export type ExpenseFeeStatus = typeof ExpenseFeeStatus[keyof typeof ExpenseFeeStatus]

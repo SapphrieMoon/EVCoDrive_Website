@@ -30,4 +30,4 @@ const expenseFeeTypeQueries = {
     },
 }
 
-export default { expenseFeeQueries, expenseFeeTypeQueries }
+export { expenseFeeQueries, expenseFeeTypeQueries }
