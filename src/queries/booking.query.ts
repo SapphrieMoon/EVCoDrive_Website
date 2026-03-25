@@ -1,6 +1,6 @@
 import bookingApi from "@/apis/booking.api"
 import { bookingKey } from "@/constants/query-keys/booking.key"
-import type { BookingPaginationParams, CheckInRequest, CheckOutRequest, UsageQuotasRequest } from "@/types/booking.type"
+import type { AvaliableBookingParams, BookingPaginationParams, CheckInRequest, CheckOutRequest, UsageQuotasRequest } from "@/types/booking.type"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 const bookingQueries = {
@@ -107,6 +107,14 @@ const bookingQueries = {
     useFaceSearchBooking: () => {
         return useMutation({
             mutationFn: (image: File) => bookingApi.postFaceSearchBooking(image),
+        })
+    },
+
+    useAvaliableBooking: (params: AvaliableBookingParams) => {
+        return useQuery({
+            queryKey: bookingKey.avaliableBooking(params),
+            queryFn: () => bookingApi.getAvaliableBooking(params),
+            placeholderData: (previousData) => previousData,
         })
     },
 }

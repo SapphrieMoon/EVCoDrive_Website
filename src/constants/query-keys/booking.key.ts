@@ -1,4 +1,4 @@
-import type { BookingPaginationParams } from "@/types/booking.type";
+import type { AvaliableBookingParams, BookingPaginationParams } from "@/types/booking.type";
 
 export const bookingKey = {
     all: () => ["booking"],
@@ -12,4 +12,9 @@ export const bookingKey = {
     details: () => ["booking", "detail"],
     detail: (id: string) => ["booking", "detail", id],
     handoverLogs: (id: string) => ["booking", "handover-logs", id],
+    avaliableBooking: (params: AvaliableBookingParams) => [
+        "booking",
+        "avaliable",
+        params,
+    ]
 }

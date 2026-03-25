@@ -15,6 +15,7 @@ export type ExpenseFeeStatus = typeof ExpenseFeeStatus[keyof typeof ExpenseFeeSt
 export interface ExpenseFee {
     expenseFeeId: string;
     coOwnerGroupId: string;
+    vehicleId: string;
     invoiceId: string | null;
     votingId: string | null;
     expenseFeeTypeId: string;
@@ -32,6 +33,7 @@ export interface ExpenseFee {
 export interface ExpenseFeeDetail {
     expenseFeeId: string;
     coOwnerGroupId: string;
+    vehicleId: string;
     invoiceId: string | null;
     votingId: string | null;
     expenseFeeTypeId: string;

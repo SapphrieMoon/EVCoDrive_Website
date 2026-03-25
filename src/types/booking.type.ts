@@ -103,6 +103,28 @@ export interface BookingSegmentDetail {
     updatedDate: string;  // ISO 8601 Date string
 }
 
+export interface AvaliableBooking {
+    bookingId: string
+    memberId: string
+    vehicleId: string
+    purpose: string
+    bookingStatus: BookingStatus
+    bookingCode: string
+    bookingDate: string // ISO date string
+    bookedDates: string[] // dạng YYYY-MM-DD
+    totalDays: number
+    segments: BookingSegment[]
+    note: string
+    createdDate: string // ISO date string
+    updatedDate: string // ISO date string
+}
+
+export type AvaliableBookingResponse = SuccessResponse<PaginationResponse<AvaliableBooking>>
+
+export type AvaliableBookingParams = PaginationParams & {
+    vehicleId: string;
+}
+
 export type BookingPaginationParams = PaginationParams & {
     bookingCode?: string,
 }
@@ -112,3 +134,5 @@ export type BookingPaginationResponse = SuccessResponse<PaginationResponse<Booki
 export type BookingDetailResponse = SuccessResponse<Booking>
 
 export type BookingSegmentDetailResponse = SuccessResponse<BookingSegmentDetail>
+
+export type AvaliableBookingPaginationResponse = SuccessResponse<PaginationResponse<AvaliableBooking>>

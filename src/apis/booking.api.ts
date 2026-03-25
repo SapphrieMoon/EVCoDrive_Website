@@ -1,4 +1,4 @@
-import type { BookingDetailResponse, BookingPaginationParams, BookingPaginationResponse, BookingSegmentDetailResponse, CheckInRequest, CheckOutRequest, FaceSearchBookingResponse, UsageQuotasRequest } from "@/types/booking.type"
+import type { AvaliableBookingPaginationResponse, AvaliableBookingParams, BookingDetailResponse, BookingPaginationParams, BookingPaginationResponse, BookingSegmentDetailResponse, CheckInRequest, CheckOutRequest, FaceSearchBookingResponse, UsageQuotasRequest } from "@/types/booking.type"
 import http from "@/utils/http"
 
 export const BOOKING_URL = {
@@ -50,7 +50,9 @@ const bookingApi = {
         const formData = new FormData();
         formData.append("faceImage", image);
         return await http.post<FaceSearchBookingResponse>(BOOKING_URL.FACE_SEARCH_BOOKING, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-    }
+    },
+    getAvaliableBooking: async (params: AvaliableBookingParams) =>
+        await http.get<AvaliableBookingPaginationResponse>(BOOKING_URL.BASE, { params }),
 }
 
 export default bookingApi
