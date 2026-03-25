@@ -26,7 +26,10 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
     const isSubmitting = checkInMutation.isPending || checkOutMutation.isPending;
     const detectDamageMutation = bookingQueries.useDetectDamage();
     const urlToFile = async (url: string, filename: string) => {
-        const res = await fetch(url);
+        // convert sang https trước khi fetch
+        const safeUrl = url.replace("http://", "https://");
+
+        const res = await fetch(safeUrl);
         const blob = await res.blob();
 
         return new File([blob], filename, { type: blob.type });
