@@ -10,6 +10,8 @@ import { EXPENSE_FEE_STATUS_MAPPING } from "@/constants/status/expense-fee/expen
 import GroupCard from "./_components/group-card";
 import ExpenseFeeTypeCard from "./_components/expense-fee-type-card";
 import ExpenseFeeForm from "./expense-fee-form";
+import BookingCalendar from "./_components/booking-calendar";
+import { ExpenseFeeStatus } from "@/types/expense-fee.type";
 
 export default function ExpenseDetailPage() {
     const { id } = useParams<{ id: string }>();
@@ -43,8 +45,13 @@ export default function ExpenseDetailPage() {
             </div>
 
             {/* Actions Toolbar */}
-            <div className="flex justify-end">
-                <ExpenseFeeForm expenseFeeId={expense.expenseFeeId} />
+            <div className="flex justify-end gap-3">
+                {expense.status === ExpenseFeeStatus.SubmittedToSystem && (
+                    <ExpenseFeeForm expenseFeeId={expense.expenseFeeId} />
+                )}
+                {expense.status === ExpenseFeeStatus.Paid && (
+                    <BookingCalendar vehicleId={expense.vehicleId} />
+                )}
             </div>
 
             <div className="grid grid-cols-12 gap-6">
