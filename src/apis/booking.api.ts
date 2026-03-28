@@ -51,8 +51,8 @@ const bookingApi = {
         formData.append("faceImage", image);
         return await http.post<FaceSearchBookingResponse>(BOOKING_URL.FACE_SEARCH_BOOKING, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
     },
-    getAvaliableBooking: async (params: AvaliableBookingParams) =>
-        await http.get<AvaliableBookingPaginationResponse>(BOOKING_URL.BASE, { params }),
+    getAvaliableBooking: async ({ vehicleId, ...params }: AvaliableBookingParams) =>
+        await http.get<AvaliableBookingPaginationResponse>(`${BOOKING_URL.BASE}/vehicle/${vehicleId}`, { params }),
 }
 
 export default bookingApi

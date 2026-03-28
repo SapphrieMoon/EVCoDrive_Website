@@ -4,6 +4,7 @@ import http from "@/utils/http";
 export const EXPENSE_FEE_API = {
     EXPENSE_FEE_TYPE: "/expense-fee-types",
     EXPENSE_FEE: "/expenses",
+    SCHEDULE_SERVICE: "/schedule-service",
 }
 
 export const expenseFeeApi = {
@@ -18,6 +19,9 @@ export const expenseFeeApi = {
             `${EXPENSE_FEE_API.EXPENSE_FEE}/${params.expenseFeeId}/quote`,
             params
         );
+    },
+    postScheduleService: async (id: string, body: string[]) => {
+        return http.post(`${EXPENSE_FEE_API.EXPENSE_FEE}/${id}${EXPENSE_FEE_API.SCHEDULE_SERVICE}`, body);
     }
 }
 

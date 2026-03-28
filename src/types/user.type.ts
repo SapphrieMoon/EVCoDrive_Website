@@ -1,4 +1,5 @@
 import type { MemberProfileGroup } from "./co-owner-group.type";
+import type { PaginationParams, PaginationResponse } from "./commons/pagination.type";
 import type { SuccessResponse } from "./commons/utils.type";
 import type { MemberProfileSellHistory } from "./sell-request.type";
 
@@ -32,5 +33,22 @@ export interface MemberProfile {
     purchaseHistory: [];
     sellHistory: MemberProfileSellHistory[];
 }
+
+export interface Member {
+    memberId: string
+    accountId: string
+    email: string
+    fullName: string
+    phone: string
+    isActive: boolean
+    createdDate: string // ISO date string
+    updatedDate: string // ISO date string
+}
+
+export type MemberPaginationParams = PaginationParams & {
+    search?: string;
+}
+
+export type MemberPaginationResponse = SuccessResponse<PaginationResponse<Member>>
 
 export type MemberProfileResponse = SuccessResponse<MemberProfile>

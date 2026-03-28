@@ -1,11 +1,11 @@
 import { CardSkeleton } from "@/common/skeletons/card-skeleton"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card } from "@/components/ui/card"
-import userQueries from "@/queries/user.query"
+import { memberQueries } from "@/queries/user.query"
 import { Briefcase } from "lucide-react"
 
 export default function UserCard({ id, purpose }: { id: string, purpose: string }) {
-    const { data, isPending } = userQueries.useGetMemberProfile(id as string)
+    const { data, isPending } = memberQueries.useGetMemberProfile(id as string)
     const memberProfile = data?.data.data
 
     if (isPending) return <CardSkeleton />
