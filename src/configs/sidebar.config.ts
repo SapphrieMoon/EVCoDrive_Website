@@ -5,7 +5,7 @@ export const adminSidebar: SidebarItem[] = [
     {
         label: "Quản lý chung",
         children: [
-            { label: "Tài khoản", path: "/accounts" },
+            { label: "Tài khoản", path: path.member },
             { label: "Nhóm đồng sở hữu", path: path.coOwnerGroup },
             { label: "Hợp đồng", path: path.contract },
             { label: "Trạm kiểm tra", path: path.station },

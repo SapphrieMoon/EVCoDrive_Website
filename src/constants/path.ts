@@ -14,6 +14,7 @@ const path = {
     bookingDetail: "/bookings/:id",
     expenseFee: "/expense-fees",
     expenseFeeDetail: "/expense-fees/:id",
+    member: "/members",
 } as const
 
 export default path
