@@ -50,7 +50,7 @@ export default function ExpenseDetailPage() {
                     <ExpenseFeeForm expenseFeeId={expense.expenseFeeId} />
                 )}
                 {expense.status === ExpenseFeeStatus.Paid && (
-                    <BookingCalendar vehicleId={expense.vehicleId} />
+                    <BookingCalendar vehicleId={expense.vehicleId} expenseFeeId={expense.expenseFeeId} />
                 )}
             </div>
 
@@ -74,8 +74,14 @@ export default function ExpenseDetailPage() {
                                 </div>
                             </div>
                             <div className="text-left sm:text-right border-t sm:border-t-0 sm:border-l pt-4 sm:pt-0 sm:pl-6 border-border/60">
-                                <p className="text-[10px] font-bold text-muted-foreground uppercase mb-0.5">Ngày chi/hoá đơn</p>
-                                <p className="font-bold text-sm text-foreground">{formatDate(expense.expenseDate, false)}</p>
+                                <p className="text-[10px] font-bold text-muted-foreground uppercase mb-0.5">Ngày bảo dưỡng</p>
+                                {expense.serviceDates.length > 0 ? (
+                                    expense.serviceDates.map((date, index) => (
+                                        <p key={index} className="font-bold text-sm text-foreground">{formatDate(date, false)}</p>
+                                    ))
+                                ) : (
+                                    <p className="font-bold text-sm text-foreground">Chưa có lịch bảo dưỡng</p>
+                                )}
                             </div>
                         </div>
                     </Card>

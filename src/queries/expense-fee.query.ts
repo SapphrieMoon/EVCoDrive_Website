@@ -43,6 +43,18 @@ const expenseFeeQueries = {
                 queryClient.invalidateQueries({ queryKey: expenseFeeKey.listPagination({ pageNumber: 1, pageSize: 10 }) })
             }
         })
+    },
+
+    useScheduleService: () => {
+        const queryClient = useQueryClient()
+
+        return useMutation({
+            mutationFn: (params: { id: string, body: string[] }) => expenseFeeApi.postScheduleService(params.id, params.body),
+            onSuccess: (_, params) => {
+                queryClient.invalidateQueries({ queryKey: expenseFeeKey.detail(params.id) })
+                queryClient.invalidateQueries({ queryKey: expenseFeeKey.listPagination({ pageNumber: 1, pageSize: 10 }) })
+            }
+        })
     }
 }
 

@@ -121,8 +121,10 @@ export interface AvaliableBooking {
 
 export type AvaliableBookingResponse = SuccessResponse<PaginationResponse<AvaliableBooking>>
 
-export type AvaliableBookingParams = PaginationParams & {
+export type AvaliableBookingParams = {
     vehicleId: string;
+    month: number;
+    year: number;
 }
 
 export type BookingPaginationParams = PaginationParams & {

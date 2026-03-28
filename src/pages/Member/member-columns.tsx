@@ -60,7 +60,7 @@ export const memberColumns: ColumnDef<Member>[] = [
         cell: ({ row }) => {
             return (
                 <span className="text-sm">
-                    {formatDate(row.original.createdDate)}
+                    {formatDate(row.original.createdDate, false)}
                 </span>
             )
         }
