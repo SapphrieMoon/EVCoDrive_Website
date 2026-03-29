@@ -1,4 +1,4 @@
-import type { CoOwnerGroupDetailResponse, CoOwnerGroupListResponse, CoOwnerGroupPaginationParams, CoOwnerGroupPaginationResponse, CoOwnerGroupStatus } from "@/types/co-owner-group.type"
+import { CoOwnerGroupStatus, type CoOwnerGroupDetailResponse, type CoOwnerGroupListResponse, type CoOwnerGroupPaginationParams, type CoOwnerGroupPaginationResponse } from "@/types/co-owner-group.type"
 import http from "@/utils/http"
 
 const COOWNERGROUP_API = {
@@ -22,4 +22,7 @@ export const coOwnerGroupApi = {
     updateStatus: async (id: string, status: CoOwnerGroupStatus) =>
         await http.patch<CoOwnerGroupDetailResponse>(`${COOWNERGROUP_API.BASE}/${id}/status`, null,
             { params: { status } }),
+    rejectStatus: async (id: string, reason: string) =>
+        await http.patch<CoOwnerGroupDetailResponse>(`${COOWNERGROUP_API.BASE}/${id}/reject`, null,
+            { params: { reason } }),
 }
