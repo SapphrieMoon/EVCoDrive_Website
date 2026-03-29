@@ -24,14 +24,14 @@ export const bookingColumns: ColumnDef<Booking>[] = [
         )
     },
     {
-        accessorKey: "vehicleId",
+        accessorKey: "licensePlate",
         header: "Phương tiện",
         enableSorting: false,
         cell: ({ row }) => (
             <div className="flex flex-col">
                 <div className="flex items-center gap-1.5 font-medium text-sm">
                     <Car className="h-4 w-4 text-muted-foreground" />
-                    <span>ID: {row.original.vehicleId.slice(0, 8)}...</span>
+                    <span>{row.original.licensePlate}</span>
                 </div>
                 <span className="text-[10px] text-muted-foreground italic truncate max-w-[120px]">
                     Ghi chú: {row.original.purpose}

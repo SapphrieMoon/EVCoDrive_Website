@@ -58,6 +58,7 @@ export interface Booking {
     bookingId: string;
     memberId: string;
     vehicleId: string;
+    licensePlate: string;
     purpose: string;
     bookingStatus: BookingStatus;
     bookingCode: string;

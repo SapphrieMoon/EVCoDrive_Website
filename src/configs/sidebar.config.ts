@@ -24,7 +24,8 @@ export const adminSidebar: SidebarItem[] = [
         label: "Quản lý vận hành",
         children: [
             { label: "Quản lý đặt xe", path: path.booking },
-            { label: "Chi phí", path: path.expenseFee },
+            { label: "Quản lý biểu quyết", path: path.expenseFee },
+            { label: "Quản lý hóa đơn", path: path.invoice },
         ],
     },
 ]

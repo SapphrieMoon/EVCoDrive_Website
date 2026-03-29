@@ -75,7 +75,7 @@ export const stationColumns: ColumnDef<Station>[] = [
             const isOpen = row.original.isOpen
             const config = STATION_ISOPEN_STATUS[isOpen]
             return (
-                <Badge variant="outline" className={cn("font-medium", config?.color)}>
+                <Badge variant={config.color} className={cn("font-medium")}>
                     {config?.label}
                 </Badge>
             )
@@ -90,7 +90,7 @@ export const stationColumns: ColumnDef<Station>[] = [
             const config = STATION_STATUS_MAPPING[status]
 
             return (
-                <Badge variant="outline" className={cn("font-medium", config?.color)}>
+                <Badge variant={config.color} className={cn("font-medium")}>
                     {config?.label || status}
                 </Badge>
             )
