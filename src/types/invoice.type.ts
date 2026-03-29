@@ -45,6 +45,14 @@ export type InvoiceParams = PaginationParams & {
 
 }
 
+export interface GenerateMonthlyInvoiceRequest {
+    month: number;
+    year: number;
+    monthlyAmountPerGroup: number;
+    currency: string;
+    dueInDays: number;
+}
+
 export type InvoicePaginationResponse = SuccessResponse<PaginationResponse<Invoice>>
 
 export type InvoiceDetailResponse = SuccessResponse<Invoice>

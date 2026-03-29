@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import invoiceQueries from "@/queries/invoice.query";
 import { useState } from "react";
 import { invoiceColumns } from "./invoice-columns";
+import GenerateInvoiceForm from "./invoice-form";
 
 export default function InvoicePage() {
     //========================== Pagination ==========================
@@ -18,6 +19,7 @@ export default function InvoicePage() {
         pageSize: pagination.pageSize,
         search: search
     })
+
     return (
         <div className="space-y-2 m-4">
 
@@ -35,10 +37,7 @@ export default function InvoicePage() {
                     className="max-w-sm"
                 />
 
-                {/* <Button onClick={handleCreate}>
-                    <PlusIcon className="w-4 h-4" />
-                    Thêm trạm
-                </Button> */}
+                <GenerateInvoiceForm />
             </div>
 
             <DataTable
