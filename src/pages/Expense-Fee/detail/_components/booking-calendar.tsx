@@ -14,7 +14,7 @@ import { expenseFeeQueries } from "@/queries/expense-fee.query";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
-export default function BookingCalendar({ vehicleId, expenseFeeId }: { vehicleId?: string, expenseFeeId?: string }) {
+export default function BookingCalendar({ vehicleId, expenseFeeId, serviceDates }: { vehicleId?: string, expenseFeeId?: string, serviceDates?: string[] }) {
     const [open, setOpen] = useState(false);
 
     const today = new Date();
@@ -32,8 +32,10 @@ export default function BookingCalendar({ vehicleId, expenseFeeId }: { vehicleId
     });
 
 
-    const bookedDates =
-        data?.data?.data?.items?.flatMap((item) => item.bookedDates) || [];
+    const bookedDates = [
+        ...(data?.data?.data?.items?.flatMap((item) => item.bookedDates) || []),
+        ...(serviceDates || []),
+    ];
 
     const disabledDates = bookedDates.map((dateStr) => {
         const [y, m, d] = dateStr.split('-');

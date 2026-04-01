@@ -50,8 +50,12 @@ export default function ExpenseDetailPage() {
                 {expense.status === ExpenseFeeStatus.SubmittedToSystem && (
                     <ExpenseFeeForm expenseFeeId={expense.expenseFeeId} />
                 )}
-                {expense.status === ExpenseFeeStatus.Paid && (
-                    <BookingCalendar vehicleId={expense.vehicleId} expenseFeeId={expense.expenseFeeId} />
+                {expense.status === ExpenseFeeStatus.Paid && expense.serviceDates?.length === 0 && (
+                    <BookingCalendar
+                        vehicleId={expense.vehicleId}
+                        expenseFeeId={expense.expenseFeeId}
+                        serviceDates={expense.serviceDates}
+                    />
                 )}
             </div>
 
