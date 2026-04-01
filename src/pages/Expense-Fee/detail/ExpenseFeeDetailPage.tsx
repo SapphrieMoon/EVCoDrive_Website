@@ -12,6 +12,7 @@ import ExpenseFeeTypeCard from "./_components/expense-fee-type-card";
 import ExpenseFeeForm from "./expense-fee-form";
 import BookingCalendar from "./_components/booking-calendar";
 import { ExpenseFeeStatus } from "@/types/expense-fee.type";
+import { formatCurrency } from "@/utils/number";
 
 export default function ExpenseDetailPage() {
     const { id } = useParams<{ id: string }>();
@@ -69,7 +70,7 @@ export default function ExpenseDetailPage() {
                                         Tổng số tiền đề xuất
                                     </p>
                                     <p className="text-3xl font-bold text-emerald-600 tabular-nums">
-                                        {expense.amount.toLocaleString()} <span className="text-lg">{expense.currency}</span>
+                                        {formatCurrency(expense.amount)}
                                     </p>
                                 </div>
                             </div>

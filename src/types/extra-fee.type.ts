@@ -2,9 +2,8 @@ import type { BaseCrudFormProps } from "./commons/crud-form.type";
 import type { SuccessResponse } from "./commons/utils.type";
 
 export enum ExtraFeeStatus {
-    Pending = 'Pending',
-    Approved = 'Approved',
-    Rejected = 'Rejected',
+    Paid = 'Paid',
+    Unpaid = 'Unpaid',
 }
 
 export interface ExtraFee {
