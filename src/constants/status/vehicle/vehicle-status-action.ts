@@ -102,6 +102,8 @@ export const VEHICLE_STATUS_ACTIONS: Record<
         },
     ],
 
+    [VehicleStatus.UnderService]: [],
+
     [VehicleStatus.SaleEligible]: [],
     [VehicleStatus.SigningContract]: [],
     [VehicleStatus.Rejected]: [],
