@@ -39,4 +39,8 @@ export const VEHICLE_STATUS_MAPPING: Record<VehicleStatus, { label: string; colo
         label: "Ngừng sử dụng",
         color: "bg-gray-500/10 text-gray-500 border-gray-500/20"
     },
+    [VehicleStatus.UnderService]: {
+        label: "Đang bảo dưỡng",
+        color: "bg-teal-500/10 text-teal-500 border-teal-500/20"
+    },
 };

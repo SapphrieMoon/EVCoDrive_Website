@@ -6,10 +6,13 @@ import { extraFeeQueries } from "@/queries/extra-fee.query";
 import { formatDate } from "@/utils/date";
 import type { BookingSegment } from "@/types/booking.type";
 import ExtraFeeForm from "./extra-fee-form";
+import { formatCurrency } from "@/utils/number";
+import { EXTRA_FEE_STATUS_MAPPING } from "@/constants/status/extra-fee/extra-fee-status";
 
 export default function ExtraFeeTable({ id, segments }: { id: string, segments: BookingSegment[] }) {
     const { data: extraFeeData } = extraFeeQueries.useDetail(id)
     const extraFees = extraFeeData?.data.data
+
     return (
         <Card className="mb-6 shadow-sm border border-border rounded-lg bg-card text-card-foreground p-0 gap-0 overflow-hidden">
             {/* Header matches segment-detail style */}
@@ -21,7 +24,7 @@ export default function ExtraFeeTable({ id, segments }: { id: string, segments: 
                     {/* Thêm leading-none và đệm nhẹ để chữ căn giữa tâm hình học với vòng tròn */}
                     <h3 className="font-bold text-foreground text-lg tracking-tight leading-none pt-0.5">Phí Phụ Thu</h3>
                 </div>
-                
+
                 <ExtraFeeForm bookingId={id} segments={segments} />
             </div>
 
@@ -58,7 +61,7 @@ export default function ExtraFeeTable({ id, segments }: { id: string, segments: 
                                 <TableCell className="py-4">
                                     <div className="flex items-center text-orange-600 font-bold text-[15px]">
                                         <Ticket className="w-4 h-4 mr-2" />
-                                        {extraFee.amount} {extraFee.currency}
+                                        {formatCurrency(extraFee.amount)}
                                     </div>
                                 </TableCell>
 
@@ -78,9 +81,8 @@ export default function ExtraFeeTable({ id, segments }: { id: string, segments: 
 
                                 {/* STATUS */}
                                 <TableCell className="py-4 text-right pr-6">
-                                    <Badge variant="orange" className="font-semibold px-2.5 py-1">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-orange-500 mr-2"></div>
-                                        {extraFee.status}
+                                    <Badge variant={EXTRA_FEE_STATUS_MAPPING[extraFee.status].color} className="font-semibold px-2.5 py-1">
+                                        {EXTRA_FEE_STATUS_MAPPING[extraFee.status].label}
                                     </Badge>
                                 </TableCell>
                             </TableRow>

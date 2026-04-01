@@ -16,6 +16,7 @@ export enum VehicleStatus {
     Maintenance = "Maintenance",
     Rejected = "Rejected",
     Decommissioned = "Decommissioned",
+    UnderService = "UnderService"
 }
 
 export interface Vehicle {

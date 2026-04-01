@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { formatDate } from "@/utils/date"
-import { BookingStatus } from "@/types/booking.type"
+import { BookingStatus, type BookingSegment } from "@/types/booking.type"
 
 export function BookingDetail({ id, open, onOpenChange }: BaseDetailProps) {
     const { data, isLoading } = bookingQueries.useDetail(id as string)
@@ -153,7 +153,7 @@ export function BookingDetail({ id, open, onOpenChange }: BaseDetailProps) {
                                     Lịch sử vận hành & Bàn giao
                                 </h4>
                                 <div className="space-y-3">
-                                    {booking.segments.map((segment: any, index: number) => (
+                                    {booking.segments.map((segment: BookingSegment, index: number) => (
                                         <div key={segment.handoverLogId || index} className="rounded-xl border p-4 space-y-3 bg-card shadow-sm">
                                             <div className="flex justify-between items-center border-b pb-2">
                                                 <p className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">

@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import INVOICE_STATUS_MAPPING from "@/constants/status/invoice/invoice-status";
 import { cn } from "@/lib/utils";
 import type { Invoice } from "@/types/invoice.type";
+import { formatCurrency } from "@/utils/number";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Calendar, FileText } from "lucide-react";
 
@@ -33,11 +34,11 @@ export const invoiceColumns: ColumnDef<Invoice>[] = [
         header: "Số tiền",
         enableSorting: false,
         cell: ({ row }) => {
-            const { totalAmount, currency } = row.original;
+            const { totalAmount } = row.original;
 
             return (
                 <span className="font-medium text-sm">
-                    {totalAmount.toLocaleString()} {currency}
+                    {formatCurrency(totalAmount)}
                 </span>
             );
         }
