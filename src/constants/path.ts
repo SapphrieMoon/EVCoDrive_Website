@@ -1,5 +1,6 @@
 const path = {
     home: '/',
+    dashboard: '/dashboard',
     login: '/login',
     vehicleBrand: '/vehicle-brands',
     vehicleModel: '/vehicle-models',
