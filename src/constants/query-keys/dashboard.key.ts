@@ -4,4 +4,5 @@ export const dashboardKey = {
     overview: (params?: DashboardParams) => ["dashboard", "overview", params],
     revenueChart: (params?: DashboardParams) => ["dashboard", "revenue-chart", params],
     bookingChart: (params?: DashboardParams) => ["dashboard", "booking-chart", params],
+    topVehicle: (params?: DashboardParams) => ["dashboard", "top-vehicle", params],
 }

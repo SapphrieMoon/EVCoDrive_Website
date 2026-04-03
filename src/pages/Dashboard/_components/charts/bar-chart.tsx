@@ -1,13 +1,13 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
-import { Bar, BarChart, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, XAxis, YAxis, CartesianGrid } from "recharts"
+import dayjs from "dayjs"
+import weekOfYear from "dayjs/plugin/weekOfYear"
 
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
@@ -19,91 +19,69 @@ import {
 } from "@/components/ui/chart"
 import type { ChartData, GroupByEnum } from "@/types/dashboard.type"
 
-export const description = "A mixed bar chart"
+import { formatTick } from "@/utils/date"
 
-const chartData = [
-    { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-    { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-    { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-    { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-    { browser: "other", visitors: 90, fill: "var(--color-other)" },
-]
+dayjs.extend(weekOfYear)
 
 const chartConfig = {
-    visitors: {
-        label: "Visitors",
-    },
-    chrome: {
-        label: "Chrome",
-        color: "var(--chart-1)",
-    },
-    safari: {
-        label: "Safari",
+    value: {
+        label: "Lượt đặt xe",
         color: "var(--chart-2)",
-    },
-    firefox: {
-        label: "Firefox",
-        color: "var(--chart-3)",
-    },
-    edge: {
-        label: "Edge",
-        color: "var(--chart-4)",
-    },
-    other: {
-        label: "Other",
-        color: "var(--chart-5)",
     },
 } satisfies ChartConfig
 
-export function ChartBarMixed({ data, groupBy, onChangeGroupBy }: {
-    data?: ChartData[],
-    groupBy: GroupByEnum,
-    onChangeGroupBy: (groupBy: GroupByEnum) => void
+
+export function ChartBarMixed({ data, groupBy }: {
+    data?: ChartData[]
+    groupBy: GroupByEnum
 }) {
     if (!data) return null
+
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Bar Chart - Mixed</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
+                <CardTitle>Đặt xe</CardTitle>
+                <CardDescription>
+                    Số lượng xe đã được đặt theo thời gian
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig}>
                     <BarChart
                         accessibilityLayer
-                        data={chartData}
-                        layout="vertical"
-                        margin={{
-                            left: 0,
-                        }}
+                        data={data}
+                        margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
                     >
-                        <YAxis
-                            dataKey="browser"
-                            type="category"
+                        <CartesianGrid vertical={false} />
+                        <XAxis
+                            dataKey="time"
                             tickLine={false}
-                            tickMargin={10}
                             axisLine={false}
-                            tickFormatter={(value) =>
-                                chartConfig[value as keyof typeof chartConfig]?.label
-                            }
+                            tickMargin={8}
+                            tickFormatter={(value) => formatTick(value, groupBy)}
                         />
-                        <XAxis dataKey="visitors" type="number" hide />
+                        <YAxis
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={8}
+                            width={32}
+                        />
                         <ChartTooltip
                             cursor={false}
-                            content={<ChartTooltipContent hideLabel />}
+                            content={
+                                <ChartTooltipContent
+                                    labelFormatter={(value) => formatTick(value, groupBy)}
+                                />
+                            }
                         />
-                        <Bar dataKey="visitors" radius={5} />
+                        <Bar
+                            dataKey="value"
+                            fill="var(--color-value)"
+                            radius={4}
+                        />
                     </BarChart>
                 </ChartContainer>
             </CardContent>
-            <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="flex gap-2 leading-none font-medium">
-                    Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-                </div>
-                <div className="leading-none text-muted-foreground">
-                    Showing total visitors for the last 6 months
-                </div>
-            </CardFooter>
         </Card>
     )
 }

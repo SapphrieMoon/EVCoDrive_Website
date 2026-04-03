@@ -39,3 +39,16 @@ export interface ChartData {
     time: string;
     value: number;
 }
+
+export type TopVehicleParams = {
+    Limit?: number;
+    From?: string;
+    To?: string;
+}
+
+export interface TopVehicleList {
+    model: string;
+    brand: string;
+    usageCount: number;
+}
+

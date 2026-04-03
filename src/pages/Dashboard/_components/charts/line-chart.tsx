@@ -1,13 +1,11 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
-import { CartesianGrid, LabelList, Line, LineChart, XAxis } from "recharts"
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
 
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
@@ -18,40 +16,36 @@ import {
     type ChartConfig,
 } from "@/components/ui/chart"
 import type { ChartData, GroupByEnum } from "@/types/dashboard.type"
-import { formatDate } from "@/utils/date"
+import { formatTick } from "@/utils/date"
 
-export const description = "A line chart with a label"
 
 const chartConfig = {
     value: {
-        label: "Revenue",
+        label: "Doanh thu",
         color: "var(--chart-1)",
     },
 } satisfies ChartConfig
 
-export function ChartLineLabel({ data, groupBy, onChangeGroupBy }: {
-    data?: ChartData[],
-    groupBy: GroupByEnum,
-    onChangeGroupBy: (groupBy: GroupByEnum) => void
+export function ChartLineLabel({ data, groupBy }: {
+    data?: ChartData[]
+    groupBy: GroupByEnum
 }) {
-
     if (!data) return null
+
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Line Chart - Label</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
+                <CardTitle>Doanh thu</CardTitle>
+                <CardDescription>
+                    Doanh thu theo thời gian
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig}>
                     <LineChart
                         accessibilityLayer
                         data={data}
-                        margin={{
-                            top: 20,
-                            left: 12,
-                            right: 12,
-                        }}
+                        margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
                     >
                         <CartesianGrid vertical={false} />
                         <XAxis
@@ -59,42 +53,41 @@ export function ChartLineLabel({ data, groupBy, onChangeGroupBy }: {
                             tickLine={false}
                             axisLine={false}
                             tickMargin={8}
-                            tickFormatter={(value) => formatDate(value)}
+                            tickFormatter={(value) => formatTick(value, groupBy)}
+                        />
+                        <YAxis
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={8}
+                            width={48}
+                            tickFormatter={(value) =>
+                                value >= 1_000_000
+                                    ? `${(value / 1_000_000).toFixed(1)}M`
+                                    : value >= 1_000
+                                        ? `${(value / 1_000).toFixed(0)}K`
+                                        : value
+                            }
                         />
                         <ChartTooltip
                             cursor={false}
-                            content={<ChartTooltipContent indicator="line" />}
+                            content={
+                                <ChartTooltipContent
+                                    indicator="line"
+                                    labelFormatter={(value) => formatTick(value, groupBy)}
+                                />
+                            }
                         />
                         <Line
                             dataKey="value"
                             type="natural"
                             stroke="var(--color-value)"
                             strokeWidth={2}
-                            dot={{
-                                fill: "var(--color-value)",
-                            }}
-                            activeDot={{
-                                r: 6,
-                            }}
-                        >
-                            {/* <LabelList
-                                position="top"
-                                offset={12}
-                                className="fill-foreground"
-                                fontSize={12}
-                            /> */}
-                        </Line>
+                            dot={{ fill: "var(--color-value)" }}
+                            activeDot={{ r: 6 }}
+                        />
                     </LineChart>
                 </ChartContainer>
             </CardContent>
-            <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="flex gap-2 leading-none font-medium">
-                    Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-                </div>
-                <div className="leading-none text-muted-foreground">
-                    Showing total visitors for the last 6 months
-                </div>
-            </CardFooter>
         </Card>
     )
 }
