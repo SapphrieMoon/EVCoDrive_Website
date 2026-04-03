@@ -1,8 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/utils/number";
 import { DollarSign, TrendingUp } from "lucide-react";
+import type { Overview } from "@/types/dashboard.type";
 
-export function RevenueCard({ data }: { data: any }) {
+export function RevenueCard({ data }: { data: Overview }) {
     return (
         <Card>
             <CardContent className="p-4 space-y-2">

@@ -1,7 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
+import type { Overview } from "@/types/dashboard.type";
 import { TrendingUp, Users } from "lucide-react";
 
-export function UserCard({ data }: { data: any }) {
+export function UserCard({ data }: { data: Overview }) {
     return (
         <Card>
             <CardContent className="p-4 space-y-2">
