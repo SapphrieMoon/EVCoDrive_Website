@@ -17,30 +17,25 @@ import {
     ChartTooltipContent,
     type ChartConfig,
 } from "@/components/ui/chart"
+import type { ChartData, GroupByEnum } from "@/types/dashboard.type"
+import { formatDate } from "@/utils/date"
 
 export const description = "A line chart with a label"
 
-const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-]
-
 const chartConfig = {
-    desktop: {
-        label: "Desktop",
+    value: {
+        label: "Revenue",
         color: "var(--chart-1)",
-    },
-    mobile: {
-        label: "Mobile",
-        color: "var(--chart-2)",
     },
 } satisfies ChartConfig
 
-export function ChartLineLabel() {
+export function ChartLineLabel({ data, groupBy, onChangeGroupBy }: {
+    data?: ChartData[],
+    groupBy: GroupByEnum,
+    onChangeGroupBy: (groupBy: GroupByEnum) => void
+}) {
+
+    if (!data) return null
     return (
         <Card>
             <CardHeader>
@@ -51,7 +46,7 @@ export function ChartLineLabel() {
                 <ChartContainer config={chartConfig}>
                     <LineChart
                         accessibilityLayer
-                        data={chartData}
+                        data={data}
                         margin={{
                             top: 20,
                             left: 12,
@@ -60,34 +55,34 @@ export function ChartLineLabel() {
                     >
                         <CartesianGrid vertical={false} />
                         <XAxis
-                            dataKey="month"
+                            dataKey="time"
                             tickLine={false}
                             axisLine={false}
                             tickMargin={8}
-                            tickFormatter={(value) => value.slice(0, 3)}
+                            tickFormatter={(value) => formatDate(value)}
                         />
                         <ChartTooltip
                             cursor={false}
                             content={<ChartTooltipContent indicator="line" />}
                         />
                         <Line
-                            dataKey="desktop"
+                            dataKey="value"
                             type="natural"
-                            stroke="var(--color-desktop)"
+                            stroke="var(--color-value)"
                             strokeWidth={2}
                             dot={{
-                                fill: "var(--color-desktop)",
+                                fill: "var(--color-value)",
                             }}
                             activeDot={{
                                 r: 6,
                             }}
                         >
-                            <LabelList
+                            {/* <LabelList
                                 position="top"
                                 offset={12}
                                 className="fill-foreground"
                                 fontSize={12}
-                            />
+                            /> */}
                         </Line>
                     </LineChart>
                 </ChartContainer>

@@ -1,3 +1,6 @@
+import type { GroupByEnum } from "@/types/dashboard.type"
+import dayjs from "dayjs"
+
 export const formatDate = (
     dateString: string | undefined | null,
     includeTime: boolean = true // Mặc định là có giờ
@@ -39,3 +42,25 @@ export const formatTime = (date: string | Date | undefined): string => {
     // Nếu phút = 0 thì chỉ hiện "6h", ngược lại hiện "6h30"
     return minutes === 0 ? `${hours}h` : `${hours}h${minutes.toString().padStart(2, '0')}`;
 };
+
+export const getRange = (groupBy: GroupByEnum) => {
+    const now = dayjs()
+
+    switch (groupBy) {
+        case "day":
+            return {
+                from: now.subtract(7, "day").toISOString(),
+                to: now.toISOString(),
+            }
+        case "week":
+            return {
+                from: now.subtract(8, "week").toISOString(),
+                to: now.toISOString(),
+            }
+        case "month":
+            return {
+                from: now.subtract(6, "month").toISOString(),
+                to: now.toISOString(),
+            }
+    }
+}

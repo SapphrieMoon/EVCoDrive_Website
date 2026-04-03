@@ -17,6 +17,7 @@ import {
     ChartTooltipContent,
     type ChartConfig,
 } from "@/components/ui/chart"
+import type { ChartData, GroupByEnum } from "@/types/dashboard.type"
 
 export const description = "A mixed bar chart"
 
@@ -54,7 +55,12 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
-export function ChartBarMixed() {
+export function ChartBarMixed({ data, groupBy, onChangeGroupBy }: {
+    data?: ChartData[],
+    groupBy: GroupByEnum,
+    onChangeGroupBy: (groupBy: GroupByEnum) => void
+}) {
+    if (!data) return null
     return (
         <Card>
             <CardHeader>

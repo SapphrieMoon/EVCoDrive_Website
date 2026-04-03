@@ -1,3 +1,18 @@
+export const GroupByEnum = {
+    Day: "day",
+    Week: "week",
+    Month: "month",
+    Year: "year",
+} as const
+
+export type GroupByEnum = typeof GroupByEnum[keyof typeof GroupByEnum]
+
+export type DashboardParams = {
+    From?: string;
+    To?: string;
+    GroupBy?: GroupByEnum
+}
+
 export interface Overview {
     totalUsers: number;
     activeUsers: number;
@@ -18,4 +33,9 @@ export interface Overview {
         revenuePercent: number;
         bookingsPercent: number;
     };
+}
+
+export interface ChartData {
+    time: string;
+    value: number;
 }

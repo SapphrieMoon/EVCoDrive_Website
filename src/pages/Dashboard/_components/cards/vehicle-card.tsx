@@ -2,7 +2,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import type { Overview } from "@/types/dashboard.type";
 import { Car } from "lucide-react";
 
-export function VehicleCard({ data }: { data: Overview }) {
+export function VehicleCard({ data }: { data?: Overview }) {
+    if (!data) return null
     return (
         <Card>
             <CardContent className="p-4 space-y-2">

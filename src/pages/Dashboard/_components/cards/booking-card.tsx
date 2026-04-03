@@ -2,7 +2,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import type { Overview } from "@/types/dashboard.type";
 import { Calendar, TrendingUp } from "lucide-react";
 
-export function BookingCard({ data }: { data: Overview }) {
+export function BookingCard({ data }: { data?: Overview }) {
+    if (!data) return null
     return (
         <Card>
             <CardContent className="p-4 space-y-2">

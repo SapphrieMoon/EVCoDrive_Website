@@ -3,7 +3,8 @@ import { formatCurrency } from "@/utils/number";
 import { DollarSign, TrendingUp } from "lucide-react";
 import type { Overview } from "@/types/dashboard.type";
 
-export function RevenueCard({ data }: { data: Overview }) {
+export function RevenueCard({ data }: { data?: Overview }) {
+    if (!data) return null
     return (
         <Card>
             <CardContent className="p-4 space-y-2">

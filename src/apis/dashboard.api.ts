@@ -1,4 +1,4 @@
-import type { Overview } from "@/types/dashboard.type"
+import type { ChartData, DashboardParams, Overview } from "@/types/dashboard.type"
 import http from "@/utils/http"
 
 const DASHBOARD_URL = {
@@ -6,6 +6,10 @@ const DASHBOARD_URL = {
 }
 
 export const dashboardApi = {
-    getAdminDashboard: async () =>
-        await http.get<Overview>(`${DASHBOARD_URL.ADMIN_DASHBOARD}/overview`),
+    getAdminDashboard: async (params?: DashboardParams) =>
+        await http.get<Overview>(`${DASHBOARD_URL.ADMIN_DASHBOARD}/overview`, { params }),
+    getAdminRevenueChart: async (params?: DashboardParams) =>
+        await http.get<ChartData[]>(`${DASHBOARD_URL.ADMIN_DASHBOARD}/revenue-chart`, { params }),
+    getAdminBookingChart: async (params?: DashboardParams) =>
+        await http.get<ChartData[]>(`${DASHBOARD_URL.ADMIN_DASHBOARD}/booking-chart`, { params }),
 }
