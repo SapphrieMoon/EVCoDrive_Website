@@ -1,6 +1,7 @@
 import { TableActionCell } from "@/common/table-action-cell";
 import { Badge } from "@/components/ui/badge";
-import { CONTRACT_STATUSES, CONTRACT_TYPES, type Contract } from "@/types/contract.type";
+import { CONTRACT_STATUS_MAPPING } from "@/constants/status/contract/contract-status";
+import { type Contract } from "@/types/contract.type";
 import { formatDate } from "@/utils/date";
 import type { ColumnDef } from "@tanstack/react-table";
 import { CheckCircle2, XCircle } from "lucide-react";
@@ -17,24 +18,24 @@ export const contractColumns: ColumnDef<Contract>[] = [
         header: "Tiêu đề",
         enableSorting: false,
     },
-    {
-        accessorKey: "contractType",
-        header: "Loại",
-        enableSorting: false,
-        cell: ({ row }) => {
-            const type = row.original.contractType as keyof typeof CONTRACT_TYPES;
-            const config = CONTRACT_TYPES[type] || { label: "N/A", variant: "outline" };
-            return <Badge variant={config.variant}>{config.label}</Badge>;
-        }
-    },
+    // {
+    //     accessorKey: "contractTypeName",
+    //     header: "Loại",
+    //     enableSorting: false,
+    //     cell: ({ row }) => {
+    //         const type = row.original.contractType as keyof typeof CONTRACT_TYPES;
+    //         const config = CONTRACT_TYPES[type] || { label: "N/A", variant: "outline" };
+    //         return <Badge variant={config.variant}>{config.label}</Badge>;
+    //     }
+    // },
     {
         accessorKey: "contractStatuses",
         header: "Trạng thái",
         enableSorting: false,
         cell: ({ row }) => {
-            const status = row.original.contractStatuses as keyof typeof CONTRACT_STATUSES;
-            const config = CONTRACT_STATUSES[status] || { label: "N/A", variant: "secondary" };
-            return <Badge variant={config.variant as any}>{config.label}</Badge>;
+            const status = row.original.contractStatuses;
+            const config = CONTRACT_STATUS_MAPPING[status] ?? { label: "N/A", color: "secondary" };
+            return <Badge variant={config.color}>{config.label}</Badge>;
         }
     },
     {

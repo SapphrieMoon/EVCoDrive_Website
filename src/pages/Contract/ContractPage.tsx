@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import contractQueries from "@/queries/contract.query";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
-import { contractColumns } from "./contract.columns";
+import { contractColumns } from "./contract-columns";
 
 export default function ContractPage() {
     //========================== Pagination ==========================
