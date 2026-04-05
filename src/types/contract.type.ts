@@ -1,29 +1,34 @@
 import type { PaginationParams, PaginationResponse } from "./commons/pagination.type"
 import type { SuccessResponse } from "./commons/utils.type"
 
-export const CONTRACT_TYPES = {
-    0: { label: "Mua bán", variant: "default" },
-    1: { label: "Đăng ký xe", variant: "outline" },
-} as const;
 
 export const CONTRACT_STATUSES = {
-    0: { label: "Bản nháp", variant: "secondary", color: "text-gray-500" },
-    1: { label: "Hoàn thành", variant: "success", color: "text-green-600" },
-    2: { label: "Đã hủy", variant: "destructive", color: "text-red-600" },
+    Completed: "Completed",
+    Draft: "Draft",
 } as const;
+
+export type ContractStatus = typeof CONTRACT_STATUSES[keyof typeof CONTRACT_STATUSES]
 
 export interface Contract {
     contractId: string
-    contractType: number
+    contractTypeId: string
+    contractTypeName: string
+    contractTypeCode: string
+    vehicleId: string | null
+    vehicleModelName: string | null
+    partyAEmail: string | null
+    partyBEmail: string | null
     buyRequestId: string | null
     partyAId: string
+    partyAName: string
     partyBId: string | null
+    partyBName: string | null
     contractNumber: string
     title: string
     description: string
     fileUrl: string
     signedDate: string
-    contractStatuses: number
+    contractStatuses: ContractStatus
     partyAVerifiedAt: string | null
     partyAVerifiedEmail: string | null
     partyBVerifiedAt: string | null
