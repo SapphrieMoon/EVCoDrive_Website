@@ -5,6 +5,7 @@ import contractQueries from "@/queries/contract.query";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { contractColumns } from "./contract-columns";
+import { ContractDetail } from "./contract-detail";
 
 export default function ContractPage() {
     //========================== Pagination ==========================
@@ -20,6 +21,16 @@ export default function ContractPage() {
         pageSize: pagination.pageSize,
         searchTerm: search
     })
+
+    //========================== Detail ==========================
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
+    const [selectedId, setSelectedId] = useState<string | null>(null);
+
+    const handleViewDetail = (id: string) => {
+        setSelectedId(id);
+        setIsDetailOpen(true);
+    }
+
     return (
         <div className="space-y-2 m-4">
 
@@ -49,9 +60,19 @@ export default function ContractPage() {
                 pageCount={data?.data.data.totalPages ?? 0}
                 pagination={pagination}
                 onPaginationChange={setPagination}
-
+                meta={{
+                    onViewDetail: handleViewDetail,
+                }}
                 isLoading={isFetching}
             />
+
+            {selectedId && (
+                <ContractDetail
+                    id={selectedId}
+                    open={isDetailOpen}
+                    onOpenChange={setIsDetailOpen}
+                />
+            )}
         </div>
     )
 }

@@ -43,6 +43,34 @@ const contractQueries = {
         })
     },
 
+    useGetPDF: () => {
+        return useMutation({
+            mutationFn: (id: string) => contractApi.getPDF(id),
+
+            onSuccess: (response, id) => {
+                const blob = response.data; // đã là Blob
+
+                const url = window.URL.createObjectURL(blob);
+
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `contract-${id}.pdf`;
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                window.URL.revokeObjectURL(url);
+
+                toast.success("Tải xuống thành công");
+            },
+
+            onError: () => {
+                toast.error("Tải xuống thất bại");
+            }
+        });
+    }
+
 }
 
 export default contractQueries

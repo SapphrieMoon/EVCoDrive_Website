@@ -14,7 +14,9 @@ const contractApi = {
     delete: async (id: string) =>
         await http.delete(`${CONTRACT_URL.BASE}/${id}`),
     getDetail: async (id: string) =>
-        await http.get<ContractDetailResponse>(`${CONTRACT_URL.BASE}/${id}`)
+        await http.get<ContractDetailResponse>(`${CONTRACT_URL.BASE}/${id}`),
+    getPDF: async (id: string) =>
+        await http.get(`${CONTRACT_URL.BASE}/${id}/pdf`, { responseType: "blob" })
 }
 
 export default contractApi
