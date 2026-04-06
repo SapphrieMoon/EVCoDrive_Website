@@ -10,6 +10,7 @@ import SegmentDetail from "./_components/segment-detail"
 import { useState, useEffect } from "react"
 import { BOOKING_STATUS_MAPPING } from "@/constants/status/booking/booking-status"
 import ExtraFeeTable from "./_components/extra-fee-table"
+import BookingCancelation from "./_components/booking-cancelation"
 
 export default function BookingDetailPage() {
     const { id } = useParams<{ id: string }>()
@@ -50,9 +51,14 @@ export default function BookingDetailPage() {
                         <p className="text-sm text-muted-foreground">{booking.bookingId}</p>
                     </div>
 
-                    <Badge className="cursor-pointer uppercase tracking-widest px-3 py-1.5 font-bold p-4" variant={configStatus?.color}>
-                        {configStatus?.label}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                        {booking.bookingStatus === "Booked" && (
+                            <BookingCancelation bookingId={booking.bookingId} />
+                        )}
+                        <Badge className="cursor-pointer uppercase tracking-widest px-3 py-1.5 font-bold p-4" variant={configStatus?.color}>
+                            {configStatus?.label}
+                        </Badge>
+                    </div>
                 </div>
             </div>
 
