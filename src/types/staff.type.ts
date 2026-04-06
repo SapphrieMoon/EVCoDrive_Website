@@ -1,3 +1,4 @@
+import type { BaseCrudFormProps } from "./commons/crud-form.type";
 import type { PaginationParams, PaginationResponse } from "./commons/pagination.type";
 import type { SuccessResponse } from "./commons/utils.type";
 
@@ -21,3 +22,6 @@ export type StaffPaginationParams = PaginationParams & {
 export type StaffPaginationResponse = SuccessResponse<PaginationResponse<Staff>>
 
 export type StaffResponse = SuccessResponse<Staff>
+
+
+export type StaffFormProps = BaseCrudFormProps & {}

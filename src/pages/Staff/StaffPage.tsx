@@ -4,6 +4,9 @@ import staffQueries from "@/queries/staff.query";
 import { useState } from "react";
 import { staffColumns } from "./staff-columns";
 import { StaffDetail } from "./staff-detail";
+import { StaffForm } from "./staff-form";
+import { PlusIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function StaffPage() {
     //========================== Pagination ==========================
@@ -29,6 +32,22 @@ export default function StaffPage() {
         setSelectedId(id);
         setIsDetailOpen(true);
     }
+    //========================== Form ==========================
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogMode, setDialogMode] = useState<"create" | "update">("create");
+    const [editingId, setEditingId] = useState<string | undefined>(undefined);
+
+    const handleCreate = () => {
+        setDialogMode("create");
+        setEditingId(undefined);
+        setDialogOpen(true);
+    };
+
+    const handleEdit = (id: string) => {
+        setDialogMode("update");
+        setEditingId(id);
+        setDialogOpen(true);
+    };
 
     return (
         <div className="space-y-2 m-4">
@@ -42,15 +61,15 @@ export default function StaffPage() {
                     value={search}
                     onChange={(e) => {
                         setSearch(e.target.value);
-                        setPagination(prev => ({ ...prev, pageIndex: 0 }));
+                        setPagination((prev: any) => ({ ...prev, pageIndex: 0 }));
                     }}
                     className="max-w-sm"
                 />
 
-                {/* <Button onClick={handleCreate}>
-                    <PlusIcon className="w-4 h-4" />
+                <Button onClick={handleCreate}>
+                    <PlusIcon className="w-4 h-4 mr-2" />
                     Thêm nhân viên mới
-                </Button> */}
+                </Button>
             </div>
 
             <DataTable
@@ -61,7 +80,7 @@ export default function StaffPage() {
                 onPaginationChange={setPagination}
                 meta={{
                     onViewDetail: handleViewDetail,
-                    // onEdit: handleEdit
+                    onEdit: handleEdit
                 }}
 
                 isLoading={isFetching}
@@ -75,12 +94,12 @@ export default function StaffPage() {
                 />
             )}
 
-            {/* <StationForm
+            <StaffForm
                 open={dialogOpen}
                 onOpenChange={setDialogOpen}
                 mode={dialogMode}
                 id={editingId}
-            /> */}
+            />
         </div>
     )
 }
