@@ -25,6 +25,7 @@ const ExpenseFeeDetailPage = lazy(() => import("@/pages/Expense-Fee/detail/index
 const MemberPage = lazy(() => import("@/pages/Member"));
 const InvoicePage = lazy(() => import("@/pages/Invoice"));
 const DashboardPage = lazy(() => import("@/pages/Dashboard"));
+const StaffPage = lazy(() => import("@/pages/Staff"));
 // const MainLayout = lazy(() => import("@/layouts/MainLayout"));
 // const PublicLayout = lazy(() => import("@/layouts/PublicLayout"));
 // const NotFound = lazy(() => import("@/pages/NotFound"));
@@ -80,6 +81,7 @@ export default function useRouteElements() {
                         { path: path.member, element: <MemberPage /> },
                         { path: path.invoice, element: <InvoicePage /> },
                         { path: path.dashboard, element: <DashboardPage /> },
+                        { path: path.staff, element: <StaffPage /> },
                     ]
                 }
             ]

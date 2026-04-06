@@ -117,6 +117,22 @@ const bookingQueries = {
             placeholderData: (previousData) => previousData,
         })
     },
+
+    useDeleteBooking: () => {
+        const queryClient = useQueryClient();
+        return useMutation({
+            mutationFn: ({ bookingId, cancellationReason }: { bookingId: string; cancellationReason: string }) =>
+                bookingApi.deleteBooking(bookingId, cancellationReason),
+            onSuccess: (_, { bookingId }) => {
+                queryClient.invalidateQueries({
+                    queryKey: bookingKey.lists(),
+                });
+                queryClient.invalidateQueries({
+                    queryKey: bookingKey.detail(bookingId),
+                });
+            },
+        });
+    },
 }
 
 export default bookingQueries

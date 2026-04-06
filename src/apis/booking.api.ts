@@ -53,6 +53,8 @@ const bookingApi = {
     },
     getAvaliableBooking: async ({ vehicleId, ...params }: AvaliableBookingParams) =>
         await http.get<AvaliableBookingPaginationResponse>(`${BOOKING_URL.BASE}/vehicle/${vehicleId}`, { params }),
+    deleteBooking: async (bookingId: string, cancellationReason: string) =>
+        await http.delete(`${BOOKING_URL.BASE}/${bookingId}`, { params: { cancellationReason } }),
 }
 
 export default bookingApi
