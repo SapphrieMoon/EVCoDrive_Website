@@ -37,6 +37,7 @@ export const SegmentStatus = {
     Pending: "Pending",
     CheckedIn: "CheckedIn",
     CheckedOut: "CheckedOut",
+    Cancelled: "Cancelled",
     // HandedOver: "HandedOver",
     // Returned: "Returned",
 } as const

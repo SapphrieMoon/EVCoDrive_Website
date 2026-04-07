@@ -14,4 +14,8 @@ export const SEGMENT_STATUS_MAPPING: Record<SegmentStatus, { label: string; colo
         label: "Đã trả xe",
         color: "green"
     },
+    [SegmentStatus.Cancelled]: {
+        label: "Đã hủy",
+        color: "red"
+    },
 }

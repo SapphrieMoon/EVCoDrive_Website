@@ -53,7 +53,7 @@ export default function BookingDetailPage() {
 
                     <div className="flex items-center gap-2">
                         {booking.bookingStatus === "Booked" && (
-                            <BookingCancelation bookingId={booking.bookingId} />
+                            <BookingCancelation bookingId={booking.bookingId} segments={sortedSegments} />
                         )}
                         <Badge className="cursor-pointer uppercase tracking-widest px-3 py-1.5 font-bold p-4" variant={configStatus?.color}>
                             {configStatus?.label}
