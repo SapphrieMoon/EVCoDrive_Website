@@ -121,8 +121,8 @@ const bookingQueries = {
     useDeleteBooking: () => {
         const queryClient = useQueryClient();
         return useMutation({
-            mutationFn: ({ bookingId, cancellationReason }: { bookingId: string; cancellationReason: string }) =>
-                bookingApi.deleteBooking(bookingId, cancellationReason),
+            mutationFn: ({ bookingId, cancellationReason, handoverLogId }: { bookingId: string; cancellationReason: string; handoverLogId?: string }) =>
+                bookingApi.deleteBooking(bookingId, cancellationReason, handoverLogId),
             onSuccess: (_, { bookingId }) => {
                 queryClient.invalidateQueries({
                     queryKey: bookingKey.lists(),

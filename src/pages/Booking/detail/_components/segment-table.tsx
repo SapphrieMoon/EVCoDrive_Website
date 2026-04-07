@@ -29,6 +29,7 @@ export default function SegmentTable({ segments, selectedSegmentId, onSelectSegm
             case SegmentStatus.Pending: return { dot: 'bg-teal-500', text: 'text-teal-500', label: config.label };
             case SegmentStatus.CheckedIn: return { dot: 'bg-blue-500', text: 'text-blue-500', label: config.label };
             case SegmentStatus.CheckedOut: return { dot: 'bg-green-500', text: 'text-green-500', label: config.label };
+            case SegmentStatus.Cancelled: return { dot: 'bg-red-500', text: 'text-red-500', label: config.label };
             default: return { dot: 'bg-muted-foreground', text: 'text-muted-foreground', label: config.label };
         }
     };
