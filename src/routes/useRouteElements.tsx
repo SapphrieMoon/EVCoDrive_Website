@@ -26,6 +26,7 @@ const MemberPage = lazy(() => import("@/pages/Member"));
 const InvoicePage = lazy(() => import("@/pages/Invoice"));
 const DashboardPage = lazy(() => import("@/pages/Dashboard"));
 const StaffPage = lazy(() => import("@/pages/Staff"));
+const WithdrawPage = lazy(() => import("@/pages/Withdraw"));
 // const MainLayout = lazy(() => import("@/layouts/MainLayout"));
 // const PublicLayout = lazy(() => import("@/layouts/PublicLayout"));
 // const NotFound = lazy(() => import("@/pages/NotFound"));
@@ -82,6 +83,7 @@ export default function useRouteElements() {
                         { path: path.invoice, element: <InvoicePage /> },
                         { path: path.dashboard, element: <DashboardPage /> },
                         { path: path.staff, element: <StaffPage /> },
+                        { path: path.withdraw, element: <WithdrawPage /> },
                     ]
                 }
             ]
