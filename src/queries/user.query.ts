@@ -17,6 +17,13 @@ const memberQueries = {
             queryFn: () => userApi.getMemberProfile(id),
             enabled: !!id,
         })
+    },
+
+    useGetUserProfile: () => {
+        return useQuery({
+            queryKey: memberKey.profile('profile'),
+            queryFn: () => userApi.getUserProfile(),
+        })
     }
 }
 

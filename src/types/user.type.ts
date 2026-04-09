@@ -45,6 +45,28 @@ export interface Member {
     updatedDate: string // ISO date string
 }
 
+export interface UserProfile {
+    id: string;
+    email: string;
+    identityCode: string;
+    fullName: string;
+    phone: string;
+    dateOfBirth: string; // ISO string hoặc empty
+    gender: string;
+    nationality: string;
+    homeTown: string;
+    address: string;
+    latitude: number;
+    longitude: number;
+    avatarUrl: string;
+    role: UserRole;
+    isActive: boolean;
+    createdAt: string; // ISO date
+    updatedAt: string | null;
+}
+
+export type UserProfileResponse = SuccessResponse<UserProfile>
+
 export type MemberPaginationParams = PaginationParams & {
     search?: string;
 }
