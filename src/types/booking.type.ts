@@ -131,6 +131,7 @@ export type AvaliableBookingParams = {
 
 export type BookingPaginationParams = PaginationParams & {
     bookingCode?: string,
+    bookedDate?: string,
 }
 
 export type BookingPaginationResponse = SuccessResponse<PaginationResponse<Booking>>

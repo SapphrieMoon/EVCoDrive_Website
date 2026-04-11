@@ -4,7 +4,11 @@ import { Button } from "@/components/ui/button";
 import bookingQueries from "@/queries/booking.query";
 import { useState, useRef } from "react";
 import { bookingColumns } from "./booking-columns";
-import { ScanFace, Camera, X } from "lucide-react";
+import { ScanFace, Camera, X, Calendar as CalendarIcon } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 export default function BookingPage() {
     //========================== Pagination ==========================
@@ -14,11 +18,13 @@ export default function BookingPage() {
     })
 
     const [search, setSearch] = useState("");
+    const [date, setDate] = useState<Date>();
 
     const { data, isFetching } = bookingQueries.usePagination({
         pageNumber: pagination.pageIndex + 1,
         pageSize: pagination.pageSize,
-        bookingCode: search
+        bookingCode: search,
+        bookedDate: date ? format(date, "yyyy-MM-dd") : ""
     })
 
     //========================== Face Search Booking ==========================
@@ -43,14 +49,56 @@ export default function BookingPage() {
             <div className="flex items-center py-4 justify-between mt-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center w-full">
                     <Input
-                        placeholder="Tìm kiếm lịch đặt xe..."
+                        placeholder="Tìm kiếm theo mã..."
                         value={search}
                         onChange={(e) => {
                             setSearch(e.target.value);
                             setPagination(prev => ({ ...prev, pageIndex: 0 }));
                         }}
-                        className="max-w-sm"
+                        className="max-w-[200px]"
                     />
+
+                    <div className="flex items-center gap-1">
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant={"outline"}
+                                    className={cn(
+                                        "w-[200px] justify-start text-left font-normal",
+                                        !date && "text-muted-foreground"
+                                    )}
+                                >
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    {date ? format(date, "dd/MM/yyyy") : <span>Chọn ngày đặt xe</span>}
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                                <Calendar
+                                    mode="single"
+                                    selected={date}
+                                    onSelect={(newDate) => {
+                                        setDate(newDate);
+                                        setPagination(prev => ({ ...prev, pageIndex: 0 }));
+                                    }}
+                                    initialFocus
+                                />
+                            </PopoverContent>
+                        </Popover>
+
+                        {date && (
+                            <Button
+                                variant="ghost"
+                                onClick={() => {
+                                    setDate(undefined);
+                                    setPagination(prev => ({ ...prev, pageIndex: 0 }));
+                                }}
+                                className="h-9 px-2 text-muted-foreground hover:text-foreground"
+                                title="Xóa bộ lọc ngày"
+                            >
+                                <X className="h-4 w-4" />
+                            </Button>
+                        )}
+                    </div>
 
                     <div className="flex items-center gap-3">
                         <label

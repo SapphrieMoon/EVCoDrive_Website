@@ -1,4 +1,4 @@
-import type { MemberPaginationParams, MemberPaginationResponse, MemberProfileResponse } from "@/types/user.type"
+import type { MemberPaginationParams, MemberPaginationResponse, MemberProfileResponse, UserProfileResponse } from "@/types/user.type"
 import http from "@/utils/http"
 
 export const USER_API = {
@@ -11,4 +11,6 @@ export const userApi = {
         await http.get<MemberProfileResponse>(`${USER_API.MEMBER}/${id}/profile`),
     getMemberPagination: async (params: MemberPaginationParams) =>
         await http.get<MemberPaginationResponse>(USER_API.MEMBER_PAGINATION, { params }),
+    getUserProfile: async () =>
+        await http.get<UserProfileResponse>(`/auth/profile`),
 }
