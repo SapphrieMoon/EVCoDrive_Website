@@ -19,6 +19,7 @@ const path = {
     invoice: "/invoices",
     staff: "/staff",
     withdraw: "/withdraws",
+    profile: "/profile",
 } as const
 
 export default path

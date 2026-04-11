@@ -6,11 +6,14 @@ import { getProfileFromLocalStorage, getStationNameFromLocalStorage } from "@/ut
 import type { User } from "@/types/user.type";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { useLogoutMutation } from "@/queries/auth.query";
+import { useNavigate } from "react-router-dom";
+import path from "@/constants/path";
 export const Header = () => {
   const { theme, setTheme } = useTheme();
   const user: User | null = getProfileFromLocalStorage();
   const stationName = getStationNameFromLocalStorage();
   const logoutMutation = useLogoutMutation();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logoutMutation.mutate();
@@ -64,7 +67,7 @@ export const Header = () => {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel className="font-medium">{user?.fullName}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Hồ sơ</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate(path.profile)}>Hồ sơ</DropdownMenuItem>
             <DropdownMenuItem onClick={handleLogout} className="text-destructive hover:text-foreground hover:bg-destructive/50">
               Đăng xuất
             </DropdownMenuItem>
