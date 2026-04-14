@@ -57,16 +57,21 @@ export default function ExpenseDetailPage() {
 
             {/* Actions Toolbar */}
             <div className="flex justify-end gap-3">
+                {/* Create invoice */}
                 {expense.status === ExpenseFeeStatus.SubmittedToSystem && (
                     <ExpenseFeeForm expenseFeeId={expense.expenseFeeId} />
                 )}
-                {expense.status === ExpenseFeeStatus.Paid && expense.serviceDates?.length === 0 && (
+
+                {/* Create schedule service */}
+                {expense.status === ExpenseFeeStatus.Paid && (
                     <BookingCalendar
                         vehicleId={expense.vehicleId}
                         expenseFeeId={expense.expenseFeeId}
                         serviceDates={expense.serviceDates}
                     />
                 )}
+
+                {/* Complete */}
                 {expense.status === ExpenseFeeStatus.Scheduled && (
                     <Button variant="default" size="sm" onClick={handleComplete} disabled={completeMutation.isPending}>
                         {completeMutation.isPending ? "Đang xử lý..." : "Hoàn thành"}

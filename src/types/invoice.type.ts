@@ -11,11 +11,11 @@ export type InvoiceStatus = typeof InvoiceStatus[keyof typeof InvoiceStatus]
 
 export interface Invoice {
     invoiceId: string;
-    extraFeeId: string;
+    extraFeeId: string | null;
     extraFeeTypeId: string | null;
     extraFeeTypeName: string | null;
     coOwnerGroupId: string | null;
-    memberId: string;
+    memberId: string | null;
     invoiceNumber: string;
     description: string;
     totalAmount: number;
