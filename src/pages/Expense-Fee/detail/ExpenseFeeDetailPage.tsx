@@ -13,14 +13,24 @@ import ExpenseFeeForm from "./expense-fee-form";
 import BookingCalendar from "./_components/booking-calendar";
 import { ExpenseFeeStatus } from "@/types/expense-fee.type";
 import { formatCurrency } from "@/utils/number";
+import { toast } from "sonner";
 
 export default function ExpenseDetailPage() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { data, isPending } = expenseFeeQueries.useDetail(id!);
     const expense = data?.data.data;
+    const completeMutation = expenseFeeQueries.useComplete();
 
     const configStatus = expense?.status ? EXPENSE_FEE_STATUS_MAPPING[expense.status] : null;
+
+    const handleComplete = () => {
+        completeMutation.mutate(id!, {
+            onSuccess: () => {
+                toast.success("Đã hoàn thành đề xuất khoản chi");
+            }
+        });
+    }
 
     if (isPending) return <DetailSkeleton />;
     if (!expense) return <div>Không tìm thấy dữ liệu chi phí</div>;
@@ -56,6 +66,11 @@ export default function ExpenseDetailPage() {
                         expenseFeeId={expense.expenseFeeId}
                         serviceDates={expense.serviceDates}
                     />
+                )}
+                {expense.status === ExpenseFeeStatus.Scheduled && (
+                    <Button variant="default" size="sm" onClick={handleComplete} disabled={completeMutation.isPending}>
+                        {completeMutation.isPending ? "Đang xử lý..." : "Hoàn thành"}
+                    </Button>
                 )}
             </div>
 

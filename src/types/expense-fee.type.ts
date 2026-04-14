@@ -8,6 +8,9 @@ export const ExpenseFeeStatus = {
     Processing: "Processing",
     Paid: "Paid",
     Cancelled: "Cancelled",
+    Approved: "Approved",
+    Scheduled: "Scheduled",
+    Complete: "Complete",
 } as const
 
 export type ExpenseFeeStatus = typeof ExpenseFeeStatus[keyof typeof ExpenseFeeStatus]
