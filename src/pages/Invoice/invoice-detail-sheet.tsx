@@ -136,8 +136,8 @@ export function InvoiceDetailSheet({ id, open, onOpenChange }: BaseDetailProps) 
                             </h4>
                             <div className="space-y-3">
                                 {invoice.details && invoice.details.length > 0 ? (
-                                    invoice.details.map((detail: any, index: number) => (
-                                        <div key={detail.invoiceDetailId || index} className="rounded-lg border p-4 bg-card">
+                                    invoice.details.map((detail) => (
+                                        <div key={detail.invoiceDetailId} className="rounded-lg border p-4 bg-card">
                                             <div className="flex justify-between items-start gap-4 mb-2">
                                                 <h5 className="font-bold text-sm leading-tight flex-1">
                                                     {detail.description || "Mục chi phí"}
