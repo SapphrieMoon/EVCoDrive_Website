@@ -55,6 +55,18 @@ const expenseFeeQueries = {
                 queryClient.invalidateQueries({ queryKey: expenseFeeKey.listPagination({ pageNumber: 1, pageSize: 10 }) })
             }
         })
+    },
+
+    useComplete: () => {
+        const queryClient = useQueryClient()
+
+        return useMutation({
+            mutationFn: (id: string) => expenseFeeApi.postComplete(id),
+            onSuccess: (_, id) => {
+                queryClient.invalidateQueries({ queryKey: expenseFeeKey.detail(id) })
+                queryClient.invalidateQueries({ queryKey: expenseFeeKey.listPagination({ pageNumber: 1, pageSize: 10 }) })
+            }
+        })
     }
 }
 

@@ -22,7 +22,10 @@ export const expenseFeeApi = {
     },
     postScheduleService: async (id: string, body: string[]) => {
         return http.post(`${EXPENSE_FEE_API.EXPENSE_FEE}/${id}${EXPENSE_FEE_API.SCHEDULE_SERVICE}`, body);
-    }
+    },
+    postComplete: async (id: string) => {
+        return http.post(`${EXPENSE_FEE_API.EXPENSE_FEE}/${id}/complete`);
+    },
 }
 
 export const expenseFeeTypeApi = {

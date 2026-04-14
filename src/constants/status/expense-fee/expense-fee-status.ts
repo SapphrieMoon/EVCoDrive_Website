@@ -4,7 +4,7 @@ import { ExpenseFeeStatus } from "@/types/expense-fee.type";
 export const EXPENSE_FEE_STATUS_MAPPING: Record<ExpenseFeeStatus, { label: string; color: BadgeVariant }> = {
     [ExpenseFeeStatus.SubmittedToSystem]: {
         label: "Đã gửi lên hệ thống",
-        color: "green"
+        color: "amber"
     },
     [ExpenseFeeStatus.Cancelled]: {
         label: "Đã hủy",
@@ -21,5 +21,17 @@ export const EXPENSE_FEE_STATUS_MAPPING: Record<ExpenseFeeStatus, { label: strin
     [ExpenseFeeStatus.Processing]: {
         label: "Đang xử lý",
         color: "yellow"
+    },
+    [ExpenseFeeStatus.Approved]: {
+        label: "Chờ thanh toán",
+        color: "blue"
+    },
+    [ExpenseFeeStatus.Scheduled]: {
+        label: "Đã lên lịch",
+        color: "sky"
+    },
+    [ExpenseFeeStatus.Complete]: {
+        label: "Đã hoàn thành",
+        color: "green"
     },
 }
