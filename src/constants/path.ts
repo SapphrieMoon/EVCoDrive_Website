@@ -20,6 +20,8 @@ const path = {
     staff: "/staff",
     withdraw: "/withdraws",
     profile: "/profile",
+    extraFeeType: "/extra-fee-types",
+    expenseFeeType: "/expense-fee-types",
 } as const
 
 export default path

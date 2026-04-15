@@ -28,6 +28,8 @@ const DashboardPage = lazy(() => import("@/pages/Dashboard"));
 const StaffPage = lazy(() => import("@/pages/Staff"));
 const WithdrawPage = lazy(() => import("@/pages/Withdraw"));
 const ProfilePage = lazy(() => import("@/pages/Profile"));
+const ExtraFeeTypePage = lazy(() => import("@/pages/ExtraFeeType"));
+const ExpenseFeeTypePage = lazy(() => import("@/pages/ExpenseFeeType"));
 // const MainLayout = lazy(() => import("@/layouts/MainLayout"));
 // const PublicLayout = lazy(() => import("@/layouts/PublicLayout"));
 // const NotFound = lazy(() => import("@/pages/NotFound"));
@@ -86,6 +88,8 @@ export default function useRouteElements() {
                         { path: path.staff, element: <StaffPage /> },
                         { path: path.withdraw, element: <WithdrawPage /> },
                         { path: path.profile, element: <ProfilePage /> },
+                        { path: path.extraFeeType, element: <ExtraFeeTypePage /> },
+                        { path: path.expenseFeeType, element: <ExpenseFeeTypePage /> },
                     ]
                 }
             ]

@@ -1,4 +1,5 @@
 import type { BaseCrudFormProps } from "./commons/crud-form.type";
+import type { PaginationParams, PaginationResponse } from "./commons/pagination.type";
 import type { SuccessResponse } from "./commons/utils.type";
 
 export enum ExtraFeeStatus {
@@ -36,6 +37,10 @@ export type CreateExtraFeePayload = {
     amount: number
     description?: string
 }
+
+export type ExtraFeeTypePaginationParams = PaginationParams & {}
+
+export type ExtraFeeTypePaginationResponse = SuccessResponse<PaginationResponse<ExtraFeeType>>
 
 export type ExtraFeeTypeResponse = SuccessResponse<ExtraFeeType[]>
 

@@ -9,6 +9,8 @@ export const adminSidebar: SidebarItem[] = [
             { label: "Nhóm đồng sở hữu", path: path.coOwnerGroup },
             { label: "Hợp đồng", path: path.contract },
             { label: "Trạm kiểm tra", path: path.station },
+            { label: "Loại chi phí phạt", path: path.extraFeeType },
+            { label: "Loại chi phí phát sinh", path: path.expenseFeeType },
         ],
     },
     {
