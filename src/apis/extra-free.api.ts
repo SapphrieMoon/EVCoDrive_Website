@@ -11,7 +11,7 @@ export const EXTRA_FEE_TYPE_URL = {
 
 export const extraFeeTypeApi = {
     getAll: async () =>
-        await http.get<ExtraFeeTypeResponse>(EXTRA_FEE_TYPE_URL.BASE),
+        await http.get<ExtraFeeTypeResponse>(`${EXTRA_FEE_TYPE_URL.BASE}/all`),
     create: async (name: string, description: string) =>
         await http.post<ExtraFeeTypeResponse>(EXTRA_FEE_TYPE_URL.BASE, { name, description }),
     update: async (id: string, name: string, description: string) =>

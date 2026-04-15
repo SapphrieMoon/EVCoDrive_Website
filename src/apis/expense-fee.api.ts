@@ -30,7 +30,7 @@ export const expenseFeeApi = {
 
 export const expenseFeeTypeApi = {
     getAll: async () => {
-        return await http.get<ExpenseFeeTypeResponse>(EXPENSE_FEE_API.EXPENSE_FEE_TYPE);
+        return await http.get<ExpenseFeeTypeResponse>(`${EXPENSE_FEE_API.EXPENSE_FEE_TYPE}/all`);
     },
     getDetail: async (id: string) => {
         return await http.get<ExpenseFeeTypeDetailResponse>(`${EXPENSE_FEE_API.EXPENSE_FEE_TYPE}/${id}`);

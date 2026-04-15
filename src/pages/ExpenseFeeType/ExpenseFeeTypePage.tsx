@@ -34,7 +34,7 @@ export default function ExpenseFeeTypePage() {
 
 
             <div className="flex items-center py-4 justify-between mt-6">
-                <Input
+                {/* <Input
                     placeholder="Tìm kiếm nhân viên..."
                     value={search}
                     onChange={(e) => {
@@ -42,7 +42,7 @@ export default function ExpenseFeeTypePage() {
                         setPagination((prev: any) => ({ ...prev, pageIndex: 0 }));
                     }}
                     className="max-w-sm"
-                />
+                /> */}
 
                 {/* <Button onClick={handleCreate}>
                     <PlusIcon className="w-4 h-4 mr-2" />
