@@ -30,6 +30,7 @@ const WithdrawPage = lazy(() => import("@/pages/Withdraw"));
 const ProfilePage = lazy(() => import("@/pages/Profile"));
 const ExtraFeeTypePage = lazy(() => import("@/pages/ExtraFeeType"));
 const ExpenseFeeTypePage = lazy(() => import("@/pages/ExpenseFeeType"));
+const NotFoundPage = lazy(() => import("@/pages/Not-Found"));
 // const MainLayout = lazy(() => import("@/layouts/MainLayout"));
 // const PublicLayout = lazy(() => import("@/layouts/PublicLayout"));
 // const NotFound = lazy(() => import("@/pages/NotFound"));
@@ -94,6 +95,11 @@ export default function useRouteElements() {
                 }
             ]
         },
+        // Not Found Route
+        {
+            path: "*",
+            element: <NotFoundPage />
+        }
     ])
     return (
         <Suspense fallback={<div className="h-screen w-full flex items-center justify-center"><CubeLoader /></div>}>
