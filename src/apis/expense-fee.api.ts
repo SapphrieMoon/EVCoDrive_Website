@@ -39,7 +39,7 @@ export const expenseFeeTypeApi = {
         return await http.post<ExpenseFeeTypeResponse>(EXPENSE_FEE_API.EXPENSE_FEE_TYPE, { name, description });
     },
     update: async (id: string, name: string, description: string) => {
-        return await http.put<ExpenseFeeTypeResponse>(`${EXPENSE_FEE_API.EXPENSE_FEE_TYPE}/${id}`, { name, description });
+        return await http.put<ExpenseFeeTypeResponse>(`${EXPENSE_FEE_API.EXPENSE_FEE_TYPE}/${id}`, { expenseFeeTypeId: id, name, description });
     },
     delete: async (id: string) => {
         return await http.delete<ExpenseFeeTypeResponse>(`${EXPENSE_FEE_API.EXPENSE_FEE_TYPE}/${id}`);
