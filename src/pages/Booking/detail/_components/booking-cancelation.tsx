@@ -9,10 +9,11 @@ import { formatDate } from "@/utils/date"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { useForm, Controller } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod"
 
 const cancelationSchema = z.object({
-    cancellationReason: z.string().min(1, "Vui lòng nhập lý do hủy đặt lịch"),
+    cancellationReason: z.string().min(1, "Vui lòng nhập lý do hủy đặt lịch").max(255, "Lý do hủy đặt lịch không được vượt quá 255 ký tự").trim(),
     handoverLogId: z.string().optional(),
 })
 
@@ -46,6 +47,7 @@ export default function BookingCancelation({ bookingId, segments, label = "Hủy
             onSuccess: () => {
                 setOpen(false)
                 reset()
+                toast.success("Hủy đặt lịch thành công")
             }
         })
     })
