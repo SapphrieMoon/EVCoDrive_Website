@@ -72,6 +72,10 @@ export type ExpenseFeePaginationResponse = SuccessResponse<PaginationResponse<Ex
 
 export type ExpenseFeeDetailResponse = SuccessResponse<ExpenseFeeDetail>
 
+export type ExpenseFeeTypePaginationParams = PaginationParams & {}
+
+export type ExpenseFeeTypePaginationResponse = SuccessResponse<PaginationResponse<ExpenseFeeType>>
+
 export type ExpenseFeeTypeResponse = SuccessResponse<ExpenseFeeType[]>
 
 export type ExpenseFeeTypeDetailResponse = SuccessResponse<ExpenseFeeType>

@@ -1,3 +1,5 @@
+import type { ExtraFeeTypePaginationParams } from "@/types/extra-fee.type"
+
 export const extraFeeKey = {
     all: () => ["extraFee"],
     lists: () => ["extraFee", "list"],
@@ -14,12 +16,12 @@ export const extraFeeKey = {
 export const extraFeeTypeKey = {
     all: () => ["extraFeeType"],
     lists: () => ["extraFeeType", "list"],
-    // listPagination: (params: StationPaginationParams) => [
-    //     "extraFeeType",
-    //     "list",
-    //     "pagination",
-    //     params,
-    // ],
+    listPagination: (params: ExtraFeeTypePaginationParams) => [
+        "extraFeeType",
+        "list",
+        "pagination",
+        params,
+    ],
     details: () => ["extraFeeType", "detail"],
     detail: (id: string) => ["extraFeeType", "detail", id],
 }

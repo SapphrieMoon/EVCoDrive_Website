@@ -1,4 +1,4 @@
-import type { ExpenseFeePaginationParams } from "@/types/expense-fee.type";
+import type { ExpenseFeePaginationParams, ExpenseFeeTypePaginationParams } from "@/types/expense-fee.type";
 
 export const expenseFeeKey = {
     all: () => ["expense-fee"],
@@ -16,7 +16,7 @@ export const expenseFeeKey = {
 export const expenseFeeTypeKey = {
     all: () => ["expense-fee-type"],
     lists: () => ["expense-fee-type", "list"],
-    listPagination: (params: ExpenseFeePaginationParams) => [
+    listPagination: (params: ExpenseFeeTypePaginationParams) => [
         "expense-fee-type",
         "list",
         "pagination",

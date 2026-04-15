@@ -1,6 +1,6 @@
 import { expenseFeeApi, expenseFeeTypeApi } from "@/apis/expense-fee.api";
 import { expenseFeeKey, expenseFeeTypeKey } from "@/constants/query-keys/expense-fee.key";
-import type { ExpenseFeePaginationParams, ExpenseFeeQuoteRequest } from "@/types/expense-fee.type";
+import type { ExpenseFeePaginationParams, ExpenseFeeQuoteRequest, ExpenseFeeTypePaginationParams } from "@/types/expense-fee.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const expenseFeeQueries = {
@@ -85,6 +85,47 @@ const expenseFeeTypeQueries = {
             enabled: !!id
         })
     },
+
+    useCreate: () => {
+        const queryClient = useQueryClient()
+
+        return useMutation({
+            mutationFn: (data: { name: string, description: string }) => expenseFeeTypeApi.create(data.name, data.description),
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: expenseFeeTypeKey.all() })
+            }
+        })
+    },
+
+    useUpdate: () => {
+        const queryClient = useQueryClient()
+
+        return useMutation({
+            mutationFn: (data: { id: string, name: string, description: string }) => expenseFeeTypeApi.update(data.id, data.name, data.description),
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: expenseFeeTypeKey.all() })
+            }
+        })
+    },
+
+    useDelete: () => {
+        const queryClient = useQueryClient()
+
+        return useMutation({
+            mutationFn: (id: string) => expenseFeeTypeApi.delete(id),
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: expenseFeeTypeKey.all() })
+            }
+        })
+    },
+
+    usePagination: (params: ExpenseFeeTypePaginationParams) => {
+        return useQuery({
+            queryKey: expenseFeeTypeKey.listPagination(params),
+            queryFn: () => expenseFeeTypeApi.getPagination(params),
+            placeholderData: (previousData) => previousData,
+        })
+    }
 }
 
 export { expenseFeeQueries, expenseFeeTypeQueries }
