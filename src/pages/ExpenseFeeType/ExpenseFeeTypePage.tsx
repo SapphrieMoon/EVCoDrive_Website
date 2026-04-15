@@ -1,5 +1,4 @@
 import { DataTable } from "@/common/data-table";
-import { Input } from "@/components/ui/input";
 import { expenseFeeTypeQueries } from "@/queries/expense-fee.query";
 import { useState } from "react";
 import { expenseFeeTypeColumns } from "./expense-fee-type-columns";
@@ -11,7 +10,7 @@ export default function ExpenseFeeTypePage() {
         pageSize: 10
     })
 
-    const [search, setSearch] = useState("");
+    // const [search, setSearch] = useState("");
 
     const { data, isFetching } = expenseFeeTypeQueries.usePagination({
         pageNumber: pagination.pageIndex + 1,
@@ -19,13 +18,13 @@ export default function ExpenseFeeTypePage() {
     })
 
     //========================== Detail ==========================
-    const [isDetailOpen, setIsDetailOpen] = useState(false);
-    const [selectedId, setSelectedId] = useState<string | null>(null);
+    // const [isDetailOpen, setIsDetailOpen] = useState(false);
+    // const [selectedId, setSelectedId] = useState<string | null>(null);
 
-    const handleViewDetail = (id: string) => {
-        setSelectedId(id);
-        setIsDetailOpen(true);
-    }
+    // const handleViewDetail = (id: string) => {
+    //     setSelectedId(id);
+    //     setIsDetailOpen(true);
+    // }
 
     return (
         <div className="space-y-2 m-4">
@@ -57,7 +56,7 @@ export default function ExpenseFeeTypePage() {
                 pagination={pagination}
                 onPaginationChange={setPagination}
                 meta={{
-                    onViewDetail: handleViewDetail,
+                    // onViewDetail: handleViewDetail,
                     // onEdit: handleEdit
                 }}
 
