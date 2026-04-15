@@ -44,6 +44,8 @@ export type ExtraFeeTypePaginationResponse = SuccessResponse<PaginationResponse<
 
 export type ExtraFeeTypeResponse = SuccessResponse<ExtraFeeType[]>
 
+export type ExtraFeeTypeDetailResponse = SuccessResponse<ExtraFeeType>
+
 export type ExtraFeeResponse = SuccessResponse<ExtraFee[]>
 
 export type ExtraFeeFormProps = BaseCrudFormProps & {}
