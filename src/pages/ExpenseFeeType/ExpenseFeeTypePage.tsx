@@ -3,9 +3,9 @@ import { expenseFeeTypeQueries } from "@/queries/expense-fee.query";
 import { useState } from "react";
 import { expenseFeeTypeColumns } from "./expense-fee-type-columns";
 import { ExpenseFeeTypeDetail } from "./expense-fee-type-detail";
-// import { ExpenseFeeTypeForm } from "./expense-fee-type-form";
-// import { PlusIcon } from "lucide-react";
-// import { Button } from "@/components/ui/button";
+import { ExpenseFeeTypeForm } from "./expense-fee-type-form";
+import { PlusIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 // import { Input } from "@/components/ui/input";
 
 export default function ExpenseFeeTypePage() {
@@ -32,21 +32,21 @@ export default function ExpenseFeeTypePage() {
     }
 
     //========================== Form ==========================
-    // const [dialogOpen, setDialogOpen] = useState(false);
-    // const [dialogMode, setDialogMode] = useState<"create" | "update">("create");
-    // const [editingId, setEditingId] = useState<string | undefined>(undefined);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogMode, setDialogMode] = useState<"create" | "update">("create");
+    const [editingId, setEditingId] = useState<string | undefined>(undefined);
 
-    // const handleCreate = () => {
-    //     setDialogMode("create");
-    //     setEditingId(undefined);
-    //     setDialogOpen(true);
-    // };
+    const handleCreate = () => {
+        setDialogMode("create");
+        setEditingId(undefined);
+        setDialogOpen(true);
+    };
 
-    // const handleEdit = (id: string) => {
-    //     setDialogMode("update");
-    //     setEditingId(id);
-    //     setDialogOpen(true);
-    // };
+    const handleEdit = (id: string) => {
+        setDialogMode("update");
+        setEditingId(id);
+        setDialogOpen(true);
+    };
 
     return (
         <div className="space-y-2 m-4">
@@ -54,7 +54,7 @@ export default function ExpenseFeeTypePage() {
             <h1 className="text-4xl font-bold">Quản lý loại phí</h1>
 
 
-            <div className="flex items-center py-4 justify-between mt-6">
+            <div className="flex items-center py-4 justify-end mt-6">
                 {/* <Input
                     placeholder="Tìm kiếm loại phí..."
                     value={search}
@@ -65,10 +65,10 @@ export default function ExpenseFeeTypePage() {
                     className="max-w-sm"
                 /> */}
 
-                {/* <Button onClick={handleCreate}>
+                <Button onClick={handleCreate}>
                     <PlusIcon className="w-4 h-4 mr-2" />
                     Thêm loại phí mới
-                </Button> */}
+                </Button>
             </div>
 
             <DataTable
@@ -79,7 +79,7 @@ export default function ExpenseFeeTypePage() {
                 onPaginationChange={setPagination}
                 meta={{
                     onViewDetail: handleViewDetail,
-                    // onEdit: handleEdit
+                    onEdit: handleEdit
                 }}
 
                 isLoading={isFetching}
@@ -93,12 +93,12 @@ export default function ExpenseFeeTypePage() {
                 />
             )}
 
-            {/* <ExpenseFeeTypeForm
+            <ExpenseFeeTypeForm
                 open={dialogOpen}
                 onOpenChange={setDialogOpen}
                 mode={dialogMode}
                 id={editingId}
-            /> */}
+            />
         </div>
     )
 }

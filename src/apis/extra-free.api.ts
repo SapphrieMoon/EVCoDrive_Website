@@ -15,7 +15,7 @@ export const extraFeeTypeApi = {
     create: async (name: string, description: string) =>
         await http.post<ExtraFeeTypeResponse>(EXTRA_FEE_TYPE_URL.BASE, { name, description }),
     update: async (id: string, name: string, description: string) =>
-        await http.put<ExtraFeeTypeResponse>(`${EXTRA_FEE_TYPE_URL.BASE}/${id}`, { name, description }),
+        await http.put<ExtraFeeTypeResponse>(`${EXTRA_FEE_TYPE_URL.BASE}/${id}`, { extraFeeTypeId: id, name, description }),
     delete: async (id: string) =>
         await http.delete<ExtraFeeTypeResponse>(`${EXTRA_FEE_TYPE_URL.BASE}/${id}`),
     getDetail: async (id: string) =>
