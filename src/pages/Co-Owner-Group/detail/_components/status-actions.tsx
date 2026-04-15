@@ -8,7 +8,9 @@ import { cn } from "@/lib/utils"
 import bookingQueries from "@/queries/booking.query"
 import coOwnerGroupQueries from "@/queries/co-owner-group.query"
 import groupWalletQueries from "@/queries/group-wallet.query"
+import vehicleQueries from "@/queries/vehicle.query"
 import { CoOwnerGroupStatus } from "@/types/co-owner-group.type"
+import { VehicleStatus } from "@/types/vehicle.type"
 import { ChevronDown, Loader2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -20,6 +22,7 @@ export function GroupStatusActions({ id }: { id: string }) {
     const rejectStatusMutation = coOwnerGroupQueries.useRejectStatus()
     const postUsageQuotasMutation = bookingQueries.usePostUsageQuotas()
     const createGroupWalletMutation = groupWalletQueries.useCreate()
+    const updateVehicleStatusMutation = vehicleQueries.useUpdateStatus()
 
     // Dialog state for normal status change (Active, Disbanded, etc.)
     const [nextStatus, setNextStatus] = useState<CoOwnerGroupStatus | null>(null)
@@ -71,17 +74,29 @@ export function GroupStatusActions({ id }: { id: string }) {
     }
 
     /** Flow: Other (e.g. Disbanded) — just update status */
-    const handleConfirmUpdate = () => {
+    const handleConfirmUpdate = async () => {
         if (!nextStatus) return
-        updateStatusMutation.mutate(
-            { id, status: nextStatus },
-            {
-                onSuccess: () => {
-                    setNextStatus(null)
-                    toast.success("Cập nhật trạng thái nhóm thành công!")
-                }
+
+        try {
+            if (nextStatus === CoOwnerGroupStatus.Disbaned && group?.vehicleId) {
+                await updateVehicleStatusMutation.mutateAsync({
+                    id: group.vehicleId,
+                    status: VehicleStatus.Decommissioned
+                })
             }
-        )
+
+            await updateStatusMutation.mutateAsync(
+                { id, status: nextStatus },
+                {
+                    onSuccess: () => {
+                        setNextStatus(null)
+                        toast.success("Cập nhật trạng thái nhóm thành công!")
+                    }
+                }
+            )
+        } catch (error) {
+            console.error("Lỗi cập nhật trạng thái:", error)
+        }
     }
 
     const handleConfirmReject = () => {
@@ -104,7 +119,8 @@ export function GroupStatusActions({ id }: { id: string }) {
     const isActivating =
         updateStatusMutation.isPending ||
         postUsageQuotasMutation.isPending ||
-        createGroupWalletMutation.isPending
+        createGroupWalletMutation.isPending ||
+        updateVehicleStatusMutation.isPending
 
     // ────────────────────────────────────────────────────────────
     // Render
