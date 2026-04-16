@@ -26,6 +26,7 @@ import type { BookingSegment } from "@/types/booking.type";
 import { Plus } from "lucide-react";
 import { formatDate } from "@/utils/date";
 import { toast } from "sonner";
+import type { ExtraFeeType } from "@/types/extra-fee.type";
 
 export default function ExtraFeeForm({ bookingId, segments }: { bookingId: string, segments: BookingSegment[] }) {
     const [open, setOpen] = useState(false);
@@ -85,7 +86,7 @@ export default function ExtraFeeForm({ bookingId, segments }: { bookingId: strin
                                         <SelectValue placeholder="Chọn loại phí" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {extraFeeTypes.map((type) => (
+                                        {extraFeeTypes.map((type: ExtraFeeType) => (
                                             <SelectItem key={type.extraFeeTypeId} value={type.extraFeeTypeId}>
                                                 {type.extraFeeTypeName}
                                             </SelectItem>

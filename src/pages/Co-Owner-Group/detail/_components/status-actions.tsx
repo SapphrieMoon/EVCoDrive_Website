@@ -20,6 +20,7 @@ export function GroupStatusActions({ id }: { id: string }) {
     const group = data?.data.data
     const updateStatusMutation = coOwnerGroupQueries.useUpdateStatus()
     const rejectStatusMutation = coOwnerGroupQueries.useRejectStatus()
+    const approveStatusMutation = coOwnerGroupQueries.useApproveStatus()
     const postUsageQuotasMutation = bookingQueries.usePostUsageQuotas()
     const createGroupWalletMutation = groupWalletQueries.useCreate()
     const updateVehicleStatusMutation = vehicleQueries.useUpdateStatus()
@@ -59,8 +60,7 @@ export function GroupStatusActions({ id }: { id: string }) {
 
             toast.success("Khởi tạo định mức và ví nhóm thành công")
 
-            await updateStatusMutation.mutateAsync(
-                { id, status: CoOwnerGroupStatus.Active },
+            await approveStatusMutation.mutateAsync(id,
                 {
                     onSuccess: () => {
                         setNextStatus(null)
@@ -118,6 +118,7 @@ export function GroupStatusActions({ id }: { id: string }) {
 
     const isActivating =
         updateStatusMutation.isPending ||
+        approveStatusMutation.isPending ||
         postUsageQuotasMutation.isPending ||
         createGroupWalletMutation.isPending ||
         updateVehicleStatusMutation.isPending
