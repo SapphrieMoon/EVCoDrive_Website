@@ -79,7 +79,7 @@ export default function BookingDetailPage() {
                 />
 
                 {/* Bên phải: Form hành động - chiếm 4 cột */}
-                <SegmentDetail key={selectedSegmentData?.handoverLogId || 'empty'} segmentId={selectedSegmentData?.handoverLogId} />
+                <SegmentDetail key={selectedSegmentData?.handoverLogId || 'empty'} segmentId={selectedSegmentData?.handoverLogId} vehicleId={booking.vehicleId} />
             </div>
         </div>
     )

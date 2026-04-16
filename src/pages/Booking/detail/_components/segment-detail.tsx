@@ -11,15 +11,19 @@ import { toast } from "sonner"
 import { CardSkeleton } from "@/common/skeletons/card-skeleton"
 import imageCompression from 'browser-image-compression';
 import { SegmentStatus, type DamageResult } from "@/types/booking.type"
+import vehicleQueries from "@/queries/vehicle.query"
 
-export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
+export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: string, vehicleId?: string }) {
     const { data, isPending } = bookingQueries.useHandoverLogs(segmentId as string)
     const segment = data?.data.data
+    const { data: vehicleData } = vehicleQueries.useDetail(vehicleId as string)
+    const vehicle = vehicleData?.data.data
     const configStatus = segment?.status ? SEGMENT_STATUS_MAPPING[segment.status] : null;
-    const [images, setImages] = useState<File[]>([]); // Dùng để gửi BE
-    const [previews, setPreviews] = useState<string[]>([]); // Dùng để show UI
-    const [odoStart, setOdoStart] = useState<number>(segment?.startOdo || 0);
-    const [odoEnd, setOdoEnd] = useState<number>(segment?.endOdo || 0);
+    const [images, setImages] = useState<File[]>([]);
+    const [previews, setPreviews] = useState<string[]>([]);
+    const [odoStart, setOdoStart] = useState<number | ''>(segment?.startOdo || '');
+    const [odoEnd, setOdoEnd] = useState<number | ''>(segment?.endOdo || '');
+    const [hasSubmitted, setHasSubmitted] = useState(false);
     const [damageResult, setDamageResult] = useState<DamageResult | null>(null);
     const checkInMutation = bookingQueries.useCheckIn();
     const checkOutMutation = bookingQueries.useCheckOut();
@@ -88,19 +92,26 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
     };
 
     const handleSubmit = async () => {
+        setHasSubmitted(true);
+
         if (!segment?.bookingId || !segmentId) {
             toast.error("Thiếu thông tin lịch trình!");
             return;
         }
 
         if (segment?.status === 'Pending') {
+            if (vehicle && Number(odoStart) < vehicle.odometer) {
+                toast.error(`Số km lúc đầu phải lớn hơn hoặc bằng số km hiện tại của xe (${vehicle.odometer} km)!`);
+                return;
+            }
+
             // --- LOGIC CHECK-IN ---
             // Gửi ID và object chứa startOdometer kèm formData
             checkInMutation.mutate({
                 bookingId: segment.bookingId,
                 handoverLogId: segmentId!,
                 body: {
-                    startOdometer: odoStart,
+                    startOdometer: Number(odoStart),
                     images: images
                 }
             }, {
@@ -108,23 +119,30 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                     // Reset state sau khi thành công
                     setImages([]);
                     setPreviews([]);
+                    setHasSubmitted(false);
                     toast.success("Check-in thành công!");
                 }
             });
 
         } else if (segment?.status === 'CheckedIn') {
+            if (segment.startOdo !== undefined && Number(odoEnd) < segment.startOdo) {
+                toast.error(`Số km lúc sau phải lớn hơn hoặc bằng số km lúc đầu (${segment.startOdo} km)!`);
+                return;
+            }
+
             // --- LOGIC CHECK-OUT ---
             checkOutMutation.mutate({
                 bookingId: segment.bookingId,
                 handoverLogId: segmentId!,
                 body: {
-                    endOdometer: odoEnd,
+                    endOdometer: Number(odoEnd),
                     images: images
                 }
             }, {
                 onSuccess: () => {
                     setImages([]);
                     setPreviews([]);
+                    setHasSubmitted(false);
                     toast.success("Check-out thành công!");
                 }
             });
@@ -227,15 +245,22 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                             Km lúc đầu
                         </p>
                         {segment?.status === 'Pending' ? (
-                            <div className="flex items-center gap-1 border-b-2 border-primary/30 focus-within:border-primary transition-colors pb-1">
-                                <input
-                                    type="number"
-                                    value={odoStart}
-                                    onChange={(e) => setOdoStart(Number(e.target.value))}
-                                    className="bg-transparent font-bold text-lg w-full outline-none"
-                                    placeholder="0"
-                                />
-                                <span className="text-xs text-muted-foreground font-semibold">km</span>
+                            <div className="flex flex-col gap-0.5">
+                                <div className={`flex items-center gap-1 border-b-2 transition-colors pb-1 ${hasSubmitted && Number(odoStart) < (vehicle?.odometer || 0) ? 'border-destructive focus-within:border-destructive text-destructive' : 'border-primary/30 focus-within:border-primary'}`}>
+                                    <input
+                                        type="number"
+                                        value={odoStart}
+                                        onChange={(e) => setOdoStart(e.target.value === '' ? '' : Number(e.target.value))}
+                                        className={`bg-transparent font-bold text-lg w-full outline-none ${hasSubmitted && Number(odoStart) < (vehicle?.odometer || 0) ? 'text-destructive placeholder:text-destructive/50' : ''}`}
+                                        placeholder="0"
+                                    />
+                                    <span className={`text-xs font-semibold ${hasSubmitted && Number(odoStart) < (vehicle?.odometer || 0) ? 'text-destructive' : 'text-muted-foreground'}`}>km</span>
+                                </div>
+                                {hasSubmitted && Number(odoStart) < (vehicle?.odometer || 0) && (
+                                    <p className="text-[10px] font-medium text-destructive mt-1">
+                                        Phải lớn hơn hoặc bằng {vehicle?.odometer} km
+                                    </p>
+                                )}
                             </div>
                         ) : (
                             <p className="text-[15px] font-bold text-foreground italic">
@@ -252,15 +277,22 @@ export default function SegmentDetail({ segmentId }: { segmentId?: string }) {
                             Km lúc sau
                         </p>
                         {segment?.status === 'CheckedIn' ? (
-                            <div className="flex items-center gap-1 border-b-2 border-primary/30 focus-within:border-primary transition-colors pb-1 justify-end">
-                                <input
-                                    type="number"
-                                    value={odoEnd}
-                                    onChange={(e) => setOdoEnd(Number(e.target.value))}
-                                    className="bg-transparent font-bold text-lg w-full text-right outline-none"
-                                    placeholder="0"
-                                />
-                                <span className="text-xs text-muted-foreground font-semibold">km</span>
+                            <div className="flex flex-col gap-0.5 items-end">
+                                <div className={`flex items-center gap-1 border-b-2 transition-colors pb-1 justify-end ${hasSubmitted && Number(odoEnd) < (segment?.startOdo || 0) ? 'border-destructive focus-within:border-destructive text-destructive' : 'border-primary/30 focus-within:border-primary'}`}>
+                                    <input
+                                        type="number"
+                                        value={odoEnd}
+                                        onChange={(e) => setOdoEnd(e.target.value === '' ? '' : Number(e.target.value))}
+                                        className={`bg-transparent font-bold text-lg w-full text-right outline-none ${hasSubmitted && Number(odoEnd) < (segment?.startOdo || 0) ? 'text-destructive placeholder:text-destructive/50' : ''}`}
+                                        placeholder="0"
+                                    />
+                                    <span className={`text-xs font-semibold ${hasSubmitted && Number(odoEnd) < (segment?.startOdo || 0) ? 'text-destructive' : 'text-muted-foreground'}`}>km</span>
+                                </div>
+                                {hasSubmitted && Number(odoEnd) < (segment?.startOdo || 0) && (
+                                    <p className="text-[10px] font-medium text-destructive mt-1">
+                                        Phải lớn hơn hoặc bằng {segment?.startOdo} km
+                                    </p>
+                                )}
                             </div>
                         ) : (
                             <p className="text-[15px] font-bold text-foreground italic">
