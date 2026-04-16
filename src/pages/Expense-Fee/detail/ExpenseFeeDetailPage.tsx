@@ -27,7 +27,7 @@ export default function ExpenseDetailPage() {
     const handleComplete = () => {
         completeMutation.mutate(id!, {
             onSuccess: () => {
-                toast.success("Đã hoàn thành đề xuất khoản chi");
+                toast.success("Đã hoàn tất xử lý phí phát sinh");
             }
         });
     }
@@ -44,7 +44,7 @@ export default function ExpenseDetailPage() {
                         <ArrowLeft className="h-5 w-5" />
                     </Button>
                     <div>
-                        <h2 className="text-2xl font-black tracking-tight uppercase">Đề xuất khoản chi</h2>
+                        <h2 className="text-2xl font-black tracking-tight uppercase">Chi phí phát sinh</h2>
                         <p className="text-sm text-muted-foreground font-mono mt-0.5">ID: {expense.expenseFeeId}</p>
                     </div>
                 </div>
