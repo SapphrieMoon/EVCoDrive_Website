@@ -16,7 +16,7 @@ import vehicleQueries from "@/queries/vehicle.query"
 export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: string, vehicleId?: string }) {
     const { data, isPending } = bookingQueries.useHandoverLogs(segmentId as string)
     const segment = data?.data.data
-    const { data: vehicleData, isPending: vehicleIsPending } = vehicleQueries.useDetail(vehicleId as string)
+    const { data: vehicleData } = vehicleQueries.useDetail(vehicleId as string)
     const vehicle = vehicleData?.data.data
     const configStatus = segment?.status ? SEGMENT_STATUS_MAPPING[segment.status] : null;
     const [images, setImages] = useState<File[]>([]);
