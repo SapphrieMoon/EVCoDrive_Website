@@ -111,6 +111,22 @@ const coOwnerGroupQueries = {
                 })
             }
         })
+    },
+
+    useApproveStatus: () => {
+        const queryClient = useQueryClient()
+
+        return useMutation({
+            mutationFn: (id: string) => coOwnerGroupApi.approveStatus(id),
+            onSuccess: (_, id) => {
+                queryClient.invalidateQueries({
+                    queryKey: coOwnerGroupKey.lists()
+                })
+                queryClient.invalidateQueries({
+                    queryKey: coOwnerGroupKey.detail(id)
+                })
+            }
+        })
     }
 }
 

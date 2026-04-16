@@ -25,4 +25,6 @@ export const coOwnerGroupApi = {
     rejectStatus: async (id: string, reason: string) =>
         await http.patch<CoOwnerGroupDetailResponse>(`${COOWNERGROUP_API.BASE}/${id}/reject`, null,
             { params: { reason } }),
+    approveStatus: async (id: string) =>
+        await http.patch<CoOwnerGroupDetailResponse>(`${COOWNERGROUP_API.BASE}/${id}/approve`, null),
 }
