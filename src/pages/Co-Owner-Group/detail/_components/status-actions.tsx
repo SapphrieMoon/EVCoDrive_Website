@@ -37,10 +37,6 @@ export function GroupStatusActions({ id }: { id: string }) {
     const statusConfig = CO_OWNER_GROUP_STATUS_MAPPING[group.status]
     const hasActions = statusConfig.nextActions && statusConfig.nextActions.length > 0
 
-    // ────────────────────────────────────────────────────────────
-    // Handlers
-    // ────────────────────────────────────────────────────────────
-
     const handleActionClick = (status: CoOwnerGroupStatus) => {
         if (status === CoOwnerGroupStatus.Rejected) {
             setRejectReason("")
@@ -122,10 +118,6 @@ export function GroupStatusActions({ id }: { id: string }) {
         postUsageQuotasMutation.isPending ||
         createGroupWalletMutation.isPending ||
         updateVehicleStatusMutation.isPending
-
-    // ────────────────────────────────────────────────────────────
-    // Render
-    // ────────────────────────────────────────────────────────────
 
     return (
         <>
