@@ -36,7 +36,7 @@ export const VEHICLE_STATUS_MAPPING: Record<VehicleStatus, { label: string; colo
         color: "bg-destructive/10 text-destructive border-destructive/20"
     },
     [VehicleStatus.Decommissioned]: {
-        label: "Ngừng sử dụng",
+        label: "Ngừng hoạt động",
         color: "bg-gray-500/10 text-gray-500 border-gray-500/20"
     },
     [VehicleStatus.UnderService]: {
