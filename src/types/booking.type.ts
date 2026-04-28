@@ -8,11 +8,15 @@ export type UsageQuotasRequest = {
 export interface CheckInRequest {
     startOdometer: number;
     images: File[];
+    startBatteryLevel: number;
+    checkInNote: string;
 }
 
 export interface CheckOutRequest {
     endOdometer: number;
     images: File[];
+    endBatteryLevel: number;
+    checkOutNote: string;
 }
 
 export interface DamageResult {
@@ -92,11 +96,13 @@ export interface BookingSegmentDetail {
     endOdo: number;
     handoverType: string;
     odometerReading: number;
-    batteryLevel: number;
+    startBatteryLevel: number;
+    endBatteryLevel: number;
     fuelLevel: string;
     exteriorCondition: string;
     interiorCondition: string;
-    notes: string;
+    checkInNote: string;
+    checkOutNote: string;
     signatureUrl: string;
     checkInImages: string[];
     checkOutImages: string[];

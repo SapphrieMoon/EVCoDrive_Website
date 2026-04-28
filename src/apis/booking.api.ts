@@ -20,6 +20,8 @@ const bookingApi = {
     patchCheckIn: async (bookingId: string, handoverLogId: string, body: CheckInRequest) => {
         const formData = new FormData();
         formData.append("startOdometer", body.startOdometer.toString());
+        formData.append("startBatteryLevel", body.startBatteryLevel.toString());
+        formData.append("checkInNote", body.checkInNote);
         body.images.forEach((file) => formData.append("images", file));
 
         return await http.patch(
@@ -31,6 +33,8 @@ const bookingApi = {
     patchCheckOut: async (bookingId: string, handoverLogId: string, body: CheckOutRequest) => {
         const formData = new FormData();
         formData.append("endOdometer", body.endOdometer.toString());
+        formData.append("endBatteryLevel", body.endBatteryLevel.toString());
+        formData.append("checkOutNote", body.checkOutNote);
         body.images.forEach((file) => formData.append("images", file));
 
         return await http.patch(
