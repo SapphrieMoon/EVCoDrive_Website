@@ -4,7 +4,7 @@ import { Image as ImageIcon, Plus, X } from "lucide-react"
 import bookingQueries from "@/queries/booking.query"
 import { formatDate } from "@/utils/date"
 import { Badge } from "@/components/ui/badge"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useDropzone } from 'react-dropzone'
 import { SEGMENT_STATUS_MAPPING } from "@/constants/status/booking/segment-status"
 import { toast } from "sonner"
@@ -13,65 +13,83 @@ import imageCompression from 'browser-image-compression';
 import { SegmentStatus, type DamageResult } from "@/types/booking.type"
 import vehicleQueries from "@/queries/vehicle.query"
 
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { checkInSchema, checkOutSchema, type CheckInFormValues, type CheckOutFormValues } from "@/schema/booking.schema"
+import { Textarea } from "@/components/ui/textarea"
+
 export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: string, vehicleId?: string }) {
     const { data, isPending } = bookingQueries.useHandoverLogs(segmentId as string)
     const segment = data?.data.data
     const { data: vehicleData } = vehicleQueries.useDetail(vehicleId as string)
     const vehicle = vehicleData?.data.data
     const configStatus = segment?.status ? SEGMENT_STATUS_MAPPING[segment.status] : null;
-    const [images, setImages] = useState<File[]>([]);
+
     const [previews, setPreviews] = useState<string[]>([]);
-    const [odoStart, setOdoStart] = useState<number | ''>(segment?.startOdo || '');
-    const [odoEnd, setOdoEnd] = useState<number | ''>(segment?.endOdo || '');
-    const [hasSubmitted, setHasSubmitted] = useState(false);
     const [damageResult, setDamageResult] = useState<DamageResult | null>(null);
+
     const checkInMutation = bookingQueries.useCheckIn();
     const checkOutMutation = bookingQueries.useCheckOut();
-    const isSubmitting = checkInMutation.isPending || checkOutMutation.isPending;
     const detectDamageMutation = bookingQueries.useDetectDamage();
-    const urlToFile = async (url: string, filename: string) => {
-        // convert sang https trước khi fetch
-        const safeUrl = url.replace("http://", "https://");
+    const isSubmitting = checkInMutation.isPending || checkOutMutation.isPending;
 
+    const isCheckIn = segment?.status === 'Pending';
+    const isCheckOut = segment?.status === 'CheckedIn';
+
+    const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm<CheckInFormValues & CheckOutFormValues>({
+        resolver: zodResolver(isCheckIn ? checkInSchema : checkOutSchema) as any,
+        defaultValues: {
+            startOdometer: (segment?.startOdo || "") as unknown as number,
+            startBatteryLevel: (segment?.startBatteryLevel || "") as unknown as number,
+            checkInNote: segment?.checkInNote ?? '',
+            images: [],
+            endOdometer: (segment?.endOdo || segment?.startOdo || "") as unknown as number,
+            endBatteryLevel: (segment?.endBatteryLevel || segment?.startBatteryLevel || "") as unknown as number,
+            checkOutNote: segment?.checkOutNote ?? '',
+        }
+    });
+
+    const formImages = watch("images") || [];
+
+    useEffect(() => {
+        if (segment) {
+            reset({
+                startOdometer: (segment.startOdo || "") as unknown as number,
+                startBatteryLevel: (segment.startBatteryLevel || "") as unknown as number,
+                checkInNote: segment.checkInNote ?? '',
+                images: [],
+                endOdometer: (segment.endOdo || segment.startOdo || "") as unknown as number,
+                endBatteryLevel: (segment.endBatteryLevel || segment.startBatteryLevel || "") as unknown as number,
+                checkOutNote: segment.checkOutNote ?? '',
+            });
+            setPreviews([]);
+        }
+    }, [segment, reset]);
+
+    const urlToFile = async (url: string, filename: string) => {
+        const safeUrl = url.replace("http://", "https://");
         const res = await fetch(safeUrl);
         const blob = await res.blob();
-
         return new File([blob], filename, { type: blob.type });
     };
 
-    const { getRootProps, getInputProps } = useDropzone({
-        accept: {
-            'image/*': ['.jpeg', '.png', '.jpg']
-        },
-        maxFiles: 5,
-        maxSize: 5 * 1024 * 1024, // 5MB
-        onDrop: (acceptedFiles) => {
-            onDrop(acceptedFiles)
-        }
-    })
-
     const removeImage = (index: number) => {
-        // Xóa URL preview để tránh memory leak
         URL.revokeObjectURL(previews[index]);
-
-        setImages(prev => prev.filter((_, i) => i !== index));
         setPreviews(prev => prev.filter((_, i) => i !== index));
+        setValue("images", formImages.filter((_, i) => i !== index));
     };
 
-    // Nén ảnh trước khi submit
     const compressImage = async (file: File) => {
         const options = {
-            maxSizeMB: 1,            // tối đa 1MB
-            maxWidthOrHeight: 1280,  // resize nếu quá lớn
-            useWebWorker: true,      // chạy nền cho mượt
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1280,
+            useWebWorker: true,
         };
-
         try {
-            const compressedFile = await imageCompression(file, options);
-            return compressedFile;
+            return await imageCompression(file, options);
         } catch (error) {
             console.error("Compress error:", error);
-            return file; // fallback nếu lỗi
+            return file;
         }
     };
 
@@ -79,70 +97,68 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
         const compressedFiles = await Promise.all(
             acceptedFiles.map(file => compressImage(file))
         );
+        const newList = [...formImages, ...compressedFiles].slice(0, 5);
+        setValue("images", newList);
 
-        setImages(prev => {
-            const newList = [...prev, ...compressedFiles].slice(0, 5);
-            return newList;
-        });
-
-        setPreviews(prev => {
-            const newPreviews = compressedFiles.map(file => URL.createObjectURL(file));
-            return [...prev, ...newPreviews].slice(0, 5);
-        });
+        const newPreviews = compressedFiles.map(file => URL.createObjectURL(file));
+        setPreviews(prev => [...prev, ...newPreviews].slice(0, 5));
     };
 
-    const handleSubmit = async () => {
-        setHasSubmitted(true);
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: {
+            'image/*': ['.jpeg', '.png', '.jpg']
+        },
+        maxFiles: 5,
+        maxSize: 5 * 1024 * 1024,
+        onDrop
+    });
 
+    const onSubmit = (data: CheckInFormValues & CheckOutFormValues) => {
         if (!segment?.bookingId || !segmentId) {
             toast.error("Thiếu thông tin lịch trình!");
             return;
         }
 
-        if (segment?.status === 'Pending') {
-            if (vehicle && Number(odoStart) < vehicle.odometer) {
-                toast.error(`Số km lúc đầu phải lớn hơn hoặc bằng số km hiện tại của xe (${vehicle.odometer} km)!`);
+        if (isCheckIn) {
+            if (vehicle && Number(data.startOdometer) < vehicle.odometer) {
+                toast.error(`Số km lúc đầu phải lớn hơn hoặc bằng ${vehicle.odometer} km!`);
                 return;
             }
 
-            // --- LOGIC CHECK-IN ---
-            // Gửi ID và object chứa startOdometer kèm formData
+            console.log(data);
+
             checkInMutation.mutate({
                 bookingId: segment.bookingId,
-                handoverLogId: segmentId!,
+                handoverLogId: segmentId,
                 body: {
-                    startOdometer: Number(odoStart),
-                    images: images
+                    startOdometer: Number(data.startOdometer),
+                    startBatteryLevel: Number(data.startBatteryLevel),
+                    checkInNote: data.checkInNote || '',
+                    images: data.images || []
                 }
             }, {
                 onSuccess: () => {
-                    // Reset state sau khi thành công
-                    setImages([]);
-                    setPreviews([]);
-                    setHasSubmitted(false);
                     toast.success("Check-in thành công!");
                 }
             });
 
-        } else if (segment?.status === 'CheckedIn') {
-            if (segment.startOdo !== undefined && Number(odoEnd) < segment.startOdo) {
-                toast.error(`Số km lúc sau phải lớn hơn hoặc bằng số km lúc đầu (${segment.startOdo} km)!`);
+        } else if (isCheckOut) {
+            if (segment.startOdo !== undefined && Number(data.endOdometer) < segment.startOdo) {
+                toast.error(`Số km lúc sau phải lớn hơn hoặc bằng ${segment.startOdo} km!`);
                 return;
             }
 
-            // --- LOGIC CHECK-OUT ---
             checkOutMutation.mutate({
                 bookingId: segment.bookingId,
-                handoverLogId: segmentId!,
+                handoverLogId: segmentId,
                 body: {
-                    endOdometer: Number(odoEnd),
-                    images: images
+                    endOdometer: Number(data.endOdometer),
+                    endBatteryLevel: Number(data.endBatteryLevel),
+                    checkOutNote: data.checkOutNote || '',
+                    images: data.images || []
                 }
             }, {
                 onSuccess: () => {
-                    setImages([]);
-                    setPreviews([]);
-                    setHasSubmitted(false);
                     toast.success("Check-out thành công!");
                 }
             });
@@ -154,15 +170,12 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
             toast.error("Không có ảnh để phân tích!");
             return;
         }
-
         try {
             const files = await Promise.all(
                 segment.checkOutImages.map((url, index) =>
                     urlToFile(url, `checkout-${index}.jpg`)
                 )
             );
-
-            // gọi API damage detect
             detectDamageMutation.mutate(files, {
                 onSuccess: (res: any) => {
                     const data = res.data?.data || res.data;
@@ -174,30 +187,28 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                     toast.error("Phân tích thất bại!");
                 }
             });
-
         } catch (error) {
             console.error("Lỗi khi xử lý file:", error);
             toast.error("Lỗi khi chuẩn bị ảnh!");
         }
     };
 
-
     if (isPending) return (
         <div className="col-span-5 p-0 sticky top-6 h-fit shadow-sm flex flex-col text-card-foreground">
             <CardSkeleton />
         </div>
     );
-    if (!segment) return <div>Không tìm thấy dữ liệu</div>
+    if (!segment) return <div>Không tìm thấy dữ liệu</div>;
 
     return (
-        <Card className="col-span-5 p-0 sticky top-6 h-fit border border-border shadow-sm flex flex-col rounded-lg bg-card text-card-foreground ">
+        <Card className="col-span-5 p-0 sticky top-6 h-fit border border-border shadow-sm flex flex-col rounded-lg bg-card text-card-foreground">
             {/* Header */}
             <div className="flex justify-start items-center gap-3 p-5 border-b border-border">
                 <div className="bg-primary rounded-full w-6 h-6 flex items-center justify-center text-primary-foreground font-bold italic">
                     i
                 </div>
                 <div className="flex items-center justify-between gap-2 w-full">
-                    <div className="">
+                    <div>
                         <h3 className="font-bold text-foreground text-lg tracking-tight">Chi tiết lịch đặt</h3>
                         <p className="text-sm text-muted-foreground">ID: {segmentId}</p>
                     </div>
@@ -208,7 +219,7 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                 </div>
             </div>
 
-            <div className="p-5 flex flex-col gap-6">
+            <form onSubmit={handleSubmit(onSubmit as any)} className="p-5 flex flex-col gap-6">
                 {/* Scheduled Times */}
                 <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -237,78 +248,168 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                     </div>
                 </div>
 
-                {/* Odometer */}
-                <div className="bg-muted/50 flex items-center justify-between p-4 rounded-xl border border-border mt-2 gap-4">
-                    {/* Start odometer */}
-                    <div className="flex-1">
-                        <p className="text-[10px] font-bold text-muted-foreground mb-1.5 uppercase tracking-widest">
-                            Km lúc đầu
-                        </p>
-                        {segment?.status === 'Pending' ? (
-                            <div className="flex flex-col gap-0.5">
-                                <div className={`flex items-center gap-1 border-b-2 transition-colors pb-1 ${hasSubmitted && Number(odoStart) < (vehicle?.odometer || 0) ? 'border-destructive focus-within:border-destructive text-destructive' : 'border-primary/30 focus-within:border-primary'}`}>
-                                    <input
-                                        type="number"
-                                        value={odoStart}
-                                        onChange={(e) => setOdoStart(e.target.value === '' ? '' : Number(e.target.value))}
-                                        className={`bg-transparent font-bold text-lg w-full outline-none ${hasSubmitted && Number(odoStart) < (vehicle?.odometer || 0) ? 'text-destructive placeholder:text-destructive/50' : ''}`}
-                                        placeholder="0"
-                                    />
-                                    <span className={`text-xs font-semibold ${hasSubmitted && Number(odoStart) < (vehicle?.odometer || 0) ? 'text-destructive' : 'text-muted-foreground'}`}>km</span>
-                                </div>
-                                {hasSubmitted && Number(odoStart) < (vehicle?.odometer || 0) && (
-                                    <p className="text-[10px] font-medium text-destructive mt-1">
-                                        Phải lớn hơn hoặc bằng {vehicle?.odometer} km
-                                    </p>
-                                )}
-                            </div>
-                        ) : (
-                            <p className="text-[15px] font-bold text-foreground italic">
-                                {segment?.startOdo?.toLocaleString()} <span className="text-xs text-muted-foreground font-semibold ml-0.5">km</span>
+                {/* Dashboard: Odometer & Battery */}
+                <div className="bg-muted/50 rounded-xl border border-border mt-2 p-4 flex flex-col gap-4">
+                    <div className="flex items-center justify-between gap-4">
+                        {/* Start odometer */}
+                        <div className="flex-1">
+                            <p className="text-[10px] font-bold text-muted-foreground mb-1.5 uppercase tracking-widest">
+                                Km lúc đầu
                             </p>
-                        )}
+                            {isCheckIn ? (
+                                <div className="flex flex-col gap-0.5">
+                                    <div className={`flex items-center gap-1 border-b-2 transition-colors pb-1 ${errors.startOdometer ? 'border-destructive focus-within:border-destructive text-destructive' : 'border-primary/30 focus-within:border-primary'}`}>
+                                        <input
+                                            type="number"
+                                            {...register("startOdometer")}
+                                            className={`bg-transparent font-bold text-lg w-full outline-none ${errors.startOdometer ? 'text-destructive placeholder:text-destructive/50' : ''}`}
+                                            placeholder="0"
+                                        />
+                                        <span className={`text-xs font-semibold ${errors.startOdometer ? 'text-destructive' : 'text-muted-foreground'}`}>km</span>
+                                    </div>
+                                    {errors.startOdometer && <p className="text-[10px] font-medium text-destructive mt-1">{errors.startOdometer.message}</p>}
+                                </div>
+                            ) : (
+                                <p className="text-[15px] font-bold text-foreground italic">
+                                    {segment?.startOdo?.toLocaleString()} <span className="text-xs text-muted-foreground font-semibold ml-0.5">km</span>
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="h-8 w-px bg-border"></div>
+
+                        {/* End odometer */}
+                        <div className="flex-1 text-right">
+                            <p className="text-[10px] font-bold text-muted-foreground mb-1.5 uppercase tracking-widest text-right">
+                                Km lúc sau
+                            </p>
+                            {isCheckOut ? (
+                                <div className="flex flex-col gap-0.5 items-end">
+                                    <div className={`flex items-center gap-1 border-b-2 transition-colors pb-1 justify-end ${errors.endOdometer ? 'border-destructive focus-within:border-destructive text-destructive' : 'border-primary/30 focus-within:border-primary'}`}>
+                                        <input
+                                            type="number"
+                                            {...register("endOdometer")}
+                                            className={`bg-transparent font-bold text-lg w-full text-right outline-none ${errors.endOdometer ? 'text-destructive placeholder:text-destructive/50' : ''}`}
+                                            placeholder="0"
+                                        />
+                                        <span className={`text-xs font-semibold ${errors.endOdometer ? 'text-destructive' : 'text-muted-foreground'}`}>km</span>
+                                    </div>
+                                    {errors.endOdometer && <p className="text-[10px] font-medium text-destructive mt-1">{errors.endOdometer.message}</p>}
+                                </div>
+                            ) : (
+                                <p className="text-[15px] font-bold text-foreground italic">
+                                    {segment?.status === 'CheckedOut' ? (
+                                        <>
+                                            {segment?.endOdo?.toLocaleString()}
+                                            <span className="text-xs text-muted-foreground font-semibold ml-0.5">km</span>
+                                        </>
+                                    ) : "—"}
+                                </p>
+                            )}
+                        </div>
                     </div>
 
-                    <div className="h-8 w-px bg-border"></div>
-
-                    {/* End odometer */}
-                    <div className="flex-1 text-right">
-                        <p className="text-[10px] font-bold text-muted-foreground mb-1.5 uppercase tracking-widest text-right">
-                            Km lúc sau
-                        </p>
-                        {segment?.status === 'CheckedIn' ? (
-                            <div className="flex flex-col gap-0.5 items-end">
-                                <div className={`flex items-center gap-1 border-b-2 transition-colors pb-1 justify-end ${hasSubmitted && Number(odoEnd) < (segment?.startOdo || 0) ? 'border-destructive focus-within:border-destructive text-destructive' : 'border-primary/30 focus-within:border-primary'}`}>
-                                    <input
-                                        type="number"
-                                        value={odoEnd}
-                                        onChange={(e) => setOdoEnd(e.target.value === '' ? '' : Number(e.target.value))}
-                                        className={`bg-transparent font-bold text-lg w-full text-right outline-none ${hasSubmitted && Number(odoEnd) < (segment?.startOdo || 0) ? 'text-destructive placeholder:text-destructive/50' : ''}`}
-                                        placeholder="0"
-                                    />
-                                    <span className={`text-xs font-semibold ${hasSubmitted && Number(odoEnd) < (segment?.startOdo || 0) ? 'text-destructive' : 'text-muted-foreground'}`}>km</span>
-                                </div>
-                                {hasSubmitted && Number(odoEnd) < (segment?.startOdo || 0) && (
-                                    <p className="text-[10px] font-medium text-destructive mt-1">
-                                        Phải lớn hơn hoặc bằng {segment?.startOdo} km
-                                    </p>
-                                )}
-                            </div>
-                        ) : (
-                            <p className="text-[15px] font-bold text-foreground italic">
-                                {segment?.status === 'CheckedOut' ? (
-                                    <>
-                                        {segment?.endOdo?.toLocaleString()}
-                                        <span className="text-xs text-muted-foreground font-semibold ml-0.5">
-                                            km
-                                        </span>
-                                    </>
-                                ) : (
-                                    "—"
-                                )}
+                    <div className="flex items-center justify-between gap-4 border-t border-border pt-4">
+                        {/* Start Battery */}
+                        <div className="flex-1">
+                            <p className="text-[10px] font-bold text-muted-foreground mb-1.5 uppercase tracking-widest">
+                                % Pin/Bình lúc đầu
                             </p>
-                        )}
+                            {isCheckIn ? (
+                                <div className="flex flex-col gap-0.5">
+                                    <div className={`flex items-center gap-1 border-b-2 transition-colors pb-1 ${errors.startBatteryLevel ? 'border-destructive focus-within:border-destructive text-destructive' : 'border-primary/30 focus-within:border-primary'}`}>
+                                        <input
+                                            type="number"
+                                            {...register("startBatteryLevel")}
+                                            className={`bg-transparent font-bold text-lg w-full outline-none ${errors.startBatteryLevel ? 'text-destructive placeholder:text-destructive/50' : ''}`}
+                                            placeholder="0"
+                                        />
+                                        <span className={`text-xs font-semibold ${errors.startBatteryLevel ? 'text-destructive' : 'text-muted-foreground'}`}>%</span>
+                                    </div>
+                                    {errors.startBatteryLevel && <p className="text-[10px] font-medium text-destructive mt-1">{errors.startBatteryLevel.message}</p>}
+                                </div>
+                            ) : (
+                                <p className="text-[15px] font-bold text-foreground italic">
+                                    {segment?.startBatteryLevel != null ? segment.startBatteryLevel.toLocaleString() : "—"} <span className="text-xs text-muted-foreground font-semibold ml-0.5">%</span>
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="h-8 w-px bg-border"></div>
+
+                        {/* End Battery */}
+                        <div className="flex-1 text-right">
+                            <p className="text-[10px] font-bold text-muted-foreground mb-1.5 uppercase tracking-widest text-right">
+                                % Pin/Bình lúc sau
+                            </p>
+                            {isCheckOut ? (
+                                <div className="flex flex-col gap-0.5 items-end">
+                                    <div className={`flex items-center gap-1 border-b-2 transition-colors pb-1 justify-end ${errors.endBatteryLevel ? 'border-destructive focus-within:border-destructive text-destructive' : 'border-primary/30 focus-within:border-primary'}`}>
+                                        <input
+                                            type="number"
+                                            {...register("endBatteryLevel")}
+                                            className={`bg-transparent font-bold text-lg w-full text-right outline-none ${errors.endBatteryLevel ? 'text-destructive placeholder:text-destructive/50' : ''}`}
+                                            placeholder="0"
+                                        />
+                                        <span className={`text-xs font-semibold ${errors.endBatteryLevel ? 'text-destructive' : 'text-muted-foreground'}`}>%</span>
+                                    </div>
+                                    {errors.endBatteryLevel && <p className="text-[10px] font-medium text-destructive mt-1">{errors.endBatteryLevel.message}</p>}
+                                </div>
+                            ) : (
+                                <p className="text-[15px] font-bold text-foreground italic">
+                                    {segment?.status === 'CheckedOut' ? (
+                                        <>
+                                            {segment?.endBatteryLevel != null ? segment.endBatteryLevel.toLocaleString() : "—"}
+                                            <span className="text-xs text-muted-foreground font-semibold ml-0.5">%</span>
+                                        </>
+                                    ) : "—"}
+                                </p>
+                            )}
+                        </div>
                     </div>
+                </div>
+
+                {/* Notes */}
+                <div className="flex flex-col gap-4">
+                    {(isCheckIn || (segment?.checkInNote && segment.checkInNote.length > 0)) && (
+                        <div className="flex flex-col gap-2">
+                            <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">Ghi chú lúc nhận xe</p>
+                            {isCheckIn ? (
+                                <div className="flex flex-col gap-1">
+                                    <Textarea
+                                        {...register("checkInNote")}
+                                        placeholder="Thêm ghi chú của bạn ở đây..."
+                                        className={`resize-none h-20 ${errors.checkInNote ? 'border-destructive focus-visible:ring-destructive' : ''}`}
+                                    />
+                                    {errors.checkInNote && <p className="text-[10px] font-medium text-destructive mt-0.5">{errors.checkInNote.message as string}</p>}
+                                </div>
+                            ) : (
+                                <div className="text-sm bg-muted/40 p-3 rounded-lg border border-border">
+                                    {segment?.checkInNote || "Không có ghi chú"}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {(isCheckOut || (segment?.checkOutNote && segment.checkOutNote.length > 0)) && (
+                        <div className="flex flex-col gap-2 mt-2">
+                            <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">Ghi chú lúc trả xe</p>
+                            {isCheckOut ? (
+                                <div className="flex flex-col gap-1">
+                                    <Textarea
+                                        {...register("checkOutNote")}
+                                        placeholder="Thêm ghi chú của bạn ở đây..."
+                                        className={`resize-none h-20 ${errors.checkOutNote ? 'border-destructive focus-visible:ring-destructive' : ''}`}
+                                    />
+                                    {errors.checkOutNote && <p className="text-[10px] font-medium text-destructive mt-0.5">{errors.checkOutNote.message as string}</p>}
+                                </div>
+                            ) : (
+                                <div className="text-sm bg-muted/40 p-3 rounded-lg border border-border">
+                                    {segment?.checkOutNote || "Không có ghi chú"}
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* Photos */}
@@ -320,18 +421,16 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                             <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">Ảnh khi bàn giao xe</p>
                         </div>
                         <div className="flex flex-row flex-wrap gap-4">
-                            {/* 1. Hiển thị ảnh ĐÃ CÓ từ API (Dành cho lúc đang sử dụng xe hoặc đã trả xe) */}
                             {segment?.checkInImages?.map((url, i) => (
                                 <img key={i} src={url} className="w-[84px] h-[84px] rounded-xl object-cover bg-muted border" alt="Checkin API" />
                             ))}
 
-                            {/* 2. Hiển thị vùng UPLOAD nếu status là Pending (Chưa nhận xe) */}
-                            {segment?.status === 'Pending' && (
+                            {isCheckIn && (
                                 <>
                                     {previews.map((url, index) => (
                                         <div key={url} className="relative aspect-square rounded-2xl overflow-hidden border">
-                                            <img src={url} className="object-cover w-[84px] h-[84px]" />
-                                            <Button onClick={(e) => { e.stopPropagation(); removeImage(index); }} className="absolute top-1 right-1 bg-red-500 rounded-full p-1 h-6 w-6">
+                                            <img src={url} className="object-cover w-[84px] h-[84px]" alt="Preview" />
+                                            <Button type="button" onClick={(e) => { e.stopPropagation(); removeImage(index); }} className="absolute top-1 right-1 bg-red-500 rounded-full p-1 h-6 w-6">
                                                 <X size={12} className="text-white" />
                                             </Button>
                                         </div>
@@ -342,10 +441,12 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                                             <input {...getInputProps()} />
                                         </div>
                                     )}
+                                    {errors.images && <p className="text-[10px] font-medium text-destructive mt-1 w-full">{errors.images.message as string}</p>}
                                 </>
                             )}
                         </div>
                     </div>
+
                     {/* Check-out */}
                     {(segment?.status === 'CheckedIn' || segment?.status === 'CheckedOut') && (
                         <div className="flex flex-col gap-3 pt-4 border-t border-dashed">
@@ -354,18 +455,16 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                                 <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">Ảnh khi trả xe</p>
                             </div>
                             <div className="flex flex-row flex-wrap gap-4">
-                                {/* 1. Hiển thị ảnh ĐÃ CÓ từ API (Khi đã hoàn thành lượt thuê) */}
                                 {segment?.checkOutImages?.map((url, i) => (
                                     <img key={i} src={url} className="w-[84px] h-[84px] rounded-xl object-cover bg-muted border" alt="Checkout API" />
                                 ))}
 
-                                {/* 2. Hiển thị vùng UPLOAD nếu status là CheckedIn (Đang cầm xe, chuẩn bị trả) */}
-                                {segment?.status === 'CheckedIn' && (
+                                {isCheckOut && (
                                     <>
                                         {previews.map((url, index) => (
                                             <div key={url} className="relative aspect-square rounded-2xl overflow-hidden border">
-                                                <img src={url} className="object-cover w-[84px] h-[84px]" />
-                                                <Button onClick={(e) => { e.stopPropagation(); removeImage(index); }} className="absolute top-1 right-1 bg-red-500 rounded-full p-1 h-6 w-6">
+                                                <img src={url} className="object-cover w-[84px] h-[84px]" alt="Preview" />
+                                                <Button type="button" onClick={(e) => { e.stopPropagation(); removeImage(index); }} className="absolute top-1 right-1 bg-red-500 rounded-full p-1 h-6 w-6">
                                                     <X size={12} className="text-white" />
                                                 </Button>
                                             </div>
@@ -376,6 +475,7 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                                                 <input {...getInputProps()} />
                                             </div>
                                         )}
+                                        {errors.images && <p className="text-[10px] font-medium text-destructive mt-1 w-full">{errors.images.message as string}</p>}
                                     </>
                                 )}
                             </div>
@@ -421,20 +521,19 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                 {/* Action button */}
                 {segment?.status !== SegmentStatus.CheckedOut ? (
                     <Button
-                        variant="default"
-                        onClick={handleSubmit}
+                        type="submit"
                         disabled={isSubmitting}
                         className="w-full text-[13px] font-bold text-primary-foreground h-11 border-border shadow-sm mt-4 rounded-xl hover:bg-muted transition-none"
                     >
                         {isSubmitting
                             ? "Đang xử lý..."
-                            : (segment?.status === SegmentStatus.Pending
+                            : (isCheckIn
                                 ? 'Xác nhận bàn giao xe'
                                 : 'Xác nhận trả xe')}
                     </Button>
                 ) : (
                     <Button
-                        variant="default"
+                        type="button"
                         onClick={() => handleAnalyzeDamage()}
                         disabled={detectDamageMutation.isPending}
                         className="w-full text-[13px] font-bold h-11 mt-4 rounded-xl bg-primary text-primary-foreground"
@@ -442,7 +541,7 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                         {detectDamageMutation.isPending ? "Đang phân tích..." : "🔍 Phân tích hư hỏng bằng AI"}
                     </Button>
                 )}
-            </div>
+            </form>
         </Card>
     )
 }
