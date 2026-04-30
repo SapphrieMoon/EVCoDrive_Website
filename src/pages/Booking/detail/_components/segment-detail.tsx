@@ -10,7 +10,7 @@ import { SEGMENT_STATUS_MAPPING } from "@/constants/status/booking/segment-statu
 import { toast } from "sonner"
 import { CardSkeleton } from "@/common/skeletons/card-skeleton"
 import imageCompression from 'browser-image-compression';
-import { SegmentStatus, type DamageResult } from "@/types/booking.type"
+import type { DamageResult } from "@/types/booking.type"
 import vehicleQueries from "@/queries/vehicle.query"
 
 import { useForm } from "react-hook-form"
@@ -179,15 +179,15 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                     const data = res.data?.data || res.data;
                     setDamageResult(data);
                     setIsAnalyzed(true);
-                    
+
                     let noteText = "Không phát hiện hư hại mới.";
                     if (data.isDamaged && data.detailsByImage) {
                         noteText = `Phát hiện hư hại (${data.damagePercentage}%):\n` +
-                        Object.entries(data.detailsByImage).map(([imgKey, desc]) => `- ${imgKey}: ${desc}`).join('\n');
+                            Object.entries(data.detailsByImage).map(([imgKey, desc]) => `- ${imgKey}: ${desc}`).join('\n');
                     } else if (data.isDamaged && data.summary) {
                         noteText = `Phát hiện hư hại:\n${data.summary}`;
                     }
-                    
+
                     setValue("checkOutNote", noteText, { shouldValidate: true });
                     toast.success("Phân tích hoàn tất!");
                 },
