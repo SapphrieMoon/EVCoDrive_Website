@@ -27,6 +27,7 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
 
     const [previews, setPreviews] = useState<string[]>([]);
     const [damageResult, setDamageResult] = useState<DamageResult | null>(null);
+    const [isAnalyzed, setIsAnalyzed] = useState(false);
 
     const checkInMutation = bookingQueries.useCheckIn();
     const checkOutMutation = bookingQueries.useCheckOut();
@@ -63,20 +64,16 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                 checkOutNote: segment.checkOutNote ?? '',
             });
             setPreviews([]);
+            setDamageResult(null);
+            setIsAnalyzed(false);
         }
     }, [segment, reset]);
-
-    const urlToFile = async (url: string, filename: string) => {
-        const safeUrl = url.replace("http://", "https://");
-        const res = await fetch(safeUrl);
-        const blob = await res.blob();
-        return new File([blob], filename, { type: blob.type });
-    };
 
     const removeImage = (index: number) => {
         URL.revokeObjectURL(previews[index]);
         setPreviews(prev => prev.filter((_, i) => i !== index));
         setValue("images", formImages.filter((_, i) => i !== index));
+        setIsAnalyzed(false);
     };
 
     const compressImage = async (file: File) => {
@@ -102,6 +99,7 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
 
         const newPreviews = compressedFiles.map(file => URL.createObjectURL(file));
         setPreviews(prev => [...prev, ...newPreviews].slice(0, 5));
+        setIsAnalyzed(false);
     };
 
     const { getRootProps, getInputProps } = useDropzone({
@@ -143,6 +141,11 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
             });
 
         } else if (isCheckOut) {
+            if (!isAnalyzed) {
+                toast.error("Vui lòng phân tích hư hỏng bằng AI trước khi xác nhận trả xe!");
+                return;
+            }
+
             if (segment.startOdo !== undefined && Number(data.endOdometer) < segment.startOdo) {
                 toast.error(`Số km lúc sau phải lớn hơn hoặc bằng ${segment.startOdo} km!`);
                 return;
@@ -166,20 +169,26 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
     };
 
     const handleAnalyzeDamage = async () => {
-        if (!segment?.checkOutImages?.length) {
-            toast.error("Không có ảnh để phân tích!");
+        if (!formImages?.length) {
+            toast.error("Vui lòng tải ảnh lên trước khi phân tích!");
             return;
         }
         try {
-            const files = await Promise.all(
-                segment.checkOutImages.map((url, index) =>
-                    urlToFile(url, `checkout-${index}.jpg`)
-                )
-            );
-            detectDamageMutation.mutate(files, {
+            detectDamageMutation.mutate(formImages, {
                 onSuccess: (res: any) => {
                     const data = res.data?.data || res.data;
                     setDamageResult(data);
+                    setIsAnalyzed(true);
+                    
+                    let noteText = "Không phát hiện hư hại mới.";
+                    if (data.isDamaged && data.detailsByImage) {
+                        noteText = `Phát hiện hư hại (${data.damagePercentage}%):\n` +
+                        Object.entries(data.detailsByImage).map(([imgKey, desc]) => `- ${imgKey}: ${desc}`).join('\n');
+                    } else if (data.isDamaged && data.summary) {
+                        noteText = `Phát hiện hư hại:\n${data.summary}`;
+                    }
+                    
+                    setValue("checkOutNote", noteText, { shouldValidate: true });
                     toast.success("Phân tích hoàn tất!");
                 },
                 onError: (error) => {
@@ -519,27 +528,34 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                 )}
 
                 {/* Action button */}
-                {segment?.status !== SegmentStatus.CheckedOut ? (
+                {isCheckIn && (
                     <Button
                         type="submit"
                         disabled={isSubmitting}
                         className="w-full text-[13px] font-bold text-primary-foreground h-11 border-border shadow-sm mt-4 rounded-xl hover:bg-muted transition-none"
                     >
-                        {isSubmitting
-                            ? "Đang xử lý..."
-                            : (isCheckIn
-                                ? 'Xác nhận bàn giao xe'
-                                : 'Xác nhận trả xe')}
+                        {isSubmitting ? "Đang xử lý..." : 'Xác nhận bàn giao xe'}
                     </Button>
-                ) : (
-                    <Button
-                        type="button"
-                        onClick={() => handleAnalyzeDamage()}
-                        disabled={detectDamageMutation.isPending}
-                        className="w-full text-[13px] font-bold h-11 mt-4 rounded-xl bg-primary text-primary-foreground"
-                    >
-                        {detectDamageMutation.isPending ? "Đang phân tích..." : "🔍 Phân tích hư hỏng bằng AI"}
-                    </Button>
+                )}
+
+                {isCheckOut && (
+                    <div className="flex flex-col gap-3 mt-4">
+                        <Button
+                            type="button"
+                            onClick={() => handleAnalyzeDamage()}
+                            disabled={detectDamageMutation.isPending || formImages.length === 0}
+                            className="w-full text-[13px] font-bold h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+                        >
+                            {detectDamageMutation.isPending ? "Đang phân tích..." : "🔍 Phân tích hư hỏng bằng AI"}
+                        </Button>
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting || !isAnalyzed}
+                            className="w-full text-[13px] font-bold text-primary-foreground h-11 border-border shadow-sm rounded-xl hover:bg-muted transition-none"
+                        >
+                            {isSubmitting ? "Đang xử lý..." : 'Xác nhận trả xe'}
+                        </Button>
+                    </div>
                 )}
             </form>
         </Card>
