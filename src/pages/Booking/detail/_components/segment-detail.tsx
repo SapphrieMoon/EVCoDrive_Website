@@ -27,7 +27,6 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
 
     const [previews, setPreviews] = useState<string[]>([]);
     const [damageResult, setDamageResult] = useState<DamageResult | null>(null);
-    const [isAnalyzed, setIsAnalyzed] = useState(false);
 
     const checkInMutation = bookingQueries.useCheckIn();
     const checkOutMutation = bookingQueries.useCheckOut();
@@ -65,7 +64,6 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
             });
             setPreviews([]);
             setDamageResult(null);
-            setIsAnalyzed(false);
         }
     }, [segment, reset]);
 
@@ -73,7 +71,6 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
         URL.revokeObjectURL(previews[index]);
         setPreviews(prev => prev.filter((_, i) => i !== index));
         setValue("images", formImages.filter((_, i) => i !== index));
-        setIsAnalyzed(false);
     };
 
     const compressImage = async (file: File) => {
@@ -99,7 +96,6 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
 
         const newPreviews = compressedFiles.map(file => URL.createObjectURL(file));
         setPreviews(prev => [...prev, ...newPreviews].slice(0, 5));
-        setIsAnalyzed(false);
     };
 
     const { getRootProps, getInputProps } = useDropzone({
@@ -123,8 +119,6 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                 return;
             }
 
-            console.log(data);
-
             checkInMutation.mutate({
                 bookingId: segment.bookingId,
                 handoverLogId: segmentId,
@@ -141,11 +135,6 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
             });
 
         } else if (isCheckOut) {
-            if (!isAnalyzed) {
-                toast.error("Vui lòng phân tích hư hỏng bằng AI trước khi xác nhận trả xe!");
-                return;
-            }
-
             if (segment.startOdo !== undefined && Number(data.endOdometer) < segment.startOdo) {
                 toast.error(`Số km lúc sau phải lớn hơn hoặc bằng ${segment.startOdo} km!`);
                 return;
@@ -178,7 +167,6 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                 onSuccess: (res: any) => {
                     const data = res.data?.data || res.data;
                     setDamageResult(data);
-                    setIsAnalyzed(true);
 
                     let noteText = "Không phát hiện hư hại mới.";
                     if (data.isDamaged && data.detailsByImage) {
@@ -550,7 +538,7 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                         </Button>
                         <Button
                             type="submit"
-                            disabled={isSubmitting || !isAnalyzed}
+                            disabled={isSubmitting}
                             className="w-full text-[13px] font-bold text-primary-foreground h-11 border-border shadow-sm rounded-xl hover:bg-muted transition-none"
                         >
                             {isSubmitting ? "Đang xử lý..." : 'Xác nhận trả xe'}
