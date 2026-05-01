@@ -19,6 +19,7 @@ export const checkInSchema = z.object({
             .max(100, "Pin/Bình không vượt quá 100")
     ),
     checkInNote: z.string().min(1, "Vui lòng nhập ghi chú lúc nhận xe"),
+    actualCheckInDate: z.string().min(1, "Vui lòng chọn ngày nhận xe thực tế"),
     images: z.array(z.any()).max(5, "Tối đa 5 ảnh").optional().default([]),
 });
 
@@ -43,6 +44,7 @@ export const checkOutSchema = z.object({
             .max(100, "Pin/Bình không vượt quá 100")
     ),
     checkOutNote: z.string().min(1, "Vui lòng nhập ghi chú lúc trả xe"),
+    actualCheckOutDate: z.string().min(1, "Vui lòng chọn ngày trả xe thực tế"),
     images: z.array(z.any()).max(5, "Tối đa 5 ảnh").optional().default([]),
 });
 
