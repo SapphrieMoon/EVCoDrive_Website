@@ -42,10 +42,12 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
             startOdometer: (segment?.startOdo || "") as unknown as number,
             startBatteryLevel: (segment?.startBatteryLevel || "") as unknown as number,
             checkInNote: segment?.checkInNote ?? '',
+            actualCheckInDate: segment?.actualCheckInDate ? new Date(segment.actualCheckInDate).toISOString().slice(0, 10) : "",
             images: [],
             endOdometer: (segment?.endOdo || segment?.startOdo || "") as unknown as number,
             endBatteryLevel: (segment?.endBatteryLevel || segment?.startBatteryLevel || "") as unknown as number,
             checkOutNote: segment?.checkOutNote ?? '',
+            actualCheckOutDate: segment?.actualCheckOutDate ? new Date(segment.actualCheckOutDate).toISOString().slice(0, 10) : "",
         }
     });
 
@@ -57,10 +59,12 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                 startOdometer: (segment.startOdo || "") as unknown as number,
                 startBatteryLevel: (segment.startBatteryLevel || "") as unknown as number,
                 checkInNote: segment.checkInNote ?? '',
+                actualCheckInDate: segment.actualCheckInDate ? new Date(segment.actualCheckInDate).toISOString().slice(0, 10) : "",
                 images: [],
                 endOdometer: (segment.endOdo || segment.startOdo || "") as unknown as number,
                 endBatteryLevel: (segment.endBatteryLevel || segment.startBatteryLevel || "") as unknown as number,
                 checkOutNote: segment.checkOutNote ?? '',
+                actualCheckOutDate: segment.actualCheckOutDate ? new Date(segment.actualCheckOutDate).toISOString().slice(0, 10) : "",
             });
             setPreviews([]);
             setDamageResult(null);
@@ -126,6 +130,7 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                     startOdometer: Number(data.startOdometer),
                     startBatteryLevel: Number(data.startBatteryLevel),
                     checkInNote: data.checkInNote || '',
+                    actualCheckInDate: data.actualCheckInDate,
                     images: data.images || []
                 }
             }, {
@@ -147,6 +152,7 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                     endOdometer: Number(data.endOdometer),
                     endBatteryLevel: Number(data.endBatteryLevel),
                     checkOutNote: data.checkOutNote || '',
+                    actualCheckOutDate: data.actualCheckOutDate,
                     images: data.images || []
                 }
             }, {
@@ -233,15 +239,37 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <p className="text-[11px] font-bold text-primary mb-1.5 tracking-wider uppercase">Ngày nhận xe thực tế</p>
-                        <p className="text-[15px] font-bold text-foreground">
-                            {segment?.actualCheckInDate ? formatDate(segment?.actualCheckInDate, false) : "---"}
-                        </p>
+                        {isCheckIn ? (
+                            <div className="flex flex-col gap-0.5">
+                                <input
+                                    type="date"
+                                    {...register("actualCheckInDate")}
+                                    className={`flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 ${errors.actualCheckInDate ? 'border-destructive focus-visible:ring-destructive' : 'border-input focus-visible:ring-ring'}`}
+                                />
+                                {errors.actualCheckInDate && <p className="text-[10px] font-medium text-destructive mt-1">{errors.actualCheckInDate.message as string}</p>}
+                            </div>
+                        ) : (
+                            <p className="text-[15px] font-bold text-foreground">
+                                {segment?.actualCheckInDate ? formatDate(segment?.actualCheckInDate, false) : "---"}
+                            </p>
+                        )}
                     </div>
                     <div>
                         <p className="text-[11px] font-bold text-muted-primary mb-1.5 tracking-wider uppercase">Ngày trả xe thực tế</p>
-                        <p className="text-[15px] font-bold text-muted-primary">
-                            {segment?.actualCheckOutDate ? formatDate(segment?.actualCheckOutDate, false) : "---"}
-                        </p>
+                        {isCheckOut ? (
+                            <div className="flex flex-col gap-0.5">
+                                <input
+                                    type="date"
+                                    {...register("actualCheckOutDate")}
+                                    className={`flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 ${errors.actualCheckOutDate ? 'border-destructive focus-visible:ring-destructive' : 'border-input focus-visible:ring-ring'}`}
+                                />
+                                {errors.actualCheckOutDate && <p className="text-[10px] font-medium text-destructive mt-1">{errors.actualCheckOutDate.message as string}</p>}
+                            </div>
+                        ) : (
+                            <p className="text-[15px] font-bold text-muted-primary">
+                                {segment?.actualCheckOutDate ? formatDate(segment?.actualCheckOutDate, false) : "---"}
+                            </p>
+                        )}
                     </div>
                 </div>
 

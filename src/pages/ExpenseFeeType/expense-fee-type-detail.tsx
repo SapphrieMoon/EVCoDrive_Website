@@ -49,7 +49,7 @@ export function ExpenseFeeTypeDetail({ id, open, onOpenChange }: BaseDetailProps
                                 <AlignLeft className="h-4 w-4" /> Mô tả
                             </h4>
                             <div className="rounded-lg border p-4 bg-card space-y-2">
-                                <div className="text-sm text-foreground leading-relaxed">
+                                <div className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">
                                     {expenseFeeType?.expenseFeeTypeDescription || "Chưa có mô tả"}
                                 </div>
                             </div>

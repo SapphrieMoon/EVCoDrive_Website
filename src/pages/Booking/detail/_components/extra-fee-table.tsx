@@ -1,4 +1,4 @@
-import { Banknote, FileText, Calendar, Ticket } from "lucide-react";
+import { Banknote, Calendar, Ticket } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -35,58 +35,62 @@ export default function ExtraFeeTable({ id, segments }: { id: string, segments: 
                             <TableHead className="w-[300px] text-xs font-bold text-muted-foreground uppercase tracking-wider py-4 pl-6">Loại phí</TableHead>
                             <TableHead className="text-xs font-bold text-muted-foreground uppercase tracking-wider py-4">Mô tả</TableHead>
                             <TableHead className="text-xs font-bold text-muted-foreground uppercase tracking-wider py-4">Số tiền</TableHead>
-                            <TableHead className="text-xs font-bold text-muted-foreground uppercase tracking-wider py-4">LOG ID / Ngày tạo</TableHead>
+                            <TableHead className="text-xs font-bold text-muted-foreground uppercase tracking-wider py-4">Chặng</TableHead>
                             <TableHead className="text-xs font-bold text-muted-foreground uppercase tracking-wider text-right py-4 pr-6">Trạng thái</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {extraFees?.map((extraFee) => (
-                            <TableRow key={extraFee.extraFeeId} className="hover:bg-muted/50 border-border">
-                                {/* FEE TYPE & TITLE */}
-                                <TableCell className="py-4 pl-6">
-                                    <div className="flex flex-col gap-1">
-                                        <span className="font-bold text-foreground text-[15px]">{extraFee.title}</span>
-                                        <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
-                                            {extraFee.extraFeeTypeId}
-                                        </span>
-                                    </div>
-                                </TableCell>
+                        {extraFees?.map((extraFee) => {
+                            const segment = segments?.find(s => s.handoverLogId === extraFee.handoverLogId);
+                            let displayDate = "Không xác định";
+                            if (segment) {
+                                const inDate = formatDate(segment.checkInDate, false);
+                                const outDate = formatDate(segment.checkOutDate, false);
+                                displayDate = inDate === outDate ? inDate : `${inDate} - ${outDate}`;
+                            }
 
-                                {/* DESCRIPTION */}
-                                <TableCell className="py-4 text-sm text-foreground/80 font-medium">
-                                    {extraFee.description}
-                                </TableCell>
-
-                                {/* AMOUNT */}
-                                <TableCell className="py-4">
-                                    <div className="flex items-center text-orange-600 font-bold text-[15px]">
-                                        <Ticket className="w-4 h-4 mr-2" />
-                                        {formatCurrency(extraFee.amount)}
-                                    </div>
-                                </TableCell>
-
-                                {/* LOG ID / DATE */}
-                                <TableCell className="py-4">
-                                    <div className="flex flex-col gap-1.5">
-                                        <div className="flex items-center text-[13px] font-medium">
-                                            <Calendar className="w-3.5 h-3.5 mr-2 opacity-70" />
-                                            {formatDate(extraFee.createdDate, false)}
+                            return (
+                                <TableRow key={extraFee.extraFeeId} className="hover:bg-muted/50 border-border">
+                                    {/* FEE TYPE & TITLE */}
+                                    <TableCell className="py-4 pl-6">
+                                        <div className="flex flex-col gap-1">
+                                            <span className="font-bold text-foreground text-[15px]">{extraFee.title}</span>
+                                            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                                                {extraFee.extraFeeTypeId}
+                                            </span>
                                         </div>
-                                        <div className="flex items-center text-[13px] font-medium text-muted-foreground">
-                                            <FileText className="w-3.5 h-3.5 mr-2 opacity-70" />
-                                            {extraFee.handoverLogId}
-                                        </div>
-                                    </div>
-                                </TableCell>
+                                    </TableCell>
 
-                                {/* STATUS */}
-                                <TableCell className="py-4 text-right pr-6">
-                                    <Badge variant={EXTRA_FEE_STATUS_MAPPING[extraFee.status].color} className="font-semibold px-2.5 py-1">
-                                        {EXTRA_FEE_STATUS_MAPPING[extraFee.status].label}
-                                    </Badge>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                                    {/* DESCRIPTION */}
+                                    <TableCell className="py-4 text-sm text-foreground/80 font-medium">
+                                        {extraFee.description}
+                                    </TableCell>
+
+                                    {/* AMOUNT */}
+                                    <TableCell className="py-4">
+                                        <div className="flex items-center text-orange-600 font-bold text-[15px]">
+                                            <Ticket className="w-4 h-4 mr-2" />
+                                            {formatCurrency(extraFee.amount)}
+                                        </div>
+                                    </TableCell>
+
+                                    {/* SEGMENT DATE */}
+                                    <TableCell className="py-4">
+                                        <div className="flex items-center text-[13px] font-medium text-foreground">
+                                            <Calendar className="w-4 h-4 mr-2 opacity-70" />
+                                            {displayDate}
+                                        </div>
+                                    </TableCell>
+
+                                    {/* STATUS */}
+                                    <TableCell className="py-4 text-right pr-6">
+                                        <Badge variant={EXTRA_FEE_STATUS_MAPPING[extraFee.status].color} className="font-semibold px-2.5 py-1">
+                                            {EXTRA_FEE_STATUS_MAPPING[extraFee.status].label}
+                                        </Badge>
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
                     </TableBody>
                 </Table>
             </div>

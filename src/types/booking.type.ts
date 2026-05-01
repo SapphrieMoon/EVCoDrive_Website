@@ -10,6 +10,7 @@ export interface CheckInRequest {
     images: File[];
     startBatteryLevel: number;
     checkInNote: string;
+    actualCheckInDate: string;
 }
 
 export interface CheckOutRequest {
@@ -17,6 +18,7 @@ export interface CheckOutRequest {
     images: File[];
     endBatteryLevel: number;
     checkOutNote: string;
+    actualCheckOutDate: string;
 }
 
 export interface DamageResult {

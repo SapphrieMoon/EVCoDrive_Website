@@ -22,6 +22,7 @@ const bookingApi = {
         formData.append("startOdometer", body.startOdometer.toString());
         formData.append("startBatteryLevel", body.startBatteryLevel.toString());
         formData.append("checkInNote", body.checkInNote);
+        formData.append("actualCheckInDate", body.actualCheckInDate);
         body.images.forEach((file) => formData.append("images", file));
 
         return await http.patch(
@@ -35,6 +36,7 @@ const bookingApi = {
         formData.append("endOdometer", body.endOdometer.toString());
         formData.append("endBatteryLevel", body.endBatteryLevel.toString());
         formData.append("checkOutNote", body.checkOutNote);
+        formData.append("actualCheckOutDate", body.actualCheckOutDate);
         body.images.forEach((file) => formData.append("images", file));
 
         return await http.patch(

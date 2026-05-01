@@ -13,18 +13,24 @@ export const expenseFeeTypeColumns: ColumnDef<ExpenseFeeType>[] = [
         enableSorting: false,
         cell: ({ row }) => {
             const item = row.original;
-
             return (
                 <div className="flex flex-col gap-1 py-1">
                     <span className="font-bold text-sm text-primary leading-none">
                         {item.expenseFeeTypeName}
                     </span>
-                    <span
-                        className="text-xs text-muted-foreground truncate max-w-[250px]"
-                        title={item.expenseFeeTypeDescription}
-                    >
-                        {item.expenseFeeTypeDescription}
-                    </span>
+                </div>
+            );
+        }
+    },
+    {
+        id: "description",
+        header: "Mô tả",
+        enableSorting: false,
+        cell: ({ row }) => {
+            const item = row.original;
+            return (
+                <div className="text-sm text-muted-foreground whitespace-pre-wrap min-w-[300px]">
+                    {item.expenseFeeTypeDescription || "Chưa có mô tả"}
                 </div>
             );
         }
