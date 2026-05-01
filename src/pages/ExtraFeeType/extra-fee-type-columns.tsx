@@ -13,19 +13,25 @@ export const extraFeeTypeColumns: ColumnDef<ExtraFeeType>[] = [
         enableSorting: false,
         cell: ({ row }) => {
             const item = row.original;
-            const description = (item as any).extraFeeTypeDescription || item.exptraFeeTypeDescription
-
             return (
                 <div className="flex flex-col gap-1 py-1">
                     <span className="font-bold text-sm text-primary leading-none">
                         {item.extraFeeTypeName}
                     </span>
-                    <span
-                        className="text-xs text-muted-foreground truncate max-w-[250px]"
-                        title={description}
-                    >
-                        {description}
-                    </span>
+                </div>
+            );
+        }
+    },
+    {
+        id: "description",
+        header: "Mô tả",
+        enableSorting: false,
+        cell: ({ row }) => {
+            const item = row.original;
+            const description = (item as any).extraFeeTypeDescription || item.exptraFeeTypeDescription;
+            return (
+                <div className="text-sm text-muted-foreground whitespace-pre-wrap min-w-[300px]">
+                    {description || "Chưa có mô tả"}
                 </div>
             );
         }
