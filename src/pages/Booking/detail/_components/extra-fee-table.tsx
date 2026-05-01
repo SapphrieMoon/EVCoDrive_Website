@@ -1,4 +1,4 @@
-import { Banknote, FileText, Calendar, Ticket } from "lucide-react";
+import { Banknote, Calendar, Ticket } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
