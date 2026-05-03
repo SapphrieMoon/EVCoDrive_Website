@@ -59,7 +59,7 @@ export default function CoOwnerGroupDetailPage() {
                                 {group.coOwnershipContractUrl ? (
                                     <a href={group.coOwnershipContractUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-2 p-2 border rounded-xl bg-card/50 hover:bg-card transition-colors group shadow-sm">
                                         <div className="aspect-[4/3] bg-muted rounded-lg overflow-hidden flex items-center justify-center border border-border/50 relative">
-                                            <img src={group.coOwnershipContractUrl} alt="Hợp đồng" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                            <img src={group.coOwnershipContractUrl.replace(/\.pdf$/i, '.jpg')} alt="Hợp đồng" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                                 <ExternalLink className="h-5 w-5 text-white" />
                                             </div>
@@ -76,7 +76,7 @@ export default function CoOwnerGroupDetailPage() {
                                 {group.vehicleRegistrationCertificateUrl ? (
                                     <a href={group.vehicleRegistrationCertificateUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-2 p-2 border rounded-xl bg-card/50 hover:bg-card transition-colors group shadow-sm">
                                         <div className="aspect-[4/3] bg-muted rounded-lg overflow-hidden flex items-center justify-center border border-border/50 relative">
-                                            <img src={group.vehicleRegistrationCertificateUrl} alt="Giấy đăng ký xe" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                            <img src={group.vehicleRegistrationCertificateUrl.replace(/\.pdf$/i, '.jpg')} alt="Giấy đăng ký xe" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                                 <ExternalLink className="h-5 w-5 text-white" />
                                             </div>
