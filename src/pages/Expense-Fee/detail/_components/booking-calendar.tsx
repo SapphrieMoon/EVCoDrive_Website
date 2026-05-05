@@ -12,9 +12,10 @@ import { CalendarDays } from "lucide-react";
 import bookingQueries from "@/queries/booking.query";
 import { expenseFeeQueries } from "@/queries/expense-fee.query";
 import { toast } from "sonner";
-import { format } from "date-fns";
+import { format, eachDayOfInterval } from "date-fns";
+import type { DateRange } from "react-day-picker";
 
-export default function BookingCalendar({ vehicleId, expenseFeeId, serviceDates }: { vehicleId?: string, expenseFeeId?: string, serviceDates?: string[] }) {
+export default function BookingCalendar({ vehicleId, expenseFeeId, serviceDates, groupId }: { vehicleId?: string, expenseFeeId?: string, serviceDates?: string[], groupId?: string }) {
     const [open, setOpen] = useState(false);
 
     const today = new Date();
@@ -22,7 +23,7 @@ export default function BookingCalendar({ vehicleId, expenseFeeId, serviceDates 
     const [year, setYear] = useState(today.getFullYear());
 
 
-    const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+    const [date, setDate] = useState<DateRange | undefined>(undefined);
 
 
     const { data, refetch } = bookingQueries.useAvaliableBooking({
@@ -31,10 +32,14 @@ export default function BookingCalendar({ vehicleId, expenseFeeId, serviceDates 
         year: year,
     });
 
+    const { data: scheduleData } = expenseFeeQueries.useScheduleByGroup(groupId || "");
+    const scheduledGroupDates = scheduleData?.data?.data?.flatMap(fee => fee.serviceDates) || [];
+
 
     const bookedDates = [
         ...(data?.data?.data?.items?.flatMap((item) => item.bookedDates) || []),
         ...(serviceDates || []),
+        ...scheduledGroupDates,
     ];
 
     const disabledDates = bookedDates.map((dateStr) => {
@@ -57,14 +62,23 @@ export default function BookingCalendar({ vehicleId, expenseFeeId, serviceDates 
     const scheduleServiceMutation = expenseFeeQueries.useScheduleService();
 
     const handleConfirm = () => {
-        console.log("Selected date:", selectedDate);
+        if (!date?.from) return;
 
-        if (!selectedDate) return;
+        const datesToSubmit = date.to
+            ? eachDayOfInterval({ start: date.from, end: date.to })
+            : [date.from];
 
-        // Because the API array expects strings, wrap the single selected date in an array.
+        const dateStrings = datesToSubmit.map(d => format(d, "yyyy-MM-dd"));
+
+        const hasDisabledDate = dateStrings.some(d => bookedDates.includes(d));
+        if (hasDisabledDate) {
+            toast.error("Khoảng thời gian đã chọn bao gồm ngày đã có lịch");
+            return;
+        }
+
         scheduleServiceMutation.mutate({
             id: expenseFeeId || "",
-            body: [format(selectedDate, "yyyy-MM-dd")]
+            body: dateStrings
         }, {
             onSuccess: () => {
                 setOpen(false);
@@ -91,9 +105,9 @@ export default function BookingCalendar({ vehicleId, expenseFeeId, serviceDates 
 
                 <div className="flex justify-center w-full mt-4">
                     <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={setSelectedDate}
+                        mode="range"
+                        selected={date}
+                        onSelect={setDate}
                         onMonthChange={handleMonthChange}
                         disabled={disabledDates}
                         showOutsideDays={false}
@@ -103,7 +117,7 @@ export default function BookingCalendar({ vehicleId, expenseFeeId, serviceDates 
 
 
                 <div className="w-full mt-4 flex justify-end">
-                    <Button onClick={handleConfirm} disabled={scheduleServiceMutation.isPending}>
+                    <Button onClick={handleConfirm} disabled={scheduleServiceMutation.isPending || !date?.from}>
                         {scheduleServiceMutation.isPending ? "Đang xử lý..." : "Xác nhận"}
                     </Button>
                 </div>

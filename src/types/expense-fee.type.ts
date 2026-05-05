@@ -81,3 +81,5 @@ export type ExpenseFeeTypeResponse = SuccessResponse<ExpenseFeeType[]>
 export type ExpenseFeeTypeDetailResponse = SuccessResponse<ExpenseFeeType>
 
 export type ExpenseFeeFormProps = BaseCrudFormProps & {}
+
+export type ExpenseFeeScheduleByGroupResponse = SuccessResponse<ExpenseFee[]>

@@ -67,6 +67,15 @@ const expenseFeeQueries = {
                 queryClient.invalidateQueries({ queryKey: expenseFeeKey.listPagination({ pageNumber: 1, pageSize: 10 }) })
             }
         })
+    },
+
+    useScheduleByGroup: (groupId: string) => {
+        return useQuery({
+            queryKey: expenseFeeKey.scheduleByGroup(groupId),
+            queryFn: () => expenseFeeApi.getScheduleByGroup(groupId),
+            enabled: !!groupId,
+            placeholderData: (previousData) => previousData,
+        })
     }
 }
 

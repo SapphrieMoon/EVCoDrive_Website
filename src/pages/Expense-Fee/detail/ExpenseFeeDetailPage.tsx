@@ -68,6 +68,7 @@ export default function ExpenseDetailPage() {
                         vehicleId={expense.vehicleId}
                         expenseFeeId={expense.expenseFeeId}
                         serviceDates={expense.serviceDates}
+                        groupId={expense.coOwnerGroupId}
                     />
                 )}
 

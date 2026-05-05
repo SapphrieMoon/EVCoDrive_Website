@@ -22,6 +22,8 @@ export enum VehicleStatus {
 export interface Vehicle {
     vehicleId: string;           // UUID
     licensePlate: string;
+    chassisNumber: string;
+    engineNumber: string;
     color: string;
     year: number;
     vehicleStatus: VehicleStatus;
@@ -38,6 +40,8 @@ export interface VehicleDetail {
     vehicleId: string;
     memberId: string | null;
     licensePlate: string;
+    chassisNumber: string;
+    engineNumber: string;
     color: string;
     year: number;
     odometer: number;

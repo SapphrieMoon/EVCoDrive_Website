@@ -90,6 +90,7 @@ export default function VehicleDetailPage() {
                             </Badge>
                         </div>
                         <p className="text-muted-foreground font-medium">Biển số: <span className="text-foreground">{vehicle.licensePlate}</span> • Hãng: {vehicle.vehicleModel.brandName}</p>
+                        <p className="text-muted-foreground font-medium text-sm">Số khung: <span className="text-foreground">{vehicle.chassisNumber}</span> • Số máy: <span className="text-foreground">{vehicle.engineNumber}</span></p>
                         <p className="text-foreground text-sm">Mã định danh xe: <span className="text-muted-foreground">{vehicle.vehicleId}</span></p>
                     </div>
 
