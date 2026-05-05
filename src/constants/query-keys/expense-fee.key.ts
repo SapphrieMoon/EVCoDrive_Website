@@ -11,6 +11,8 @@ export const expenseFeeKey = {
     ],
     details: () => ["expense-fee", "detail"],
     detail: (id: string) => ["expense-fee", "detail", id],
+    schedules: () => ["expense-fee", "schedule"],
+    scheduleByGroup: (groupId: string) => ["expense-fee", "schedule", "group", groupId],
 }
 
 export const expenseFeeTypeKey = {

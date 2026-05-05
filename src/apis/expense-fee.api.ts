@@ -1,4 +1,4 @@
-import type { ExpenseFeeDetailResponse, ExpenseFeePaginationParams, ExpenseFeePaginationResponse, ExpenseFeeQuoteRequest, ExpenseFeeTypeDetailResponse, ExpenseFeeTypePaginationParams, ExpenseFeeTypePaginationResponse, ExpenseFeeTypeResponse } from "@/types/expense-fee.type";
+import type { ExpenseFeeDetailResponse, ExpenseFeePaginationParams, ExpenseFeePaginationResponse, ExpenseFeeQuoteRequest, ExpenseFeeScheduleByGroupResponse, ExpenseFeeTypeDetailResponse, ExpenseFeeTypePaginationParams, ExpenseFeeTypePaginationResponse, ExpenseFeeTypeResponse } from "@/types/expense-fee.type";
 import http from "@/utils/http";
 
 export const EXPENSE_FEE_API = {
@@ -26,6 +26,9 @@ export const expenseFeeApi = {
     postComplete: async (id: string) => {
         return http.post(`${EXPENSE_FEE_API.EXPENSE_FEE}/${id}/complete`);
     },
+    getScheduleByGroup: async (groupId: string) => {
+        return http.get<ExpenseFeeScheduleByGroupResponse>(`${EXPENSE_FEE_API.EXPENSE_FEE}/group/${groupId}`);
+    }
 }
 
 export const expenseFeeTypeApi = {
