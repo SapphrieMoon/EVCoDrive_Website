@@ -100,6 +100,7 @@ export default function VehicleDetailPage() {
                             <Button key={action.type} variant={action.variant || "outline"} size="lg"
                                 className="font-bold uppercase text-[10px]"
                                 onClick={() => handleAction(vehicle.vehicleId, action.type)}
+                                disabled={updateStatusMutation.isPending}
                             >
                                 <action.icon className="mr-2 h-3.5 w-3.5" /> {action.label}
                             </Button>
