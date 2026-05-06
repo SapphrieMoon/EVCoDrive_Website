@@ -1,5 +1,6 @@
 import bookingApi from "@/apis/booking.api"
 import { bookingKey } from "@/constants/query-keys/booking.key"
+import { extraFeeKey } from "@/constants/query-keys/extra-fee"
 import type { AvaliableBookingParams, BookingPaginationParams, CheckInRequest, CheckOutRequest, UsageQuotasRequest } from "@/types/booking.type"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
@@ -75,6 +76,9 @@ const bookingQueries = {
                 queryClient.invalidateQueries({
                     queryKey: bookingKey.handoverLogs(handoverLogId)
                 });
+                queryClient.invalidateQueries({
+                    queryKey: extraFeeKey.all(),
+                })
             },
         })
     },
@@ -129,6 +133,12 @@ const bookingQueries = {
                 });
                 queryClient.invalidateQueries({
                     queryKey: bookingKey.detail(bookingId),
+                });
+                queryClient.invalidateQueries({
+                    queryKey: extraFeeKey.all(),
+                });
+                queryClient.invalidateQueries({
+                    queryKey: bookingKey.all(),
                 });
             },
         });

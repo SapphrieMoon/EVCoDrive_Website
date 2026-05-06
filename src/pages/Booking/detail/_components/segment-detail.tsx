@@ -117,6 +117,10 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
             return;
         }
 
+        const totalImageSize = (data.images || []).reduce((acc, file) => acc + (file.size || 0), 0);
+        console.log(`Dung lượng tổng cộng của ${data.images?.length || 0} ảnh:`, (totalImageSize / (1024 * 1024)).toFixed(2), "MB");
+
+
         if (isCheckIn) {
             if (vehicle && Number(data.startOdometer) < vehicle.odometer) {
                 toast.error(`Số km lúc đầu phải lớn hơn hoặc bằng ${vehicle.odometer} km!`);
@@ -433,6 +437,15 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                                     {segment?.checkOutNote || "Không có ghi chú"}
                                 </div>
                             )}
+                        </div>
+                    )}
+
+                    {segment?.status === 'Cancelled' && segment?.cancellationReason && (
+                        <div className="flex flex-col gap-2 mt-2">
+                            <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">Lý do hủy</p>
+                            <div className="text-sm bg-destructive/10 text-destructive p-3 rounded-lg border border-destructive/20 font-medium">
+                                {segment.cancellationReason}
+                            </div>
                         </div>
                     )}
                 </div>

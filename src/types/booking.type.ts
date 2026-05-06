@@ -105,6 +105,7 @@ export interface BookingSegmentDetail {
     interiorCondition: string;
     checkInNote: string;
     checkOutNote: string;
+    cancellationReason: string;
     signatureUrl: string;
     checkInImages: string[];
     checkOutImages: string[];
