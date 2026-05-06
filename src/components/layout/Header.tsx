@@ -32,7 +32,7 @@ export const Header = () => {
       {/* Logo / title */}
       {user?.role === "Operator" ? (
         <div className="font-semibold tracking-tight px-3 py-1 bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-full text-sm inline-flex items-center justify-center shadow-sm">
-          Trạm {stationName}
+          {stationName}
         </div>
       ) : (
         <div className="font-semibold tracking-tight px-3 py-1 bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-full text-sm inline-flex items-center justify-center shadow-sm">
