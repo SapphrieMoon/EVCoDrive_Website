@@ -62,7 +62,7 @@ export default function ExtraFeeTable({ id, segments }: { id: string, segments: 
                                     </TableCell>
 
                                     {/* DESCRIPTION */}
-                                    <TableCell className="py-4 text-sm text-foreground/80 font-medium">
+                                    <TableCell className="py-4 text-sm text-foreground/80 font-medium whitespace-pre-wrap">
                                         {extraFee.description}
                                     </TableCell>
 
