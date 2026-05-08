@@ -28,7 +28,7 @@ const bookingApi = {
         return await http.patch(
             `${BOOKING_URL.BASE}/${bookingId}${BOOKING_URL.HANDOVER_LOGS}/${handoverLogId}/check-in`,
             formData,
-            { headers: { 'Content-Type': 'multipart/form-data' } }
+            { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 0 }
         );
     },
     patchCheckOut: async (bookingId: string, handoverLogId: string, body: CheckOutRequest) => {
@@ -42,7 +42,7 @@ const bookingApi = {
         return await http.patch(
             `${BOOKING_URL.BASE}/${bookingId}${BOOKING_URL.HANDOVER_LOGS}/${handoverLogId}/check-out`,
             formData,
-            { headers: { 'Content-Type': 'multipart/form-data' } }
+            { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 0 }
         );
     },
     getHandoverLogs: async (id: string) =>
@@ -50,12 +50,12 @@ const bookingApi = {
     postDetectDamage: async (images: File[]) => {
         const formData = new FormData();
         images.forEach((file) => formData.append("images", file));
-        return await http.post(BOOKING_URL.DETECT_DAMAGE, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+        return await http.post(BOOKING_URL.DETECT_DAMAGE, formData, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 0 });
     },
     postFaceSearchBooking: async (image: File) => {
         const formData = new FormData();
         formData.append("faceImage", image);
-        return await http.post<FaceSearchBookingResponse>(BOOKING_URL.FACE_SEARCH_BOOKING, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+        return await http.post<FaceSearchBookingResponse>(BOOKING_URL.FACE_SEARCH_BOOKING, formData, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 0 });
     },
     getAvaliableBooking: async ({ vehicleId, ...params }: AvaliableBookingParams) =>
         await http.get<AvaliableBookingPaginationResponse>(`${BOOKING_URL.BASE}/vehicle/${vehicleId}`, { params }),

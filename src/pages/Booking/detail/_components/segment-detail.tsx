@@ -17,6 +17,8 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { checkInSchema, checkOutSchema, type CheckInFormValues, type CheckOutFormValues } from "@/schema/booking.schema"
 import { Textarea } from "@/components/ui/textarea"
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: string, vehicleId?: string }) {
     const { data, isPending } = bookingQueries.useHandoverLogs(segmentId as string)
@@ -27,6 +29,13 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
 
     const [previews, setPreviews] = useState<string[]>([]);
     const [damageResult, setDamageResult] = useState<DamageResult | null>(null);
+    const [lightboxIndex, setLightboxIndex] = useState(-1);
+    const [lightboxSlides, setLightboxSlides] = useState<{ src: string }[]>([]);
+
+    const handleImageClick = (urls: string[], index: number) => {
+        setLightboxSlides(urls.map(url => ({ src: url })));
+        setLightboxIndex(index);
+    };
 
     const checkInMutation = bookingQueries.useCheckIn();
     const checkOutMutation = bookingQueries.useCheckOut();
@@ -413,7 +422,7 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                                     {errors.checkInNote && <p className="text-[10px] font-medium text-destructive mt-0.5">{errors.checkInNote.message as string}</p>}
                                 </div>
                             ) : (
-                                <div className="text-sm bg-muted/40 p-3 rounded-lg border border-border">
+                                <div className="text-sm bg-muted/40 p-3 rounded-lg border border-border whitespace-pre-wrap">
                                     {segment?.checkInNote || "Không có ghi chú"}
                                 </div>
                             )}
@@ -433,7 +442,7 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                                     {errors.checkOutNote && <p className="text-[10px] font-medium text-destructive mt-0.5">{errors.checkOutNote.message as string}</p>}
                                 </div>
                             ) : (
-                                <div className="text-sm bg-muted/40 p-3 rounded-lg border border-border">
+                                <div className="text-sm bg-muted/40 p-3 rounded-lg border border-border whitespace-pre-wrap">
                                     {segment?.checkOutNote || "Không có ghi chú"}
                                 </div>
                             )}
@@ -460,14 +469,14 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                         </div>
                         <div className="flex flex-row flex-wrap gap-4">
                             {segment?.checkInImages?.map((url, i) => (
-                                <img key={i} src={url} className="w-[84px] h-[84px] rounded-xl object-cover bg-muted border" alt="Checkin API" />
+                                <img key={i} src={url} onClick={() => handleImageClick(segment.checkInImages!, i)} className="w-[84px] h-[84px] rounded-xl object-cover bg-muted border cursor-pointer hover:opacity-80 transition-opacity" alt="Checkin API" />
                             ))}
 
                             {isCheckIn && (
                                 <>
                                     {previews.map((url, index) => (
                                         <div key={url} className="relative aspect-square rounded-2xl overflow-hidden border">
-                                            <img src={url} className="object-cover w-[84px] h-[84px]" alt="Preview" />
+                                            <img src={url} onClick={() => handleImageClick(previews, index)} className="object-cover w-[84px] h-[84px] cursor-pointer hover:opacity-80 transition-opacity" alt="Preview" />
                                             <Button type="button" onClick={(e) => { e.stopPropagation(); removeImage(index); }} className="absolute top-1 right-1 bg-red-500 rounded-full p-1 h-6 w-6">
                                                 <X size={12} className="text-white" />
                                             </Button>
@@ -494,14 +503,14 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                             </div>
                             <div className="flex flex-row flex-wrap gap-4">
                                 {segment?.checkOutImages?.map((url, i) => (
-                                    <img key={i} src={url} className="w-[84px] h-[84px] rounded-xl object-cover bg-muted border" alt="Checkout API" />
+                                    <img key={i} src={url} onClick={() => handleImageClick(segment.checkOutImages!, i)} className="w-[84px] h-[84px] rounded-xl object-cover bg-muted border cursor-pointer hover:opacity-80 transition-opacity" alt="Checkout API" />
                                 ))}
 
                                 {isCheckOut && (
                                     <>
                                         {previews.map((url, index) => (
                                             <div key={url} className="relative aspect-square rounded-2xl overflow-hidden border">
-                                                <img src={url} className="object-cover w-[84px] h-[84px]" alt="Preview" />
+                                                <img src={url} onClick={() => handleImageClick(previews, index)} className="object-cover w-[84px] h-[84px] cursor-pointer hover:opacity-80 transition-opacity" alt="Preview" />
                                                 <Button type="button" onClick={(e) => { e.stopPropagation(); removeImage(index); }} className="absolute top-1 right-1 bg-red-500 rounded-full p-1 h-6 w-6">
                                                     <X size={12} className="text-white" />
                                                 </Button>
@@ -587,6 +596,17 @@ export default function SegmentDetail({ segmentId, vehicleId }: { segmentId?: st
                     </div>
                 )}
             </form>
+            <Lightbox
+                open={lightboxIndex >= 0}
+                index={lightboxIndex}
+                close={() => setLightboxIndex(-1)}
+                slides={lightboxSlides}
+                portal={{ root: document.body }}
+                render={{
+                    buttonPrev: lightboxSlides.length <= 1 ? () => null : undefined,
+                    buttonNext: lightboxSlides.length <= 1 ? () => null : undefined,
+                }}
+            />
         </Card>
     )
 }

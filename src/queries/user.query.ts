@@ -1,7 +1,7 @@
 import { userApi } from "@/apis/user.api"
 import { memberKey } from "@/constants/query-keys/user.key"
 import type { MemberPaginationParams } from "@/types/user.type"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 const memberQueries = {
     usePagination: (params: MemberPaginationParams) => {
@@ -23,6 +23,13 @@ const memberQueries = {
         return useQuery({
             queryKey: memberKey.profile('profile'),
             queryFn: () => userApi.getUserProfile(),
+        })
+    },
+
+    useBlockUser: () => {
+        return useMutation({
+            mutationFn: (params: { userId: string, isBlocked: boolean, blockReason: string }) =>
+                userApi.putBlockUser(params.userId, params.isBlocked, params.blockReason),
         })
     }
 }

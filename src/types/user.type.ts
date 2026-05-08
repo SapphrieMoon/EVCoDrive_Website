@@ -41,6 +41,8 @@ export interface Member {
     fullName: string
     phone: string
     isActive: boolean
+    isBlocked: boolean
+    blockReason: string
     createdDate: string // ISO date string
     updatedDate: string // ISO date string
 }

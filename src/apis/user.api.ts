@@ -13,4 +13,6 @@ export const userApi = {
         await http.get<MemberPaginationResponse>(USER_API.MEMBER_PAGINATION, { params }),
     getUserProfile: async () =>
         await http.get<UserProfileResponse>(`/auth/profile`),
+    putBlockUser: async (userId: string, isBlocked: boolean, blockReason: string) =>
+        await http.put(`/user/block`, { userId, isBlocked, blockReason }),
 }
