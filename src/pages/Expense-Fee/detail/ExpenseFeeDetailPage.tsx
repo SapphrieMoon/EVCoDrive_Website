@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Banknote, FileText, History } from "lucide-react";
+import { ArrowLeft, Banknote, FileText } from "lucide-react";
 import { DetailSkeleton } from "@/common/skeletons/detail-skeleton";
 import { formatDate } from "@/utils/date";
 import { expenseFeeQueries } from "@/queries/expense-fee.query";
@@ -160,7 +160,7 @@ export default function ExpenseDetailPage() {
                     <ExpenseFeeTypeCard typeId={expense.expenseFeeTypeId} />
 
                     {/* Invoice Link (Nếu có) */}
-                    {expense.invoiceId && (
+                    {/* {expense.invoiceId && (
                         <Card className="p-5 border-2 border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors cursor-pointer group">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
@@ -171,7 +171,7 @@ export default function ExpenseDetailPage() {
                                 </div>
                             </div>
                         </Card>
-                    )}
+                    )} */}
                 </div>
             </div>
         </div>
