@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Banknote, FileText, History } from "lucide-react";
+import { ArrowLeft, Banknote, FileText } from "lucide-react";
 import { DetailSkeleton } from "@/common/skeletons/detail-skeleton";
 import { formatDate } from "@/utils/date";
 import { expenseFeeQueries } from "@/queries/expense-fee.query";
