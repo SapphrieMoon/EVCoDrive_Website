@@ -9,9 +9,12 @@ import type { ShareHolder } from "@/types/share-holder"
 import { GroupStatusActions } from "./_components/status-actions"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ExternalLink, FileText } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import contractQueries from "@/queries/contract.query"
 
 export default function CoOwnerGroupDetailPage() {
     const { id } = useParams<{ id: string }>()
+    const getPDFMutation = contractQueries.useGetPDF()
     const { data, isLoading } = coOwnerGroupQueries.useDetail(id as string)
     const group = data?.data.data
 
@@ -57,14 +60,14 @@ export default function CoOwnerGroupDetailPage() {
                             </h3>
                             <div className="grid grid-cols-2 gap-3">
                                 {group.coOwnershipContractUrl ? (
-                                    <a href={group.coOwnershipContractUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-2 p-2 border rounded-xl bg-card/50 hover:bg-card transition-colors group shadow-sm">
+                                    <a href={group.coOwnershipContractUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-2 p-2 border rounded-xl bg-card/50 hover:bg-card hover:shadow-md transition-all duration-300 group shadow-sm cursor-pointer">
                                         <div className="aspect-[4/3] bg-muted rounded-lg overflow-hidden flex items-center justify-center border border-border/50 relative">
                                             <img src={group.coOwnershipContractUrl.replace(/\.pdf$/i, '.jpg')} alt="Hợp đồng" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                                 <ExternalLink className="h-5 w-5 text-white" />
                                             </div>
                                         </div>
-                                        <span className="text-xs font-bold text-center leading-tight pt-1">Hợp đồng<br />Đồng sở hữu</span>
+                                        <span className="text-[11px] font-bold text-center leading-tight pt-1 group-hover:text-primary transition-colors">Hợp đồng<br />Đồng sở hữu</span>
                                     </a>
                                 ) : (
                                     <div className="flex flex-col items-center justify-center gap-2 p-4 border border-dashed rounded-xl bg-muted/20 text-muted-foreground min-h-[120px]">
@@ -74,14 +77,14 @@ export default function CoOwnerGroupDetailPage() {
                                 )}
 
                                 {group.vehicleRegistrationCertificateUrl ? (
-                                    <a href={group.vehicleRegistrationCertificateUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-2 p-2 border rounded-xl bg-card/50 hover:bg-card transition-colors group shadow-sm">
+                                    <a href={group.vehicleRegistrationCertificateUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-2 p-2 border rounded-xl bg-card/50 hover:bg-card hover:shadow-md transition-all duration-300 group shadow-sm cursor-pointer">
                                         <div className="aspect-[4/3] bg-muted rounded-lg overflow-hidden flex items-center justify-center border border-border/50 relative">
                                             <img src={group.vehicleRegistrationCertificateUrl.replace(/\.pdf$/i, '.jpg')} alt="Giấy đăng ký xe" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                                 <ExternalLink className="h-5 w-5 text-white" />
                                             </div>
                                         </div>
-                                        <span className="text-xs font-bold text-center leading-tight pt-1">Giấy đăng ký<br />Phương tiện</span>
+                                        <span className="text-[11px] font-bold text-center leading-tight pt-1 group-hover:text-primary transition-colors">Giấy đăng ký<br />Phương tiện</span>
                                     </a>
                                 ) : (
                                     <div className="flex flex-col items-center justify-center gap-2 p-4 border border-dashed rounded-xl bg-muted/20 text-muted-foreground min-h-[120px]">
@@ -90,6 +93,27 @@ export default function CoOwnerGroupDetailPage() {
                                     </div>
                                 )}
                             </div>
+
+                            {/* Nút tải xuống tất cả hợp đồng */}
+                            {group.contracts && group.contracts.length > 0 && (
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    className="w-full h-9 mt-2 text-[11px] font-bold uppercase tracking-wider cursor-pointer hover:bg-primary hover:text-primary-foreground hover:shadow-md transition-all duration-300"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        group.contracts?.forEach(contract => {
+                                            if (contract.contractId) {
+                                                getPDFMutation.mutate(contract.contractId);
+                                            }
+                                        });
+                                    }}
+                                    disabled={getPDFMutation.isPending}
+                                >
+                                    {getPDFMutation.isPending ? "Đang tải..." : "Tải tất cả hợp đồng"}
+                                </Button>
+                            )}
                         </div>
 
                         {/* 2. Danh sách cổ đông */}

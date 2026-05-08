@@ -3,6 +3,7 @@ import type { PaginationParams, PaginationResponse } from "./commons/pagination.
 import type { SuccessResponse } from "./commons/utils.type"
 import type { ShareHolder } from "./share-holder"
 import type { ShareUnit } from "./share-unit"
+import type { Contract } from "./contract.type"
 
 export const CoOwnerGroupStatus = {
     Active: "Active",
@@ -38,6 +39,7 @@ export interface CoOwnerGroupDetail {
     vehicleRegistrationCertificateUrl: string;
     shareHolders: ShareHolder[];
     shareUnits: ShareUnit[];
+    contracts: Contract[];
 }
 
 export interface CoOwnerGroupSummary {
