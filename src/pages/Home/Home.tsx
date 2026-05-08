@@ -192,14 +192,14 @@ export default function Home() {
             </section>
 
             {/* 3. AI MODULES SECTION - ENFORCED DARK THEME */}
-            <section className="py-24 bg-zinc-950 text-zinc-50 relative overflow-hidden dark:bg-black">
+            <section className="py-24 bg-zinc-950 text-zinc-50 relative overflow-hidden dark:bg-black dark">
                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(hsl(var(--primary))_1px,transparent_1px)] [background-size:30px_30px]" />
                 <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 relative z-10 items-center">
                     <div>
                         <Badge className="bg-primary/20 text-primary border-primary/30 mb-6 gap-2 pointer-events-none">
                             <Sparkles className="w-4 h-4" /> Powered by AI
                         </Badge>
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6">AI là cốt lõi của EVCoDrive</h2>
+                        <h2 className="text-4xl md:text-5xl font-bold mb-6">Minh bạch là cốt lõi của EVCoDrive</h2>
                         <p className="text-zinc-400 text-lg mb-8">Các thuật toán tiên tiến đảm bảo sự công bằng và tối ưu hóa giá trị tài sản của bạn.</p>
                         <div className="flex flex-col gap-6">
                             {[
@@ -218,7 +218,7 @@ export default function Home() {
                         <Card className="bg-white/5 border-white/10 hover:border-chart-2/50 transition-colors text-white">
                             <CardContent className="flex items-center gap-4 p-5">
                                 <div className="bg-primary/20 p-3 rounded-lg text-primary"><TrendingUp /></div>
-                                <div className="flex-1"><h4 className="font-bold">Gợi ý giá AI</h4><p className="text-xs text-zinc-400">100.000.000₫ / 5% cổ phần</p></div>
+                                <div className="flex-1"><h4 className="font-bold">Gợi ý giá AI</h4><p className="text-xs text-zinc-400">100.000.000₫ / 5 cổ phần</p></div>
                                 <Badge className="bg-chart-2/20 text-chart-2 hover:bg-chart-2/30">Khả thi 82%</Badge>
                             </CardContent>
                         </Card>
