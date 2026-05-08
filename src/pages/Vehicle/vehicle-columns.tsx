@@ -45,7 +45,7 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
 
     {
         accessorKey: "batteryHealth",
-        header: "% Pin còn lại",
+        header: "% Pin dung lượng tối đa",
         cell: ({ getValue }) => {
             const value = getValue<number>();
             return <span>{value}%</span>;

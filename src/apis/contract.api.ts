@@ -16,7 +16,7 @@ const contractApi = {
     getDetail: async (id: string) =>
         await http.get<ContractDetailResponse>(`${CONTRACT_URL.BASE}/${id}`),
     getPDF: async (id: string) =>
-        await http.get(`${CONTRACT_URL.BASE}/${id}/pdf`, { responseType: "blob" })
+        await http.get(`${CONTRACT_URL.BASE}/${id}/pdf`, { responseType: "blob" }),
 }
 
 export default contractApi
