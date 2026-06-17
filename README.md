@@ -20,9 +20,18 @@ This project was built as a real-world product, covering UI/UX design, frontend 
 
 The project has been deployed and is publicly accessible at:
 
-👉 **https://evcodrive.io.vn/**
+👉 **https://ev-co-drive-website.vercel.app/**
 
 *(Note: Access to the admin portal requires authorized admin or staff credentials.)*
+
+---
+
+## 📄 Project Documents
+
+Access the official project documents, specifications, and guidelines here:
+
+👉 **Project Documents**  
+https://drive.google.com/drive/folders/1xHdGKG8b1f5Oz0iZlVl2BX_Y6QVUnbIu?usp=sharing
 
 ---
 
@@ -186,146 +195,146 @@ The project has been deployed and is publicly accessible at:
 │   │   └── 📄 utils.ts
 │   ├── 📁 pages
 │   │   ├── 📁 Booking
--│   │   │   ├── 📁 detail
--│   │   │   │   ├── 📁 _components
--│   │   │   │   │   ├── 📄 booking-cancelation.tsx
--│   │   │   │   │   ├── 📄 extra-fee-form.tsx
--│   │   │   │   │   ├── 📄 extra-fee-table.tsx
--│   │   │   │   │   ├── 📄 period-card.tsx
--│   │   │   │   │   ├── 📄 segment-detail.tsx
--│   │   │   │   │   ├── 📄 segment-table.tsx
--│   │   │   │   │   ├── 📄 user-card.tsx
--│   │   │   │   │   └── 📄 vehicle-card.tsx
--│   │   │   │   ├── 📄 BookingDetailPage.tsx
--│   │   │   │   └── 📄 index.ts
--│   │   │   ├── 📄 BookingPage.tsx
--│   │   │   ├── 📄 booking-columns.tsx
--│   │   │   ├── 📄 booking-detail.tsx
--│   │   │   └── 📄 index.ts
+│   │   │   ├── 📁 detail
+│   │   │   │   ├── 📁 _components
+│   │   │   │   │   ├── 📄 booking-cancelation.tsx
+│   │   │   │   │   ├── 📄 extra-fee-form.tsx
+│   │   │   │   │   ├── 📄 extra-fee-table.tsx
+│   │   │   │   │   ├── 📄 period-card.tsx
+│   │   │   │   │   ├── 📄 segment-detail.tsx
+│   │   │   │   │   ├── 📄 segment-table.tsx
+│   │   │   │   │   ├── 📄 user-card.tsx
+│   │   │   │   │   └── 📄 vehicle-card.tsx
+│   │   │   │   ├── 📄 BookingDetailPage.tsx
+│   │   │   │   └── 📄 index.ts
+│   │   │   ├── 📄 BookingPage.tsx
+│   │   │   ├── 📄 booking-columns.tsx
+│   │   │   ├── 📄 booking-detail.tsx
+│   │   │   └── 📄 index.ts
 │   │   ├── 📁 Co-Owner-Group
--│   │   │   ├── 📁 detail
--│   │   │   │   ├── 📁 _components
--│   │   │   │   │   ├── 📄 share-unit-grid.tsx
--│   │   │   │   │   ├── 📄 stats-overview.tsx
--│   │   │   │   │   └── 📄 status-actions.tsx
--│   │   │   │   ├── 📄 CoOwnerGroupDetailPage.tsx
--│   │   │   │   └── 📄 index.ts
--│   │   │   ├── 📄 CoOwnerGroupPage.tsx
--│   │   │   ├── 📄 co-owner-group-columns.tsx
--│   │   │   └── 📄 index.ts
+│   │   │   ├── 📁 detail
+│   │   │   │   ├── 📁 _components
+│   │   │   │   │   ├── 📄 share-unit-grid.tsx
+│   │   │   │   │   ├── 📄 stats-overview.tsx
+│   │   │   │   │   └── 📄 status-actions.tsx
+│   │   │   │   ├── 📄 CoOwnerGroupDetailPage.tsx
+│   │   │   │   └── 📄 index.ts
+│   │   │   ├── 📄 CoOwnerGroupPage.tsx
+│   │   │   ├── 📄 co-owner-group-columns.tsx
+│   │   │   └── 📄 index.ts
 │   │   ├── 📁 Contract
--│   │   │   ├── 📄 ContractPage.tsx
--│   │   │   ├── 📄 contract-columns.tsx
--│   │   │   ├── 📄 contract-detail.tsx
--│   │   │   └── 📄 index.ts
+│   │   │   ├── 📄 ContractPage.tsx
+│   │   │   ├── 📄 contract-columns.tsx
+│   │   │   ├── 📄 contract-detail.tsx
+│   │   │   └── 📄 index.ts
 │   │   ├── 📁 Dashboard
--│   │   │   ├── 📁 _components
--│   │   │   │   ├── 📁 cards
--│   │   │   │   │   ├── 📄 booking-card.tsx
--│   │   │   │   │   ├── 📄 revenue-card.tsx
--│   │   │   │   │   ├── 📄 user-card.tsx
--│   │   │   │   │   └── 📄 vehicle-card.tsx
--│   │   │   │   ├── 📁 charts
--│   │   │   │   │   ├── 📄 bar-chart.tsx
--│   │   │   │   │   └── 📄 line-chart.tsx
--│   │   │   │   └── 📄 top-vehicle-list.tsx
--│   │   │   ├── 📄 DashboardPage.tsx
--│   │   │   └── 📄 index.ts
+│   │   │   ├── 📁 _components
+│   │   │   │   ├── 📁 cards
+│   │   │   │   │   ├── 📄 booking-card.tsx
+│   │   │   │   │   ├── 📄 revenue-card.tsx
+│   │   │   │   │   ├── 📄 user-card.tsx
+│   │   │   │   │   └── 📄 vehicle-card.tsx
+│   │   │   │   ├── 📁 charts
+│   │   │   │   │   ├── 📄 bar-chart.tsx
+│   │   │   │   │   └── 📄 line-chart.tsx
+│   │   │   │   └── 📄 top-vehicle-list.tsx
+│   │   │   ├── 📄 DashboardPage.tsx
+│   │   │   └── 📄 index.ts
 │   │   ├── 📁 Expense-Fee
--│   │   │   ├── 📁 detail
--│   │   │   │   ├── 📁 _components
--│   │   │   │   │   ├── 📄 booking-calendar.tsx
--│   │   │   │   │   ├── 📄 expense-fee-type-card.tsx
--│   │   │   │   │   └── 📄 group-card.tsx
--│   │   │   │   ├── 📄 ExpenseFeeDetailPage.tsx
--│   │   │   │   ├── 📄 expense-fee-form.tsx
--│   │   │   │   └── 📄 index.ts
--│   │   │   ├── 📄 ExpenseFeePage.tsx
--│   │   │   ├── 📄 expense-fee-columns.tsx
--│   │   │   └── 📄 index.ts
+│   │   │   ├── 📁 detail
+│   │   │   │   ├── 📁 _components
+│   │   │   │   │   ├── 📄 booking-calendar.tsx
+│   │   │   │   │   ├── 📄 expense-fee-type-card.tsx
+│   │   │   │   │   └── 📄 group-card.tsx
+│   │   │   │   ├── 📄 ExpenseFeeDetailPage.tsx
+│   │   │   │   ├── 📄 expense-fee-form.tsx
+│   │   │   │   └── 📄 index.ts
+│   │   │   ├── 📄 ExpenseFeePage.tsx
+│   │   │   ├── 📄 expense-fee-columns.tsx
+│   │   │   └── 📄 index.ts
 │   │   ├── 📁 ExpenseFeeType
--│   │   │   ├── 📄 ExpenseFeeTypePage.tsx
--│   │   │   ├── 📄 expense-fee-type-columns.tsx
--│   │   │   ├── 📄 expense-fee-type-detail.tsx
--│   │   │   ├── 📄 expense-fee-type-form.tsx
--│   │   │   └── 📄 index.ts
+│   │   │   ├── 📄 ExpenseFeeTypePage.tsx
+│   │   │   ├── 📄 expense-fee-type-columns.tsx
+│   │   │   ├── 📄 expense-fee-type-detail.tsx
+│   │   │   ├── 📄 expense-fee-type-form.tsx
+│   │   │   └── 📄 index.ts
 │   │   ├── 📁 ExtraFeeType
--│   │   │   ├── 📄 ExtraFeeTypePage.tsx
--│   │   │   ├── 📄 extra-fee-type-columns.tsx
--│   │   │   ├── 📄 extra-fee-type-detail.tsx
--│   │   │   ├── 📄 extra-fee-type-form.tsx
--│   │   │   └── 📄 index.ts
+│   │   │   ├── 📄 ExtraFeeTypePage.tsx
+│   │   │   ├── 📄 extra-fee-type-columns.tsx
+│   │   │   ├── 📄 extra-fee-type-detail.tsx
+│   │   │   ├── 📄 extra-fee-type-form.tsx
+│   │   │   └── 📄 index.ts
 │   │   ├── 📁 Home
--│   │   │   ├── 📄 Home.tsx
--│   │   │   └── 📄 index.tsx
+│   │   │   ├── 📄 Home.tsx
+│   │   │   └── 📄 index.tsx
 │   │   ├── 📁 Invoice
--│   │   │   ├── 📄 InvoicePage.tsx
--│   │   │   ├── 📄 index.ts
--│   │   │   ├── 📄 invoice-columns.tsx
--│   │   │   ├── 📄 invoice-detail-sheet.tsx
--│   │   │   └── 📄 invoice-form.tsx
+│   │   │   ├── 📄 InvoicePage.tsx
+│   │   │   ├── 📄 index.ts
+│   │   │   ├── 📄 invoice-columns.tsx
+│   │   │   ├── 📄 invoice-detail-sheet.tsx
+│   │   │   └── 📄 invoice-form.tsx
 │   │   ├── 📁 Login
--│   │   │   ├── 📄 Login.tsx
--│   │   │   └── 📄 index.ts
+│   │   │   ├── 📄 Login.tsx
+│   │   │   └── 📄 index.ts
 │   │   ├── 📁 Member
--│   │   │   ├── 📄 MemberPage.tsx
--│   │   │   ├── 📄 index.ts
--│   │   │   └── 📄 member-columns.tsx
+│   │   │   ├── 📄 MemberPage.tsx
+│   │   │   ├── 📄 index.ts
+│   │   │   └── 📄 member-columns.tsx
 │   │   ├── 📁 Not-Found
--│   │   │   ├── 📄 NotFoundPage.tsx
--│   │   │   └── 📄 index.ts
+│   │   │   ├── 📄 NotFoundPage.tsx
+│   │   │   └── 📄 index.ts
 │   │   ├── 📁 Operator
--│   │   │   ├── 📄 OperatorPage.tsx
--│   │   │   ├── 📄 index.ts
--│   │   │   ├── 📄 operator-columns.tsx
--│   │   │   ├── 📄 operator-detail.tsx
--│   │   │   └── 📄 operator-form.tsx
+│   │   │   ├── 📄 OperatorPage.tsx
+│   │   │   ├── 📄 index.ts
+│   │   │   ├── 📄 operator-columns.tsx
+│   │   │   ├── 📄 operator-detail.tsx
+│   │   │   └── 📄 operator-form.tsx
 │   │   ├── 📁 Profile
--│   │   │   ├── 📄 ProfilePage.tsx
--│   │   │   └── 📄 index.tsx
+│   │   │   ├── 📄 ProfilePage.tsx
+│   │   │   └── 📄 index.tsx
 │   │   ├── 📁 Staff
--│   │   │   ├── 📄 StaffPage.tsx
--│   │   │   ├── 📄 index.ts
--│   │   │   ├── 📄 staff-columns.tsx
--│   │   │   ├── 📄 staff-detail.tsx
--│   │   │   └── 📄 staff-form.tsx
+│   │   │   ├── 📄 StaffPage.tsx
+│   │   │   ├── 📄 index.ts
+│   │   │   ├── 📄 staff-columns.tsx
+│   │   │   ├── 📄 staff-detail.tsx
+│   │   │   └── 📄 staff-form.tsx
 │   │   ├── 📁 Station
--│   │   │   ├── 📄 StationPage.tsx
--│   │   │   ├── 📄 index.ts
--│   │   │   ├── 📄 station-columns.tsx
--│   │   │   ├── 📄 station-detail.tsx
--│   │   │   └── 📄 station-form.tsx
+│   │   │   ├── 📄 StationPage.tsx
+│   │   │   ├── 📄 index.ts
+│   │   │   ├── 📄 station-columns.tsx
+│   │   │   ├── 📄 station-detail.tsx
+│   │   │   └── 📄 station-form.tsx
 │   │   ├── 📁 Vehicle
--│   │   │   ├── 📁 detail
--│   │   │   │   ├── 📁 _components
--│   │   │   │   │   ├── 📄 co-owner-card.tsx
--│   │   │   │   │   ├── 📄 reject-dialog.tsx
--│   │   │   │   │   ├── 📄 station-card.tsx
--│   │   │   │   │   └── 📄 vehicle-specs.tsx
--│   │   │   │   ├── 📄 VehicleDetailPage.tsx
--│   │   │   │   └── 📄 index.ts
--│   │   │   ├── 📁 filters
--│   │   │   │   └── 📄 data-table-faceted-filter.tsx
--│   │   │   ├── 📄 VehiclePage.tsx
--│   │   │   ├── 📄 index.ts
--│   │   │   ├── 📄 vehicle-columns.tsx
--│   │   │   └── 📄 vehicle-filter-sidebar.tsx
+│   │   │   ├── 📁 detail
+│   │   │   │   ├── 📁 _components
+│   │   │   │   │   ├── 📄 co-owner-card.tsx
+│   │   │   │   │   ├── 📄 reject-dialog.tsx
+│   │   │   │   │   ├── 📄 station-card.tsx
+│   │   │   │   │   └── 📄 vehicle-specs.tsx
+│   │   │   │   ├── 📄 VehicleDetailPage.tsx
+│   │   │   │   └── 📄 index.ts
+│   │   │   ├── 📁 filters
+│   │   │   │   └── 📄 data-table-faceted-filter.tsx
+│   │   │   ├── 📄 VehiclePage.tsx
+│   │   │   ├── 📄 index.ts
+│   │   │   ├── 📄 vehicle-columns.tsx
+│   │   │   └── 📄 vehicle-filter-sidebar.tsx
 │   │   ├── 📁 Vehicle-Brand
--│   │   │   ├── 📄 VehicleBrandPage.tsx
--│   │   │   ├── 📄 index.ts
--│   │   │   ├── 📄 vehicle-brand-detail.tsx
--│   │   │   ├── 📄 vehicle-brand-form.tsx
--│   │   │   └── 📄 vehicle-brand.columns.tsx
+│   │   │   ├── 📄 VehicleBrandPage.tsx
+│   │   │   ├── 📄 index.ts
+│   │   │   ├── 📄 vehicle-brand-detail.tsx
+│   │   │   ├── 📄 vehicle-brand-form.tsx
+│   │   │   └── 📄 vehicle-brand.columns.tsx
 │   │   ├── 📁 Vehicle-Model
--│   │   │   ├── 📄 VehicleModelPage.tsx
--│   │   │   ├── 📄 index.ts
--│   │   │   ├── 📄 vehicle-model-columns.tsx
--│   │   │   ├── 📄 vehicle-model-detail.tsx
--│   │   │   └── 📄 vehicle-model-form.tsx
+│   │   │   ├── 📄 VehicleModelPage.tsx
+│   │   │   ├── 📄 index.ts
+│   │   │   ├── 📄 vehicle-model-columns.tsx
+│   │   │   ├── 📄 vehicle-model-detail.tsx
+│   │   │   └── 📄 vehicle-model-form.tsx
 │   │   └── 📁 Withdraw
--│   │       ├── 📄 WithdrawPage.tsx
--│   │       ├── 📄 index.ts
--│   │       └── 📄 withdraw-columns.tsx
+│   │       ├── 📄 WithdrawPage.tsx
+│   │       ├── 📄 index.ts
+│   │       └── 📄 withdraw-columns.tsx
 │   ├── 📁 providers
 │   │   └── 📄 theme-provider.tsx
 │   ├── 📁 queries
