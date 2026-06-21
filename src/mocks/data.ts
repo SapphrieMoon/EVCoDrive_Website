@@ -10,9 +10,12 @@ import type { VehicleBrand } from "@/types/vehicle-brand.type";
 import type { Staff } from "@/types/staff.type";
 import type { Operator } from "@/types/operator";
 import type { ExpenseFee, ExpenseFeeDetail, ExpenseFeeType } from "@/types/expense-fee.type";
-import type { ExtraFeeType } from "@/types/extra-fee.type";
+import type { ExtraFeeType, ExtraFee } from "@/types/extra-fee.type";
+import { ExtraFeeStatus } from "@/types/extra-fee.type";
 import type { Invoice } from "@/types/invoice.type";
 import type { WalletWithdraw } from "@/types/withdraw.type";
+import type { Booking, BookingSegmentDetail } from "@/types/booking.type";
+import { BookingStatus, SegmentStatus } from "@/types/booking.type";
 
 // ================= USERS & PROFILE =================
 export const mockUser: User = {
@@ -363,74 +366,207 @@ export const mockMembers: Member[] = [
 ];
 
 // ================= BOOKINGS =================
-export const mockBookings = [
+export const mockBookings: Booking[] = [
   {
     bookingId: "b-1",
+    memberId: "m-1",
+    vehicleId: "v-1",
     licensePlate: "29A-999.99",
-    modelName: "VF 8 Eco",
-    thumbnailUrl: "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=400&q=80",
-    customerName: "Nguyen Van A",
-    phone: "0901234567",
-    startDate: "2026-06-22T08:00:00Z",
-    endDate: "2026-06-25T17:00:00Z",
-    bookingStatus: "Paid",
-    totalAmount: 3200000,
+    purpose: "Đi du lịch gia đình tại Nha Trang",
+    bookingStatus: BookingStatus.Booked,
+    bookingCode: "BK882103",
+    bookingDate: "2026-06-21T10:00:00Z",
+    bookedDates: ["2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25"],
+    totalDays: 4,
+    segments: [
+      {
+        handoverLogId: "hl-1",
+        checkInDate: "2026-06-22T08:00:00Z",
+        checkOutDate: "2026-06-25T17:00:00Z",
+        actualCheckInDate: null,
+        actualCheckOutDate: null,
+        startOdometer: 12450,
+        endOdometer: 12450,
+        status: SegmentStatus.Pending,
+      }
+    ],
+    note: "Cần xe sạch sẽ, đầy pin trước khi nhận xe.",
+    createdDate: "2026-06-21T10:00:00Z",
+    updatedDate: "2026-06-21T10:00:00Z",
   },
   {
     bookingId: "b-2",
+    memberId: "m-2",
+    vehicleId: "v-3",
     licensePlate: "51K-777.77",
-    modelName: "VF e34",
-    thumbnailUrl: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=400&q=80",
-    customerName: "Tran Thi B",
-    phone: "0912345678",
-    startDate: "2026-06-20T09:00:00Z",
-    endDate: "2026-06-21T18:00:00Z",
-    bookingStatus: "Completed",
-    totalAmount: 1200000,
+    purpose: "Gặp đối tác kinh doanh tại trung tâm TP.HCM",
+    bookingStatus: BookingStatus.Completed,
+    bookingCode: "BK991204",
+    bookingDate: "2026-06-19T08:30:00Z",
+    bookedDates: ["2026-06-20", "2026-06-21"],
+    totalDays: 2,
+    segments: [
+      {
+        handoverLogId: "hl-2",
+        checkInDate: "2026-06-20T09:00:00Z",
+        checkOutDate: "2026-06-21T18:00:00Z",
+        actualCheckInDate: "2026-06-20T09:15:00Z",
+        actualCheckOutDate: "2026-06-21T17:45:00Z",
+        startOdometer: 32800,
+        endOdometer: 33020,
+        status: SegmentStatus.CheckedOut,
+      }
+    ],
+    note: "Sẽ sạc pin tại trạm quận 1.",
+    createdDate: "2026-06-19T08:30:00Z",
+    updatedDate: "2026-06-21T17:45:00Z",
   },
   {
     bookingId: "b-3",
+    memberId: "m-1",
+    vehicleId: "v-2",
     licensePlate: "30E-888.88",
-    modelName: "VF 9 Plus",
-    thumbnailUrl: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=400&q=80",
-    customerName: "Pham Xuan D",
-    phone: "0945678901",
-    startDate: "2026-06-23T10:00:00Z",
-    endDate: "2026-06-24T18:00:00Z",
-    bookingStatus: "Pending",
-    totalAmount: 2000000,
+    purpose: "Đưa đón khách VIP hội thảo",
+    bookingStatus: BookingStatus.InUsed,
+    bookingCode: "BK110293",
+    bookingDate: "2026-06-20T14:00:00Z",
+    bookedDates: ["2026-06-21", "2026-06-22"],
+    totalDays: 2,
+    segments: [
+      {
+        handoverLogId: "hl-3",
+        checkInDate: "2026-06-21T08:00:00Z",
+        checkOutDate: "2026-06-22T18:00:00Z",
+        actualCheckInDate: "2026-06-21T08:10:00Z",
+        actualCheckOutDate: null,
+        startOdometer: 150,
+        endOdometer: 150,
+        status: SegmentStatus.CheckedIn,
+      }
+    ],
+    note: "Yêu cầu xe màu trắng sạch sẽ.",
+    createdDate: "2026-06-20T14:00:00Z",
+    updatedDate: "2026-06-21T08:10:00Z",
   },
 ];
 
-export const mockBookingDetails: Record<string, any> = {
-  "b-1": {
+export const mockBookingDetails: Record<string, Booking> = {
+  "b-1": mockBookings[0],
+  "b-2": mockBookings[1],
+  "b-3": mockBookings[2],
+};
+
+export const mockBookingSegments: Record<string, BookingSegmentDetail> = {
+  "hl-1": {
+    handoverLogId: "hl-1",
     bookingId: "b-1",
-    totalAmount: 3200000,
-    bookingStatus: "Paid",
-    startDate: "2026-06-22T08:00:00Z",
-    endDate: "2026-06-25T17:00:00Z",
-    customerName: "Nguyen Van A",
-    phone: "0901234567",
-    email: "nguyenvan.a@gmail.com",
-    licensePlate: "29A-999.99",
-    vehicleModelName: "VF 8 Eco",
-    vehicleBrandName: "VinFast",
-    vehicleColor: "Crimson Red",
-    vehicleThumbnail: "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=400&q=80",
-    startOdometer: 12450,
-    endOdometer: null,
-    actualStartDate: null,
-    actualEndDate: null,
-    extraFees: [],
-    segments: [
-      {
-        segmentId: "bs-1",
-        title: "Initial Handover",
-        status: "Pending",
-        scheduledTime: "2026-06-22T08:00:00Z",
-      },
-    ],
+    operatorId: "op-1",
+    checkInDate: "2026-06-22T08:00:00Z",
+    checkOutDate: "2026-06-25T17:00:00Z",
+    actualCheckInDate: null,
+    actualCheckOutDate: null,
+    status: SegmentStatus.Pending,
+    startOdo: 12450,
+    endOdo: 12450,
+    handoverType: "StaffHandover",
+    odometerReading: 12450,
+    startBatteryLevel: 95,
+    endBatteryLevel: 0,
+    fuelLevel: "Full",
+    exteriorCondition: "Không trầy xước, sạch sẽ",
+    interiorCondition: "Sạch sẽ, đầy đủ thiết bị",
+    checkInNote: "",
+    checkOutNote: "",
+    cancellationReason: "",
+    signatureUrl: "https://evcodrive.io.vn/signatures/hl-1.png",
+    checkInImages: [],
+    checkOutImages: [],
+    handoverDate: "2026-06-22T08:00:00Z",
+    createdDate: "2026-06-21T10:00:00Z",
+    updatedDate: "2026-06-21T10:00:00Z",
   },
+  "hl-2": {
+    handoverLogId: "hl-2",
+    bookingId: "b-2",
+    operatorId: "op-1",
+    checkInDate: "2026-06-20T09:00:00Z",
+    checkOutDate: "2026-06-21T18:00:00Z",
+    actualCheckInDate: "2026-06-20T09:15:00Z",
+    actualCheckOutDate: "2026-06-21T17:45:00Z",
+    status: SegmentStatus.CheckedOut,
+    startOdo: 32800,
+    endOdo: 33020,
+    handoverType: "StaffHandover",
+    odometerReading: 33020,
+    startBatteryLevel: 92,
+    endBatteryLevel: 80,
+    fuelLevel: "80%",
+    exteriorCondition: "Không trầy xước, sạch sẽ",
+    interiorCondition: "Sạch sẽ",
+    checkInNote: "Xe pin 92%",
+    checkOutNote: "Xe pin 80%, đã vệ sinh sạch sẽ.",
+    cancellationReason: "",
+    signatureUrl: "https://evcodrive.io.vn/signatures/hl-2.png",
+    checkInImages: [
+      "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=400&q=80",
+    ],
+    checkOutImages: [
+      "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=400&q=80",
+    ],
+    handoverDate: "2026-06-20T09:15:00Z",
+    createdDate: "2026-06-19T08:30:00Z",
+    updatedDate: "2026-06-21T17:45:00Z",
+  },
+  "hl-3": {
+    handoverLogId: "hl-3",
+    bookingId: "b-3",
+    operatorId: "op-1",
+    checkInDate: "2026-06-21T08:00:00Z",
+    checkOutDate: "2026-06-22T18:00:00Z",
+    actualCheckInDate: "2026-06-21T08:10:00Z",
+    actualCheckOutDate: null,
+    status: SegmentStatus.CheckedIn,
+    startOdo: 150,
+    endOdo: 150,
+    handoverType: "StaffHandover",
+    odometerReading: 150,
+    startBatteryLevel: 100,
+    endBatteryLevel: 0,
+    fuelLevel: "Full",
+    exteriorCondition: "Hoàn hảo",
+    interiorCondition: "Hoàn hảo",
+    checkInNote: "Xe giao đúng giờ, pin 100%",
+    checkOutNote: "",
+    cancellationReason: "",
+    signatureUrl: "https://evcodrive.io.vn/signatures/hl-3.png",
+    checkInImages: [
+      "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80"
+    ],
+    checkOutImages: [],
+    handoverDate: "2026-06-21T08:10:00Z",
+    createdDate: "2026-06-20T14:00:00Z",
+    updatedDate: "2026-06-21T08:10:00Z",
+  },
+};
+
+export const mockExtraFees: Record<string, ExtraFee[]> = {
+  "b-1": [],
+  "b-2": [
+    {
+      extraFeeId: "xf-1",
+      bookingId: "b-2",
+      handoverLogId: "hl-2",
+      extraFeeTypeId: "xft-2",
+      title: "Phí vệ sinh nội thất",
+      amount: 150000,
+      currency: "VND",
+      description: "Xe bám nhiều bùn đất ở sàn sau.",
+      status: ExtraFeeStatus.Paid,
+      createdDate: "2026-06-21T17:45:00Z",
+      updatedDate: "2026-06-21T17:50:00Z",
+    }
+  ],
+  "b-3": [],
 };
 
 // ================= CO-OWNER GROUPS =================

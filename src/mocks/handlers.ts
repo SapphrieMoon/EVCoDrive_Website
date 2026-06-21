@@ -1,5 +1,6 @@
 import type MockAdapter from "axios-mock-adapter";
 import * as mockData from "./data";
+import { ExtraFeeStatus } from "@/types/extra-fee.type";
 
 function paginate<T>(items: T[], pageNumber = 1, pageSize = 10) {
   const startIndex = (pageNumber - 1) * pageSize;
@@ -591,33 +592,253 @@ export function setupMockHandlers(mock: MockAdapter) {
   });
 
   // ================= BOOKINGS =================
-  mock.onGet(/\/bookings(\?.*)?/).reply((config) => {
-    const rawPath = config.url?.split("?")[0] || "";
-    const pathParts = rawPath.split("/").filter(Boolean);
-    
-    // Check if detail request: /bookings/:id
-    if (pathParts.length > 1) {
-      const id = pathParts[pathParts.length - 1];
-      const detail = mockData.mockBookingDetails[id] || mockData.mockBookingDetails["b-1"];
-      return [
-        200,
-        {
-          message: "Booking details fetched successfully",
-          data: detail,
-        },
-      ];
-    }
-
-    // Pagination
+  // Available bookings for a vehicle
+  mock.onGet(/\/bookings\/vehicle\/[a-zA-Z0-9-]+/).reply((config) => {
     const url = new URL(config.url || "", "http://localhost");
     const pageNumber = parseInt(url.searchParams.get("pageNumber") || "1", 10);
     const pageSize = parseInt(url.searchParams.get("pageSize") || "10", 10);
+    const parts = config.url?.split("/") || [];
+    const vehicleId = parts[parts.indexOf("vehicle") + 1]?.split("?")[0];
+    
+    const available = mockData.mockBookings.filter(b => b.vehicleId === vehicleId);
+
+    return [
+      200,
+      {
+        message: "Available bookings fetched successfully",
+        data: paginate(available, pageNumber, pageSize),
+      },
+    ];
+  });
+
+  // Booking detail
+  mock.onGet(/\/bookings\/[a-zA-Z0-9-]+$/).reply((config) => {
+    const parts = config.url?.split("/") || [];
+    const id = parts[parts.length - 1];
+    const booking = mockData.mockBookingDetails[id];
+
+    if (!booking) {
+      return [404, { message: "Booking not found" }];
+    }
+
+    return [
+      200,
+      {
+        message: "Booking details fetched successfully",
+        data: booking,
+      },
+    ];
+  });
+
+  // Booking list with pagination & filters
+  mock.onGet(/\/bookings(\?.*)?$/).reply((config) => {
+    const url = new URL(config.url || "", "http://localhost");
+    const pageNumber = parseInt(url.searchParams.get("pageNumber") || "1", 10);
+    const pageSize = parseInt(url.searchParams.get("pageSize") || "10", 10);
+    const bookingCode = url.searchParams.get("bookingCode");
+    const bookedDate = url.searchParams.get("bookedDate");
+
+    let filtered = [...mockData.mockBookings];
+    if (bookingCode) {
+      filtered = filtered.filter((b) => b.bookingCode.toLowerCase().includes(bookingCode.toLowerCase()));
+    }
+    if (bookedDate) {
+      filtered = filtered.filter((b) => b.bookedDates.includes(bookedDate));
+    }
 
     return [
       200,
       {
         message: "Bookings fetched successfully",
-        data: paginate(mockData.mockBookings, pageNumber, pageSize),
+        data: paginate(filtered, pageNumber, pageSize),
+      },
+    ];
+  });
+
+  // Check-in (PATCH /bookings/:bookingId/handover-logs/:handoverLogId/check-in)
+  mock.onPatch(/\/bookings\/[a-zA-Z0-9-]+\/handover-logs\/[a-zA-Z0-9-]+\/check-in/).reply((config) => {
+    const parts = config.url?.split("/") || [];
+    const bookingId = parts[2];
+    const handoverLogId = parts[4];
+
+    if (mockData.mockBookingSegments[handoverLogId]) {
+      mockData.mockBookingSegments[handoverLogId].status = "CheckedIn" as any;
+      mockData.mockBookingSegments[handoverLogId].actualCheckInDate = new Date().toISOString();
+    }
+
+    if (mockData.mockBookingDetails[bookingId]) {
+      const seg = mockData.mockBookingDetails[bookingId].segments.find(s => s.handoverLogId === handoverLogId);
+      if (seg) {
+        seg.status = "CheckedIn" as any;
+        seg.actualCheckInDate = new Date().toISOString();
+      }
+      mockData.mockBookingDetails[bookingId].bookingStatus = "InUsed" as any;
+    }
+
+    const bookingIdx = mockData.mockBookings.findIndex(b => b.bookingId === bookingId);
+    if (bookingIdx !== -1) {
+      mockData.mockBookings[bookingIdx].bookingStatus = "InUsed" as any;
+      const seg = mockData.mockBookings[bookingIdx].segments.find(s => s.handoverLogId === handoverLogId);
+      if (seg) {
+        seg.status = "CheckedIn" as any;
+        seg.actualCheckInDate = new Date().toISOString();
+      }
+    }
+
+    return [
+      200,
+      {
+        message: "Check-in successful",
+      },
+    ];
+  });
+
+  // Check-out (PATCH /bookings/:bookingId/handover-logs/:handoverLogId/check-out)
+  mock.onPatch(/\/bookings\/[a-zA-Z0-9-]+\/handover-logs\/[a-zA-Z0-9-]+\/check-out/).reply((config) => {
+    const parts = config.url?.split("/") || [];
+    const bookingId = parts[2];
+    const handoverLogId = parts[4];
+
+    if (mockData.mockBookingSegments[handoverLogId]) {
+      mockData.mockBookingSegments[handoverLogId].status = "CheckedOut" as any;
+      mockData.mockBookingSegments[handoverLogId].actualCheckOutDate = new Date().toISOString();
+    }
+
+    if (mockData.mockBookingDetails[bookingId]) {
+      const seg = mockData.mockBookingDetails[bookingId].segments.find(s => s.handoverLogId === handoverLogId);
+      if (seg) {
+        seg.status = "CheckedOut" as any;
+        seg.actualCheckOutDate = new Date().toISOString();
+      }
+      mockData.mockBookingDetails[bookingId].bookingStatus = "Completed" as any;
+    }
+
+    const bookingIdx = mockData.mockBookings.findIndex(b => b.bookingId === bookingId);
+    if (bookingIdx !== -1) {
+      mockData.mockBookings[bookingIdx].bookingStatus = "Completed" as any;
+      const seg = mockData.mockBookings[bookingIdx].segments.find(s => s.handoverLogId === handoverLogId);
+      if (seg) {
+        seg.status = "CheckedOut" as any;
+        seg.actualCheckOutDate = new Date().toISOString();
+      }
+    }
+
+    return [
+      200,
+      {
+        message: "Check-out successful",
+      },
+    ];
+  });
+
+  // Cancel Booking (DELETE /bookings/:bookingId)
+  mock.onDelete(/\/bookings\/[a-zA-Z0-9-]+/).reply((config) => {
+    const parts = config.url?.split("/") || [];
+    const bookingId = parts[parts.length - 1]?.split("?")[0];
+
+    if (mockData.mockBookingDetails[bookingId]) {
+      mockData.mockBookingDetails[bookingId].bookingStatus = "Cancelled" as any;
+    }
+    const bookingIdx = mockData.mockBookings.findIndex(b => b.bookingId === bookingId);
+    if (bookingIdx !== -1) {
+      mockData.mockBookings[bookingIdx].bookingStatus = "Cancelled" as any;
+    }
+
+    return [
+      200,
+      {
+        message: "Booking cancelled successfully",
+      },
+    ];
+  });
+
+  // Handover Log detail (GET /handover-logs/:id)
+  mock.onGet(/\/handover-logs\/[a-zA-Z0-9-]+$/).reply((config) => {
+    const parts = config.url?.split("/") || [];
+    const id = parts[parts.length - 1];
+    const segment = mockData.mockBookingSegments[id];
+
+    if (!segment) {
+      return [404, { message: "Handover log not found" }];
+    }
+
+    return [
+      200,
+      {
+        message: "Handover log details fetched successfully",
+        data: segment,
+      },
+    ];
+  });
+
+  // AI Damage Detection (POST /detect-damage)
+  mock.onPost("/detect-damage").reply(200, {
+    message: "Damage detected successfully",
+    data: {
+      isDamaged: false,
+      summary: "Không phát hiện hư hại mới từ ảnh tải lên.",
+      damagePercentage: 0,
+      detailsByImage: {},
+    },
+  });
+
+  // Face Search Booking (POST /face/search-booking)
+  mock.onPost("/face/search-booking").reply(() => {
+    const bookings = mockData.mockBookings.filter(b => b.memberId === "m-1");
+    return [
+      200,
+      {
+        message: "Face search successful",
+        data: {
+          memberId: "m-1",
+          memberName: "Nguyen Van A",
+          confidence: 0.985,
+          bookings: bookings,
+        },
+      },
+    ];
+  });
+
+  // ================= EXTRA FEES =================
+  // GET bookings/:id/extra-fees
+  mock.onGet(/\/bookings\/[a-zA-Z0-9-]+\/extra-fees/).reply((config) => {
+    const parts = config.url?.split("/") || [];
+    const bookingId = parts[2];
+    const fees = mockData.mockExtraFees[bookingId] || [];
+    return [
+      200,
+      {
+        message: "Extra fees fetched successfully",
+        data: fees,
+      },
+    ];
+  });
+
+  // POST extra-fees
+  mock.onPost(/\/extra-fees/).reply((config) => {
+    const payload = JSON.parse(config.data || "{}");
+    const newFee = {
+      extraFeeId: `xf-${Date.now()}`,
+      bookingId: payload.bookingId,
+      handoverLogId: payload.handoverLogId,
+      extraFeeTypeId: payload.extraFeeTypeId,
+      title: payload.title,
+      amount: payload.amount,
+      currency: "VND",
+      description: payload.description || "",
+      status: ExtraFeeStatus.Unpaid,
+      createdDate: new Date().toISOString(),
+      updatedDate: new Date().toISOString(),
+    };
+    if (!mockData.mockExtraFees[payload.bookingId]) {
+      mockData.mockExtraFees[payload.bookingId] = [];
+    }
+    mockData.mockExtraFees[payload.bookingId].push(newFee);
+    return [
+      200,
+      {
+        message: "Extra fee created successfully",
+        data: [newFee],
       },
     ];
   });
