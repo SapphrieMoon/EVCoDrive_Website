@@ -20,9 +20,13 @@ This project was built as a real-world product, covering UI/UX design, frontend 
 
 The project has been deployed and is publicly accessible at:
 
-👉 **https://ev-co-drive-website.vercel.app/**
+👉 **[https://evcodrive.vercel.app/](https://evcodrive.vercel.app/)**
 
-*(Note: Access to the admin portal requires authorized admin or staff credentials.)*
+> [!NOTE]
+> This is a **demo deployment** for UI/UX showcase purposes, not a real production environment.
+> 
+> **🔑 Demo Login:**
+> Since this demo uses mock data, you can log in using **any email and password**. The only requirement is that the email must follow a valid email format (e.g., `admin@example.com`).
 
 ---
 
