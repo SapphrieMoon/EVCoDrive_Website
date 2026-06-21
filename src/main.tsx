@@ -9,6 +9,11 @@ import { Toaster } from "sonner"
 import { ThemeProvider } from "./providers/theme-provider.tsx"
 import { AppProvider } from "@/contexts/app.context";
 
+if (import.meta.env.VITE_USE_MOCK === "true") {
+  await import("./mocks");
+}
+
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
